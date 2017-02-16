@@ -1,0 +1,19 @@
+# .gitignore für SPECTATOR_Arduino_2
+
+# ignoriert die Solution-Dateien
+*.suo
+
+# ignoriert alle Dateien im bin/ Verzeichnis
+bin/
+
+# ignoriert alle Dateien im obj/ Verzeichnis
+obj/
+
+# ignoriert alle Dateien im Debug/ Verzeichnis
+Debug/
+
+# ignoriert alle Dateien im .vs/ Verzeichnis
+.vs/
+
+# ignoriert alle Dateien im __vm/ Verzeichnis
+__vm/
