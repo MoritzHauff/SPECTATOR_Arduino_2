@@ -51,7 +51,6 @@ protected:
 
 	// MPU control/status vars
 	bool dmpReady = false;  // set true if DMP init was successful
-	uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
 	uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
 	uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
 	uint16_t fifoCount;     // count of all bytes currently in FIFO
@@ -64,9 +63,10 @@ protected:
 
 public: 
 	MPU();
-	/*todo*/
+	/*Initalisiert den MPU6050. Gibt den Fortschritt über die serielle Schnittstelle aus.*/
 	void Init();
-	/*todo*/	
+	/*Überpüft ob dem MPU neue Daten vorliegen und übernimmt diese gegebenfalls.
+	Dauer: 5169 us wenn neue Daten vorliegen, sonst 200 us.*/	
 	void Update();
 };
 
