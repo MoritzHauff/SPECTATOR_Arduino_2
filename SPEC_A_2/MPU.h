@@ -42,6 +42,11 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////
+///Konstanten
+const uint8_t CALIBRATION_SUCCESS = 1;
+const uint8_t CALIBRATION_ERROR = 0;
+
+///////////////////////////////////////////////////////////////////////////
 ///MPU-Class
 /*Diese Klasse stellt die Daten eines MPU6050 zur Verfügung.*/
 class MPU
@@ -60,6 +65,7 @@ protected:
 	Quaternion q;           // [w, x, y, z]         quaternion container
 	VectorFloat gravity;    // [x, y, z]            gravity vector
 	float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+	float ypr_correction[3];// yaw/pitch/roll container for offset-correction
 
 public: 
 	MPU();
@@ -68,6 +74,9 @@ public:
 	/*Überpüft ob dem MPU neue Daten vorliegen und übernimmt diese gegebenfalls.
 	Dauer: 5169 us wenn neue Daten vorliegen, sonst 200 us.*/	
 	void Update();
+	/*Führt eine Kalibrierung des MPU durchs. Wartet bis sich die Werte stabilisiert haben und
+	stellt anhand dessen dann das Offset ein. Bricht nach einem gewissen Timeout (ms) die Fkt. ab falls sie zu lange kein Ergebnis liefert.*/
+	uint8_t WaitForCalibration(uint16_t Timeout);
 };
 
 #endif

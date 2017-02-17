@@ -70,7 +70,11 @@ void setup()
 
 	mpu.Init();
 
-
+	Serial.println("MPU6050-Kalibrierung: ");
+	if (mpu.WaitForCalibration(40000) != CALIBRATION_SUCCESS)  // Rückgabewert kann zum Beispiel an Raspberry gesendet werden.
+	{
+		Serial.println("MPU6050-Kalibrierung gescheitert!");
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -96,7 +100,7 @@ void loop()
 
 	Serial.print(" ");
 	Serial.print(sensorValue);  
-	Serial.print(" Zeit: ");  // 7720 us bei neuen MPU Daten, sonst 3900 us.
+	Serial.print(" Zeit: ");  // 8500 us bei neuen MPU Daten, sonst 3900 us.
 	Serial.print(zwei - eins);
 	Serial.println(" us.");
 
