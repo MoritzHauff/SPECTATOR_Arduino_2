@@ -16,6 +16,9 @@
 MPU::MPU()
 {
 	dmpReady = false;
+	ypr_correction[0] = 0;
+	ypr_correction[1] = 0;
+	ypr_correction[2] = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -96,13 +99,46 @@ void MPU::Update()
 			mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);  // Die gesamte Berechnung benötigt ca. 980 us. Das ist OK.
 			
 			Serial.print("\t\t\typr\t");
-			Serial.print(ypr[0]/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
+			Serial.print(ypr[0] - ypr_correction[0], 4/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
 			Serial.print("\t");
-			Serial.print(ypr[1]/* * 180 / M_PI*/);
+			Serial.print(ypr[1] - ypr_correction[1], 4/* * 180 / M_PI*/);
 			Serial.print("\t");
-			Serial.println(ypr[2]/* * 180 / M_PI*/);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
+			Serial.println(ypr[2] - ypr_correction[2], 4/* * 180 / M_PI*/);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
 
 			//todo: Tue irgendetwas mit den Daten.
 		}
 	}
+}
+
+uint8_t MPU::WaitForCalibration(uint16_t Timeout)
+{
+	unsigned long startZeitpunkt = millis();
+	unsigned long aktZeitpunkt = startZeitpunkt;
+	float yawReference = ypr[0];
+
+	while (startZeitpunkt + Timeout > millis())
+	{
+		if (dmpReady)
+		{
+			Update();
+			if (!(yawReference + 0.0002 > ypr[0] && yawReference - 0.0002 < ypr[0]))  // Wert liegt nicht innerhalb einer gewissen Toleranz.
+			{
+				yawReference = ypr[0];
+				aktZeitpunkt = millis();
+			}
+			if (aktZeitpunkt + 1000 < millis())  // Wert soll mind. 1 sec stabil sein.
+			{
+				ypr_correction[0] = ypr[0];
+				ypr_correction[1] = ypr[1];
+				ypr_correction[2] = ypr[2];
+
+				Serial.print("MPU-Kalibrierung erfolgreich. Kalibrierungszeit: ");
+				Serial.println(millis() - startZeitpunkt);
+				Serial.println(" ms.");
+
+				return CALIBRATION_SUCCESS;
+			}
+		}
+	}
+	return CALIBRATION_ERROR;
 }
