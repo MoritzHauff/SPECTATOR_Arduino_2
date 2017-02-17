@@ -30,6 +30,9 @@
     <ClInclude Include="MedianFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MPU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Functions.c">
@@ -39,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MedianFilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MPU.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
