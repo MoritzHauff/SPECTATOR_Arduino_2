@@ -14,6 +14,10 @@ Ermöglicht eine genauere und vor allem schnellere Ansteuerung des Analog-Digita
 Wandlers des ATmegas2560. Die Informationen aus der AnalogueInput_Explanation.pdf 
 finden sich in der Funktion get_adc() wieder.
 
+## SharpIR-Master
+
+Diese Bibliothek generiert stabilere und in cm umgerechnete Messwerte des Sharp-IR-Sensors.
+
 ## Credits
 
 Moritz Hauff, 16.02.2017
