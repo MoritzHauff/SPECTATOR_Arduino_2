@@ -4,8 +4,7 @@
 ***
 *** Test der schnelleren IO-Bibliothek.
 ***
-*** Test des schnelleren analogReads() von: 
-*** https://bennthomsen.wordpress.com/arduino/peripherals/analogue-input/
+*** Test der Sharp-SensorKlasse: http://playground.arduino.cc/Main/SharpIR
 ***
 *** Moritz Hauff, 16.02.2017
 **/
@@ -16,6 +15,8 @@
 #include <arduino2.h>   // include the fast I/O 2 functions
 
 #include "Functions.c"
+
+#include <SharpIR.h>  
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -35,7 +36,10 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-int sensorValue = 0;
+//int sensorValue[10];
+int sensorValue;
+
+SharpIR sharp(A1, 430);
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -55,10 +59,22 @@ void setup()
 void loop()
 {
 	eins = micros();
-	for (int i = 0; i < 100; i++)
+	/*for (int i = 0; i < 10; i++)
 	{
-		sensorValue = analogRead(analog_pin);
-	}
+		sensorValue = analogRead(analog_pin);    // 10 Messungen in einer for-Schleife brauchen genau 1120 us.
+	}*/
+	/*sensorValue[0] = analogRead(analog_pin);    // 10 hardgecodede Messungen benötigen ebenfalls 1120 us.
+	sensorValue[1] = analogRead(analog_pin);
+	sensorValue[2] = analogRead(analog_pin);
+	sensorValue[3] = analogRead(analog_pin);
+	sensorValue[4] = analogRead(analog_pin);
+	sensorValue[5] = analogRead(analog_pin);
+	sensorValue[6] = analogRead(analog_pin);
+	sensorValue[7] = analogRead(analog_pin);
+	sensorValue[8] = analogRead(analog_pin);
+	sensorValue[9] = analogRead(analog_pin);*/
+	sensorValue = sharp.distance();   // Mit der Sharp-Klasse und 10(in lib einstellen!) Messungen werden schon 1620 us gebraucht.
+
 	zwei = micros();
 	
 	Serial.print(" ");
