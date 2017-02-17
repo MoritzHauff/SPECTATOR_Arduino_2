@@ -4,7 +4,7 @@
 ***
 *** Test der schnelleren IO-Bibliothek.
 ***
-*** Test der Sharp-SensorKlasse: http://playground.arduino.cc/Main/SharpIR
+*** ZeitTests des MPU6050s.
 ***
 *** Moritz Hauff, 16.02.2017
 **/
@@ -90,7 +90,9 @@ void loop()
 	sensorValue = sharprechts.GetValue();
 	sensorValue = sharplinks.GetValue();
 
-	mpu.Update();   // dauert fast 10 ms !  dies hängt jedoch nicht mit der Klasse zusammen (hardgecode Funktion braucht genauso lange.)
+	eins = micros();
+
+	mpu.Update();   // dauert nur noch 5169 us wenn neue Daten vorliegen, sont 200 us.
 
 	zwei = micros();
 

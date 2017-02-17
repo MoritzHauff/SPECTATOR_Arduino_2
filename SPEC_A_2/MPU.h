@@ -33,7 +33,6 @@
 	#include "WProgram.h"
 #endif
 
-//#include <MPU6050_6Axis_MotionApps20.h>
 #include "MPU6050_2.h" // import *new* MPU6050.h with MotionApps already included
 
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
@@ -42,6 +41,9 @@
 #include "Wire.h"
 #endif
 
+///////////////////////////////////////////////////////////////////////////
+///MPU-Class
+/*Diese Klasse stellt die Daten eines MPU6050 zur Verfügung.*/
 class MPU
 {
 protected: 
