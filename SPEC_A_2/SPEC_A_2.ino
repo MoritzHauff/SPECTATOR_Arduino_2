@@ -2,9 +2,9 @@
 ***
 *** Dieses Programm läuft auf dem SPECTATOR-Arduino und überwacht dessen Sensoren.
 ***
-*** Test der schnelleren IO-Bibliothek.
+*** Test der schnelleren IO-Bibliothek. Und angeschlossener SHARP-Distanzsensoren.
 ***
-*** Test der Sharp-SensorKlasse: http://playground.arduino.cc/Main/SharpIR
+*** ZeitTests des MPU6050s.
 ***
 *** Moritz Hauff, 16.02.2017
 **/
@@ -14,10 +14,11 @@
 #define  GPIO2_PREFER_SPEED    1   // results in even faster execution
 #include <arduino2.h>   // include the fast I/O 2 functions
 
+#include "SharpIR.h"
+#include "MPU.h"
+
 #include "Functions.c"
  
-#include "SharpIR.h"
-
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
@@ -41,17 +42,34 @@ unsigned long drei = 0;
 SharpIR sharplinks(analog_pin, SHARPMEASUREMTS);
 SharpIR sharprechts(A2, SHARPMEASUREMTS);
 
+MPU mpu = MPU();
+
 int sensorValue;
+bool ledstate = false;
+
 
 
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
 {	
+	pinMode2f(led_pin, OUTPUT);
+	
 	Serial.begin(115200);
 	Serial.println("SPEC_A_2 - Serial Start");
 
-	pinMode2f(led_pin, OUTPUT);
+	// join I2C bus (I2Cdev library doesn't do this automatically)
+	#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+		Wire.begin();
+		Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+	#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+		Fastwire::setup(400, true);
+	#endif
+
+	Serial.println("SPEC_A_2 - Joined I2C.");
+
+	mpu.Init();
+
 
 }
 
@@ -64,20 +82,25 @@ void loop()
 	{
 		sharplinks.Update();    
 		sharprechts.Update();   // Sensoren nacheinander abfragen, damit diese sich aktualisieren können.
+		sharplinks.Update();
+		sharprechts.Update();   // Alle Sensoren zu aktualsieren dauert ca. 3900 us.
 	}
 
 	sensorValue = sharprechts.GetValue();
-	sensorValue = sharplinks.GetValue();   // komplett in neue SharpIR-Klasse gepackt, mit 10 Werten: 1200 us.
+	sensorValue = sharplinks.GetValue();
+	//todo: alle SharpSensoren.
+
+	mpu.Update();
 
 	zwei = micros();
 
 	Serial.print(" ");
 	Serial.print(sensorValue);  
-	Serial.print(" Zeit: ");
-	Serial.print(zwei - eins);  // Zwei Sharp-Sensoren mit 8 Messungen abzufragen dauert: 1920 us.
+	Serial.print(" Zeit: ");  // 7720 us bei neuen MPU Daten, sonst 3900 us.
+	Serial.print(zwei - eins);
 	Serial.println(" us.");
 
-	digitalWrite2f(led_pin, HIGH);   // LOOP-Dauer messbar: konstant leuchtend: <3ms, blinken: ~10 ms
-	delay(10);
-	digitalWrite2f(led_pin, LOW);
+	ledstate = !ledstate;
+	digitalWrite2f(led_pin, ledstate);   // Make the heartbeat.
 }
+

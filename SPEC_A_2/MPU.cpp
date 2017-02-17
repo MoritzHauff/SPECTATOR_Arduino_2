@@ -1,45 +1,83 @@
-// 
-// 
-// 
+/** MPU.cpp
+***
+*** Die MPU-Class verwaltet greift auf ein MPU6050 zu und analysiert
+*** dessen Werte.
+*** Diese sollten außerdem in Zukunft zur Weiterverwendung bereitgestellt werden.
+***
+*** Moritz Hauff - 30.12.2016
+**/
 
+///////////////////////////////////////////////////////////////////////////
+/// Copyright (C) {2017}  {Moritz Hauff}
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+///
+/// If you start using parts of this code please write a short message to: 
+/// license@vierradroboter.de
+///
+/// If you have any questions contact me via mail: admin@vierradroboter.de
+///////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////
+///Includes
 #include "MPU.h"
 
+///////////////////////////////////////////////////////////////////////////
+///Konstruktoren
+MPU::MPU()
+{
+	dmpReady = false;
+}
+
+///////////////////////////////////////////////////////////////////////////
+///Funktionen
 void MPU::Init()
 {
-					 // initialize device
-	Serial.println(F("Initializing I2C devices..."));
+	// initialize device
+	Serial.println(F("Initializing MPU-I2C ..."));
 	mpu.initialize();
 
 	// verify connection
 	Serial.println(F("Testing device connections..."));
 	Serial.println(mpu.testConnection() ? F("MPU6050 connection successful") : F("MPU6050 connection failed"));
 
-												 // load and configure the DMP
+	//load and configure the DMP
 	Serial.println(F("Initializing DMP..."));
 	devStatus = mpu.dmpInitialize();
 
 	// supply your own gyro offsets here, scaled for min sensitivity
-	mpu.setXGyroOffset(220);
+	mpu.setXGyroOffset(220);   // todo: Hier richtige Kalibrierung.
 	mpu.setYGyroOffset(76);
 	mpu.setZGyroOffset(-85);
 	mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
 
-							   // make sure it worked (returns 0 if so)
-	if (devStatus == 0) {
+	// make sure it worked (returns 0 if so)
+	if (devStatus == 0) 
+	{
 		// turn on the DMP, now that it's ready
 		Serial.println(F("Enabling DMP..."));
 		mpu.setDMPEnabled(true);
 
-		mpuIntStatus = mpu.getIntStatus();
-
 		// set our DMP Ready flag so the main loop() function knows it's okay to use it
-		Serial.println(F("DMP ready! Waiting for first interrupt..."));
+		Serial.println(F("DMP ready! Waiting for first update()-Call..."));
 		dmpReady = true;
 
 		// get expected DMP packet size for later comparison
 		packetSize = mpu.dmpGetFIFOPacketSize();
 	}
-	else {
+	else 
+	{
 		// ERROR!
 		// 1 = initial memory load failed
 		// 2 = DMP configuration updates failed
@@ -50,68 +88,43 @@ void MPU::Init()
 	}
 }
 
-
-
 void MPU::Update()
 {
 	// if programming failed, don't try to do anything
-	if (!dmpReady) return;
-
-	/*// wait for MPU interrupt or extra packet(s) available   // wait until one packet is full
-	while (fifoCount < packetSize) 
+	if (dmpReady)
 	{
-		// other program behavior stuff here
-		// .
-		// .
-		// .
-		// if you are really paranoid you can frequently test in between other
-		// stuff to see if mpuInterrupt is true, and if so, "break;" from the
-		// while() loop to immediately process the MPU data
-		// .
-		// .
-		// .
-		fifoCount = mpu.getFIFOCount();   // work without interrupts !
-	}*/
+		// get current FIFO count
+		fifoCount = mpu.getFIFOCount();
 
-	mpuIntStatus = mpu.getIntStatus();
+		// check for overflow (this should never happen unless our code is too inefficient)
+		if (fifoCount == 1024) 
+		{
+			// reset so we can continue cleanly
+			mpu.resetFIFO();
+			Serial.println(F("FIFO overflow!"));
+		}
+		else if (fifoCount > packetSize)
+		{
+			// read a packet from FIFO
+			mpu.getFIFOBytes(fifoBuffer, packetSize); //Die LeseZeit beträgt 1700 us.
 
-	// get current FIFO count
-	fifoCount = mpu.getFIFOCount();
+			// track FIFO count here in case there is > 1 packet available
+			// (this lets us immediately read more without waiting for an interrupt) - oder auch nicht. Es geschieht immer nur genau eine Aktualisierung pro Funktionsaufruf.
+			fifoCount -= packetSize;
 
-	// check for overflow (this should never happen unless our code is too inefficient)
-	if ((mpuIntStatus & 0x10) || fifoCount == 1024) 
-	{
-		// reset so we can continue cleanly
-		mpu.resetFIFO();
-		Serial.println(F("FIFO overflow!"));
+			// display Euler angles in degrees
+			mpu.dmpGetQuaternion(&q, fifoBuffer);
+			mpu.dmpGetGravity(&gravity, &q);
+			mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);  // Die gesamte Berechnung benötigt ca. 980 us. Das ist OK.
+			
+			Serial.print("\t\t\typr\t");
+			Serial.print(ypr[0]/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
+			Serial.print("\t");
+			Serial.print(ypr[1]/* * 180 / M_PI*/);
+			Serial.print("\t");
+			Serial.println(ypr[2]/* * 180 / M_PI*/);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
 
-		// otherwise, check for DMP data ready interrupt (this should happen frequently)
-	}
-	else if (mpuIntStatus & 0x02) 
-	{
-		// wait for correct available data length, should be a VERY short wait
-		while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-
-		// read a packet from FIFO
-		mpu.getFIFOBytes(fifoBuffer, packetSize);
-
-		// track FIFO count here in case there is > 1 packet available
-		// (this lets us immediately read more without waiting for an interrupt)
-		fifoCount -= packetSize;
-
-
-#ifdef OUTPUT_READABLE_YAWPITCHROLL
-		// display Euler angles in degrees
-		mpu.dmpGetQuaternion(&q, fifoBuffer);
-		mpu.dmpGetGravity(&gravity, &q);
-		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-		Serial.print("ypr\t");
-		Serial.print(ypr[0] * 180 / M_PI);
-		Serial.print("\t");
-		Serial.print(ypr[1] * 180 / M_PI);
-		Serial.print("\t");
-		Serial.println(ypr[2] * 180 / M_PI);
-#endif
-
+			//todo: Tue irgendetwas mit den Daten.
+		}
 	}
 }
