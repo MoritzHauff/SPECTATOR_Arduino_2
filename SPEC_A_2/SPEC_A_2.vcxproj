@@ -80,11 +80,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="MedianFilter.h" />
     <ClInclude Include="SharpIR.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Functions.c" />
+    <ClCompile Include="MedianFilter.cpp" />
     <ClCompile Include="SharpIR.cpp" />
   </ItemGroup>
   <PropertyGroup>
