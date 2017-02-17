@@ -38,10 +38,9 @@ MedianFilterClass::MedianFilterClass()
 {
 	this->ready = false;
 	this->currentpos = 0;
-	for (int i = 0; i < ARRAYLENGTH; i++)
+	for (int i = 0; i < MAXARRAYLENGTH; i++)
 	{
 		this->measurements[i] = 0;   // korrekte Initialisierung des Arrays.
-		this->sortedMeasurements[i] = 0;
 	}
 }
 
@@ -49,7 +48,7 @@ void MedianFilterClass::Init(int TotalNumberOfValues)
 {
 	this->TotalNumberOfValues = TotalNumberOfValues;
 
-	if (TotalNumberOfValues < ARRAYLENGTH)
+	if (TotalNumberOfValues < MAXARRAYLENGTH)
 	{
 		this->ready = true;   // Alles wurde korrekt initialisiert.
 	}
@@ -71,7 +70,6 @@ void MedianFilterClass::Update(int measurement)
 		{
 			currentpos = 0;   // Keinen Speicherüberlauf generieren sondern wieder von vorne anfangen.
 		}
-		
 	}
 }
 
@@ -79,12 +77,6 @@ int MedianFilterClass::GetValue()
 {
 	if (ready)
 	{
-		// aktuelle Daten sortieren.
-		/*for (int i = 0; i < ARRAYLENGTH; i++)   // array kopereien und dann erst sorteiren dauert 300 us!
-		{
-			sortedMeasurements[i] = measurements[i];
-		}*/
-
 		for (int k = 1; k < TotalNumberOfValues; k++)   
 		{
 			for (int i = 0; i < TotalNumberOfValues - 1 - k; i++)
@@ -97,23 +89,18 @@ int MedianFilterClass::GetValue()
 				}
 			}
 		}
+
+		// nachdem die Daten einmal ausgelesen wurden passt sind die Daten im Array nicht mehr zeitlich 
+		// geordnet und sie sollten komplett neu aufgefüllt werden, damit es nicht zu Auswertungsfehlern kommt.
+		currentpos = 0;
 		
 		return measurements[TotalNumberOfValues / 2];
 	}
 	return 0;
 }
 
-int MedianFilterClass::GetValue_Int()
-{
-	return (int)GetValue();
-}
-
 void MedianFilterClass::PrintProps()
 {
 	Serial.print("TotalNumberOfValues: ");
 	Serial.print(TotalNumberOfValues, 3);
-	//Serial.print("UsedValues: ");
-	//Serial.print(NumberOfUsedValues, 3);
-	//Serial.print("Dropped Values: ");
-	//Serial.print(TotalNumberOfValues - NumberOfUsedValues);
 }

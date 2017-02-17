@@ -17,7 +17,7 @@
 #include "Functions.c"
  
 #include "SharpIR.h"
-#include "MedianFilter.h"
+
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
@@ -36,13 +36,9 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-//int sensorValue[10];
+SharpIR sharp(analog_pin, 10);
+
 int sensorValue;
-
-int distanceCM;
-
-//SharpIR sharp(A1, 430);
-MedianFilterClass median = MedianFilterClass();
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,9 +50,6 @@ void setup()
 
 	pinMode2f(led_pin, OUTPUT);
 
-	pinMode(analog_pin, INPUT);
-
-	median.Init(10);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -66,7 +59,7 @@ void loop()
 	eins = micros();
 	for (int i = 0; i < 10; i++)
 	{
-		median.Update(analogRead(analog_pin));    // 10 Messungen in einer for-Schleife brauchen genau 1120 us.
+		sharp.Update();    // 10 Messungen in einer for-Schleife brauchen genau 1120 us.
 		//sensorValue[i] = analogRead(analog_pin);
 	}
 	/*sensorValue[0] = analogRead(analog_pin);    // 10 hardgecodede Messungen benötigen ebenfalls 1120 us.
@@ -80,20 +73,7 @@ void loop()
 	sensorValue[8] = analogRead(analog_pin);
 	sensorValue[9] = analogRead(analog_pin);*/
 
-	sensorValue = median.GetValue();   // 1380 us mit median-klasse -> anstatt double int in median klasse: median braucht nur noch 16 us länger als hardgecoded.
-
-	/*for (int k = 1; k < 10; k++)
-	{
-		for (int i = 0; i < 10 - 1 - k; i++)
-		{
-			if (sensorValue[i] > sensorValue[i + 1])
-			{
-				int temp = sensorValue[i];
-				sensorValue[i] = sensorValue[i + 1];
-				sensorValue[i + 1] = temp;
-			}
-		}
-	}*/
+	sensorValue = sharp.GetValue();   // komplett in neue SharpIR-Klasse gepackt, mit 10 Werten: 1200 us.
 
 	zwei = micros();
 

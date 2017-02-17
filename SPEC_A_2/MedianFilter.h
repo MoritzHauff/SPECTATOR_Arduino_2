@@ -33,7 +33,7 @@
 #include "WProgram.h"
 #endif
 
-#define ARRAYLENGTH 50
+#define MAXARRAYLENGTH 20
 
 ///////////////////////////////////////////////////////////////////////////
 ///KalmanFilterClass
@@ -43,8 +43,7 @@ class MedianFilterClass
 {
 protected:
 	int TotalNumberOfValues;   // wie viele Werte insgesamt gespeichert werden.
-	int measurements[ARRAYLENGTH];
-	double sortedMeasurements[ARRAYLENGTH];
+	int measurements[MAXARRAYLENGTH];
 	int currentpos;
 	bool ready;
 
@@ -57,10 +56,8 @@ public:
 	/* Add a new measurement.*/
 	void Update(int measurement);
 
-	/* Get the current value.*/
+	/* Get the current value and delete the last measurments.*/
 	int GetValue();
-	/* Get the current value converted to an integer.*/
-	int GetValue_Int();
 
 	/* Print current properties to serial terminal.*/
 	void PrintProps();

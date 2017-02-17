@@ -23,19 +23,31 @@
   #include "Particle.h"
 #endif
 
+#include "MedianFilter.h"
+
 class SharpIR
 {
-  public:
+private:
 
-    SharpIR (int irPin, long sensorModel);
-    int distance();
+	MedianFilterClass median = MedianFilterClass();
 
-  private:
+	uint8_t _ir_Pin;
+	uint8_t _numberOfValues;
 
-    void sort(int a[], int size);
+public:
+
+	SharpIR (uint8_t ir_Pin, uint8_t NumberOfValues);
     
-    int _irPin;
-    long _model;
+	/*Gibt den median-Wert der letzten Updates zurück.*/
+	int GetValue();
+
+	/*Führt die angegebene Anzahl an Messungen durch und gibt dann den berechneten Wert zurück. Zeitkritisch!*/
+	int CalculateValue();
+
+	/*Führt eine einzelne Messung durch.*/
+	void Update();
+
+
 };
 
 #endif
