@@ -5,16 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SPEC_A_2", "SPEC_A_2.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MPU6050", "MPU6050", "{55D81B50-721A-401E-8AF2-630EDF9C8B1B}"
-	ProjectSection(SolutionItems) = preProject
-		MPU6050\helper_3dmath.h = MPU6050\helper_3dmath.h
-		MPU6050\library.json = MPU6050\library.json
-		MPU6050\MPU6050.cpp = MPU6050\MPU6050.cpp
-		MPU6050\MPU6050.h = MPU6050\MPU6050.h
-		MPU6050\MPU6050_6Axis_MotionApps20.h = MPU6050\MPU6050_6Axis_MotionApps20.h
-		MPU6050\MPU6050_9Axis_MotionApps41.h = MPU6050\MPU6050_9Axis_MotionApps41.h
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

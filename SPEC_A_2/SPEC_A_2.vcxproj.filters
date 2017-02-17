@@ -27,9 +27,6 @@
     <ClInclude Include="SharpIR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MedianFilter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MPU.h">
       <Filter>Header Files</Filter>
     </ClInclude>

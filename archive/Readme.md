@@ -18,6 +18,17 @@ finden sich in der Funktion get_adc() wieder.
 
 Diese Bibliothek generiert stabilere und in cm umgerechnete Messwerte des Sharp-IR-Sensors.
 
+## I2CDev
+
+Diese Bibliothek wird für die Kommunikation mit dem MPU6050 benötigt.
+
+## MPU6050_2
+
+Diese Biliothek stellt sämtliche Funktionen für das MPU6050 bereit.
+Dabei habe ich sie so bearbeitet, dass sie auch in Visual Micro verwendet werden kann.
+Es ist also möglich diese Bibliothek ganz normal in den Arduino 'libraries'-Ordner
+zu kopieren und in der ArduinoIDE und in Visual Micro zu nutzen.
+
 ## Credits
 
 Moritz Hauff, 16.02.2017
