@@ -14,7 +14,7 @@
 #define MAXARRAYLENGTH 20
 
 ///////////////////////////////////////////////////////////////////////////
-///KalmanFilterClass
+///MedianFilterClass
 /* Die MedianFilter-Class verwaltet Messwerte
 und wendet auf diese einen eindimensionalen MedianFilter an.*/
 class MedianFilterClass

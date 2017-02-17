@@ -31,6 +31,8 @@
    Reading 25 times and return a mean distance takes 53 ms. For my application of the sensor is fast enough.
    This library has the formulas to work with the GP2Y0A21Y and the GP2Y0A02YK sensors but exanding it for
    other sensors is easy enough.
+
+   todo: Header bearbeiten.
 */
 
 #ifdef Arduino
@@ -48,6 +50,7 @@ SharpIR::SharpIR(uint8_t ir_Pin, uint8_t NumberOfValues)
     pinMode (_ir_Pin, INPUT);
     
 	median.Init(NumberOfValues);
+
     /*#ifdef ARDUINO
       analogReference(DEFAULT);
     #endif*/

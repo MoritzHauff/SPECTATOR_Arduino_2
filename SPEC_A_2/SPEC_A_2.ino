@@ -29,6 +29,8 @@ const uint8_t analog_pin = A1;
 
 const uint8_t DELAY_TIME = 100;
 
+const uint8_t SHARPMEASUREMTS = 8;   // acht sharp-Messungen an einem Sensor dauern genau 940 us. Diese reium an allen würden damit 4 ms dauern.
+
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
 
@@ -36,7 +38,8 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-SharpIR sharp(analog_pin, 10);
+SharpIR sharplinks(analog_pin, SHARPMEASUREMTS);
+SharpIR sharprechts(A2, SHARPMEASUREMTS);
 
 int sensorValue;
 
@@ -57,30 +60,21 @@ void setup()
 void loop()
 {
 	eins = micros();
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < SHARPMEASUREMTS; i++)
 	{
-		sharp.Update();    // 10 Messungen in einer for-Schleife brauchen genau 1120 us.
-		//sensorValue[i] = analogRead(analog_pin);
+		sharplinks.Update();    
+		sharprechts.Update();   // Sensoren nacheinander abfragen, damit diese sich aktualisieren können.
 	}
-	/*sensorValue[0] = analogRead(analog_pin);    // 10 hardgecodede Messungen benötigen ebenfalls 1120 us.
-	sensorValue[1] = analogRead(analog_pin);
-	sensorValue[2] = analogRead(analog_pin);
-	sensorValue[3] = analogRead(analog_pin);
-	sensorValue[4] = analogRead(analog_pin);
-	sensorValue[5] = analogRead(analog_pin);
-	sensorValue[6] = analogRead(analog_pin);
-	sensorValue[7] = analogRead(analog_pin);
-	sensorValue[8] = analogRead(analog_pin);
-	sensorValue[9] = analogRead(analog_pin);*/
 
-	sensorValue = sharp.GetValue();   // komplett in neue SharpIR-Klasse gepackt, mit 10 Werten: 1200 us.
+	sensorValue = sharprechts.GetValue();
+	sensorValue = sharplinks.GetValue();   // komplett in neue SharpIR-Klasse gepackt, mit 10 Werten: 1200 us.
 
 	zwei = micros();
 
 	Serial.print(" ");
-	Serial.print(sensorValue);
+	Serial.print(sensorValue);  
 	Serial.print(" Zeit: ");
-	Serial.print(zwei - eins);
+	Serial.print(zwei - eins);  // Zwei Sharp-Sensoren mit 8 Messungen abzufragen dauert: 1920 us.
 	Serial.println(" us.");
 
 	digitalWrite2f(led_pin, HIGH);   // LOOP-Dauer messbar: konstant leuchtend: <3ms, blinken: ~10 ms
