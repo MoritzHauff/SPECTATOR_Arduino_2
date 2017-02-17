@@ -2,7 +2,7 @@
 ***
 *** Dieses Programm läuft auf dem SPECTATOR-Arduino und überwacht dessen Sensoren.
 ***
-*** Test der schnelleren IO-Bibliothek.
+*** Test der schnelleren IO-Bibliothek. Und angeschlossener SHARP-Distanzsensoren.
 ***
 *** ZeitTests des MPU6050s.
 ***
@@ -14,12 +14,11 @@
 #define  GPIO2_PREFER_SPEED    1   // results in even faster execution
 #include <arduino2.h>   // include the fast I/O 2 functions
 
+#include "SharpIR.h"
 #include "MPU.h"
 
 #include "Functions.c"
  
-#include "SharpIR.h"
-
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
@@ -84,29 +83,24 @@ void loop()
 		sharplinks.Update();    
 		sharprechts.Update();   // Sensoren nacheinander abfragen, damit diese sich aktualisieren können.
 		sharplinks.Update();
-		sharprechts.Update();
+		sharprechts.Update();   // Alle Sensoren zu aktualsieren dauert ca. 3900 us.
 	}
 
 	sensorValue = sharprechts.GetValue();
 	sensorValue = sharplinks.GetValue();
+	//todo: alle SharpSensoren.
 
-	eins = micros();
-
-	mpu.Update();   // dauert nur noch 5169 us wenn neue Daten vorliegen, sont 200 us.
+	mpu.Update();
 
 	zwei = micros();
 
-	
-
 	Serial.print(" ");
 	Serial.print(sensorValue);  
-	Serial.print(" Zeit: ");
+	Serial.print(" Zeit: ");  // 7720 us bei neuen MPU Daten, sonst 3900 us.
 	Serial.print(zwei - eins);
-	Serial.print(" us.");
+	Serial.println(" us.");
 
 	ledstate = !ledstate;
-	digitalWrite2f(led_pin, ledstate);   // LOOP-Dauer messbar: konstant leuchtend: <3ms, blinken: ~10 ms
-	//delay(2);   // zu lang für MPu -> FIfo overflow
-	//digitalWrite2f(led_pin, LOW);
+	digitalWrite2f(led_pin, ledstate);   // Make the heartbeat.
 }
 

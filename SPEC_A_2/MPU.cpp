@@ -40,24 +40,22 @@ void MPU::Init()
 	mpu.setZGyroOffset(-85);
 	mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
 
-							   // make sure it worked (returns 0 if so)
-	if (devStatus == 0) {
+	// make sure it worked (returns 0 if so)
+	if (devStatus == 0) 
+	{
 		// turn on the DMP, now that it's ready
 		Serial.println(F("Enabling DMP..."));
 		mpu.setDMPEnabled(true);
 
-		// enable Arduino interrupt detection
-		Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
-		mpuIntStatus = mpu.getIntStatus();
-
 		// set our DMP Ready flag so the main loop() function knows it's okay to use it
-		Serial.println(F("DMP ready! Waiting for first interrupt..."));
+		Serial.println(F("DMP ready! Waiting for first update()-Call..."));
 		dmpReady = true;
 
 		// get expected DMP packet size for later comparison
 		packetSize = mpu.dmpGetFIFOPacketSize();
 	}
-	else {
+	else 
+	{
 		// ERROR!
 		// 1 = initial memory load failed
 		// 2 = DMP configuration updates failed
@@ -71,60 +69,40 @@ void MPU::Init()
 void MPU::Update()
 {
 	// if programming failed, don't try to do anything
-	if (!dmpReady) return;
-
-	// reset interrupt flag and get INT_STATUS byte
-	//mpuIntStatus = mpu.getIntStatus();
-
-	// get current FIFO count
-	fifoCount = mpu.getFIFOCount();
-
-	// check for overflow (this should never happen unless our code is too inefficient)
-	if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-		// reset so we can continue cleanly
-		mpu.resetFIFO();
-		Serial.println(F("FIFO overflow!"));
-
-		// otherwise, check for DMP data ready interrupt (this should happen frequently)
-	}
-	else if(fifoCount > packetSize)/*if (mpuIntStatus & 0x02) */
+	if (dmpReady)
 	{
-		// wait for correct available data length, should be a VERY short wait
-		unsigned long eins = micros();
-		//while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-		unsigned long zwei = micros();
-		Serial.print("Wartezeit: ");
-		Serial.print(zwei - eins);  //Die Wartezeit betrug ca. 6000us. Das ist zu viel.
+		// get current FIFO count
+		fifoCount = mpu.getFIFOCount();
 
-		eins = micros();
-		// read a packet from FIFO
-		mpu.getFIFOBytes(fifoBuffer, packetSize);
-		zwei = micros();
-		Serial.print(" Lesen: ");
-		Serial.print(zwei - eins);  //Die LeseZeit beträgt 1700 us.
+		// check for overflow (this should never happen unless our code is too inefficient)
+		if (fifoCount == 1024) 
+		{
+			// reset so we can continue cleanly
+			mpu.resetFIFO();
+			Serial.println(F("FIFO overflow!"));
+		}
+		else if (fifoCount > packetSize)
+		{
+			// read a packet from FIFO
+			mpu.getFIFOBytes(fifoBuffer, packetSize); //Die LeseZeit beträgt 1700 us.
 
-		// track FIFO count here in case there is > 1 packet available
-		// (this lets us immediately read more without waiting for an interrupt)
-		fifoCount -= packetSize;
+			// track FIFO count here in case there is > 1 packet available
+			// (this lets us immediately read more without waiting for an interrupt) - oder auch nicht. Es geschieht immer nur genau eine Aktualisierung pro Funktionsaufruf.
+			fifoCount -= packetSize;
 
-		// display Euler angles in degrees
-		eins = micros();
-		mpu.dmpGetQuaternion(&q, fifoBuffer);
-		mpu.dmpGetGravity(&gravity, &q);
-		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-		zwei = micros();
-		Serial.print(" Berechnung: ");  // Die Berechnung benötigt ca. 980 us. Das ist OK.
-		Serial.println(zwei - eins);
-		eins = micros();
-		Serial.print("ypr\t");
-		Serial.print(ypr[0]/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
-		Serial.print("\t");
-		Serial.print(ypr[1]/* * 180 / M_PI*/);
-		Serial.print("\t");
-		Serial.println(ypr[2]/* * 180 / M_PI*/);
-		zwei = micros();
-		Serial.print(" Ausgabe: ");  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
-		Serial.print(zwei - eins);
+			// display Euler angles in degrees
+			mpu.dmpGetQuaternion(&q, fifoBuffer);
+			mpu.dmpGetGravity(&gravity, &q);
+			mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);  // Die gesamte Berechnung benötigt ca. 980 us. Das ist OK.
+			
+			Serial.print("\t\t\typr\t");
+			Serial.print(ypr[0]/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
+			Serial.print("\t");
+			Serial.print(ypr[1]/* * 180 / M_PI*/);
+			Serial.print("\t");
+			Serial.println(ypr[2]/* * 180 / M_PI*/);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
+
+			//todo: Tue irgendetwas mit den Daten.
+		}
 	}
-
 }
