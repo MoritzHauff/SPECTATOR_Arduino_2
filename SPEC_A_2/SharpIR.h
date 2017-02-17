@@ -9,6 +9,8 @@
 
 	https://github.com/guillaume-rico/SharpIR
 
+	todo: Header bearbeiten.
+
 */
 
 
