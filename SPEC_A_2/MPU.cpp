@@ -121,11 +121,11 @@ void MPU::Update()
 			mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);  // Die gesamte Berechnung benötigt ca. 980 us. Das ist OK.
 			
 			Serial.print("\t\t\typr\t");
-			Serial.print(ypr[0] - ypr_correction[0], 4/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
+			Serial.print(ypr[0] - ypr_correction[0], 4);  // das Weglassen einer Umrechnung bringt nochmal 180 us.
 			Serial.print("\t");
-			Serial.print(ypr[1] - ypr_correction[1], 4/* * 180 / M_PI*/);
+			Serial.print(ypr[1] - ypr_correction[1], 4);
 			Serial.print("\t");
-			Serial.println(ypr[2] - ypr_correction[2], 4/* * 180 / M_PI*/);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
+			Serial.println(ypr[2] - ypr_correction[2], 4);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
 
 			//todo: Tue irgendetwas mit den Daten.
 		}

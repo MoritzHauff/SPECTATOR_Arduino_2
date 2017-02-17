@@ -2,11 +2,12 @@
 ***
 *** Dieses Programm läuft auf dem SPECTATOR-Arduino und überwacht dessen Sensoren.
 ***
-*** Test der schnelleren IO-Bibliothek. Und angeschlossener SHARP-Distanzsensoren.
+*** Test der schnelleren IO-Bibliothek. Und angeschlossener SHARP-Distanzsensoren,
+*** sowie des MPU6050s.
 ***
-*** ZeitTests des MPU6050s.
+*** ZeitTests der MLX-Temp-Sensoren.
 ***
-*** Moritz Hauff, 16.02.2017
+*** Moritz Hauff, 18.02.2017
 **/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -16,6 +17,8 @@
 
 #include "SharpIR.h"
 #include "MPU.h"
+
+#include <Adafruit_MLX90614.h>
 
 #include "Functions.c"
  
@@ -39,12 +42,17 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-SharpIR sharplinks(analog_pin, SHARPMEASUREMTS);
-SharpIR sharprechts(A2, SHARPMEASUREMTS);
+SharpIR sharplinksvorne(analog_pin, SHARPMEASUREMTS);
+SharpIR sharprechtsvorne(A2, SHARPMEASUREMTS);
+SharpIR sharplinkshinten(A3, SHARPMEASUREMTS);
+SharpIR sharprechtshinten(A4, SHARPMEASUREMTS);
 
 MPU mpu = MPU();
 
-int sensorValue;
+Adafruit_MLX90614 mlx = Adafruit_MLX90614(0x2B);
+
+
+float sensorValue;
 bool ledstate = false;
 
 
@@ -70,11 +78,13 @@ void setup()
 
 	mpu.Init();
 
-	Serial.println("MPU6050-Kalibrierung: ");
+	/*Serial.println("MPU6050-Kalibrierung: ");
 	if (mpu.WaitForCalibration(40000) != CALIBRATION_SUCCESS)  // Rückgabewert kann zum Beispiel an Raspberry gesendet werden.
 	{
 		Serial.println("MPU6050-Kalibrierung gescheitert!");
-	}
+	}*/
+
+	mlx.begin();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -84,23 +94,33 @@ void loop()
 	eins = micros();
 	for (int i = 0; i < SHARPMEASUREMTS; i++)
 	{
-		sharplinks.Update();    
-		sharprechts.Update();   // Sensoren nacheinander abfragen, damit diese sich aktualisieren können.
-		sharplinks.Update();
-		sharprechts.Update();   // Alle Sensoren zu aktualsieren dauert ca. 3900 us.
+		sharplinksvorne.Update();    
+		sharprechtsvorne.Update();   // Sensoren nacheinander abfragen, damit diese sich aktualisieren können.
+		sharplinkshinten.Update();
+		sharprechtshinten.Update();   // Alle Sensoren zu aktualsieren dauert ca. 4400 us.
 	}
 
-	sensorValue = sharprechts.GetValue();
-	sensorValue = sharplinks.GetValue();
-	//todo: alle SharpSensoren.
+	int a;
+	a = sharplinksvorne.GetValue();
+	a = sharprechtsvorne.GetValue();
+	a = sharplinkshinten.GetValue();
+	a = sharprechtshinten.GetValue();
+	//todo: Tue etwas mit den Daten.
+	
+	Wire.setClock(100000); // 100kHz I2C clock. MLX-I2C maximum speed.
+	//TWBR = ((F_CPU / 100000l) - 16) / 2; // Change the i2c clock to 100KHz // maybe this way of changing is even faster.
+	sensorValue = mlx.readObjectTempC();   // mlx is to slow for 400 kHz I2C.   // Ändern des Wire-Speeds und auslesen eines MLX: 500us
 
+	Wire.setClock(400000); // 400kHz I2C clock. Go back to "fullspeed" for MPU and Motorshield.
+	//TWBR = ((F_CPU / 400000l) - 16) / 2; // Change the i2c clock to 400KHz 
 	mpu.Update();
+
 
 	zwei = micros();
 
 	Serial.print(" ");
 	Serial.print(sensorValue);  
-	Serial.print(" Zeit: ");  // 8500 us bei neuen MPU Daten, sonst 3900 us.
+	Serial.print(" Zeit: ");  // 9300 us bei neuen MPU Daten, sonst 4700 us.
 	Serial.print(zwei - eins);
 	Serial.println(" us.");
 

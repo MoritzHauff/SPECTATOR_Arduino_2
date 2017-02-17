@@ -29,6 +29,12 @@ Dabei habe ich sie so bearbeitet, dass sie auch in Visual Micro verwendet werden
 Es ist also möglich diese Bibliothek ganz normal in den Arduino 'libraries'-Ordner
 zu kopieren und in der ArduinoIDE und in Visual Micro zu nutzen.
 
+## Adafruit-MLX90614
+
+Diese Bibliothek von Adafruit wurde leicht verändert damit die sonst etablierte I2C 
+Kommunikation nicht gestört wird. Aus diesem Grund muss man selbst dafür sorgen, dass 
+Wire.begin() vor dem ersten Zugriff auf einen MLX aufgerufen wird.
+
 ## Credits
 
 Moritz Hauff, 16.02.2017
