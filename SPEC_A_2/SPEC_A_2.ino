@@ -15,9 +15,8 @@
 #include <arduino2.h>   // include the fast I/O 2 functions
 
 #include "Functions.c"
-
-#include <SharpIR.h>  
-
+ 
+#include "SharpIR.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
@@ -36,10 +35,12 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-//int sensorValue[10];
-int sensorValue;
+int sensorValue[10];
+//int sensorValue;
 
-SharpIR sharp(A1, 430);
+int distanceCM;
+
+//SharpIR sharp(A1, 430);
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -63,7 +64,7 @@ void loop()
 	{
 		sensorValue = analogRead(analog_pin);    // 10 Messungen in einer for-Schleife brauchen genau 1120 us.
 	}*/
-	/*sensorValue[0] = analogRead(analog_pin);    // 10 hardgecodede Messungen benötigen ebenfalls 1120 us.
+	sensorValue[0] = analogRead(analog_pin);    // 10 hardgecodede Messungen benötigen ebenfalls 1120 us.
 	sensorValue[1] = analogRead(analog_pin);
 	sensorValue[2] = analogRead(analog_pin);
 	sensorValue[3] = analogRead(analog_pin);
@@ -72,13 +73,29 @@ void loop()
 	sensorValue[6] = analogRead(analog_pin);
 	sensorValue[7] = analogRead(analog_pin);
 	sensorValue[8] = analogRead(analog_pin);
-	sensorValue[9] = analogRead(analog_pin);*/
-	sensorValue = sharp.distance();   // Mit der Sharp-Klasse und 10(in lib einstellen!) Messungen werden schon 1620 us gebraucht.
+	sensorValue[9] = analogRead(analog_pin);
+
+	for (int k = 1; k < NB_SAMPLE; k++)  // Die Sortierung des Arrays dauert 60 us länger.
+	{
+		for (int i = 0; i < NB_SAMPLE - 1 - k; i++)
+		{
+			if (sensorValue[i] > sensorValue[i + 1])
+			{
+				int temp = sensorValue[i];
+				sensorValue[i] = sensorValue[i + 1];
+				sensorValue[i + 1] = temp;
+			}
+		}
+	}
+
+	//distanceCM = 12.08 * pow(map(sensorValue[NB_SAMPLE / 2], 0, 1023, 0, 5000) / 1000.0, -1.058);  // exp() dauert ewig (500 us)!
+
+	//sensorValue = sharp.distance();   // Mit der Sharp-Klasse und 10(in lib einstellen!) Messungen werden schon 1620 us gebraucht. Das ist 1,5 mal soviel wie ohne die Klasse.
 
 	zwei = micros();
 	
 	Serial.print(" ");
-	Serial.print(sensorValue);
+	Serial.print(sensorValue[NB_SAMPLE / 2]);
 	Serial.print(" Zeit: ");
 	Serial.print(zwei - eins);
 	Serial.println(" us.");
