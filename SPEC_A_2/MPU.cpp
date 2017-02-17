@@ -1,14 +1,25 @@
-// 
-// 
-// 
+/** MPU.cpp
+***
+*** Die MPU-Class verwaltet greift auf ein MPU6050 zu und analysiert
+*** dessen Werte.
+*** Diese sollten außerdem in Zukunft zur Weiterverwendung bereitgestellt werden.
+***
+*** Moritz Hauff - 30.12.2016
+**/
 
+///////////////////////////////////////////////////////////////////////////
+///Includes
 #include "MPU.h"
 
+///////////////////////////////////////////////////////////////////////////
+///Konstruktoren
 MPU::MPU()
 {
 	dmpReady = false;
 }
 
+///////////////////////////////////////////////////////////////////////////
+///Funktionen
 void MPU::Init()
 {
 	// initialize device
@@ -24,7 +35,7 @@ void MPU::Init()
 	devStatus = mpu.dmpInitialize();
 
 	// supply your own gyro offsets here, scaled for min sensitivity
-	mpu.setXGyroOffset(220);
+	mpu.setXGyroOffset(220);   // todo: Hier richtige Kalibrierung.
 	mpu.setYGyroOffset(76);
 	mpu.setZGyroOffset(-85);
 	mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
@@ -76,32 +87,44 @@ void MPU::Update()
 
 		// otherwise, check for DMP data ready interrupt (this should happen frequently)
 	}
-	else /*if (mpuIntStatus & 0x02) */
+	else if(fifoCount > packetSize)/*if (mpuIntStatus & 0x02) */
 	{
 		// wait for correct available data length, should be a VERY short wait
-		while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
+		unsigned long eins = micros();
+		//while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
+		unsigned long zwei = micros();
+		Serial.print("Wartezeit: ");
+		Serial.print(zwei - eins);  //Die Wartezeit betrug ca. 6000us. Das ist zu viel.
 
+		eins = micros();
 		// read a packet from FIFO
 		mpu.getFIFOBytes(fifoBuffer, packetSize);
+		zwei = micros();
+		Serial.print(" Lesen: ");
+		Serial.print(zwei - eins);  //Die LeseZeit beträgt 1700 us.
 
 		// track FIFO count here in case there is > 1 packet available
 		// (this lets us immediately read more without waiting for an interrupt)
 		fifoCount -= packetSize;
 
-		/*Serial.print("loop[ms]: ");
-		Serial.print(zwei - drei);
-		Serial.print("\t");*/
-
 		// display Euler angles in degrees
+		eins = micros();
 		mpu.dmpGetQuaternion(&q, fifoBuffer);
 		mpu.dmpGetGravity(&gravity, &q);
 		mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+		zwei = micros();
+		Serial.print(" Berechnung: ");  // Die Berechnung benötigt ca. 980 us. Das ist OK.
+		Serial.println(zwei - eins);
+		eins = micros();
 		Serial.print("ypr\t");
-		Serial.print(ypr[0] * 180 / M_PI);
+		Serial.print(ypr[0]/* * 180 / M_PI*/);  // das Weglassen der Umrechnung bringt nochmal 180 us.
 		Serial.print("\t");
-		Serial.print(ypr[1] * 180 / M_PI);
+		Serial.print(ypr[1]/* * 180 / M_PI*/);
 		Serial.print("\t");
-		Serial.println(ypr[2] * 180 / M_PI);
+		Serial.println(ypr[2]/* * 180 / M_PI*/);
+		zwei = micros();
+		Serial.print(" Ausgabe: ");  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
+		Serial.print(zwei - eins);
 	}
 
 }
