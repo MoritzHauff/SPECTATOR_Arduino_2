@@ -74,6 +74,19 @@ void SerialBuffer::AddMsg(uint8_t Code, String Msg)
 	currentPos++;
 }
 
+void SerialBuffer::AddMsg(uint8_t Code, bool b)
+{
+	if (b)
+	{
+		AddMsg(Code, String("True"));
+	}
+	else
+	{
+		AddMsg(Code, String("False"));
+	}
+	//AddMsg(Code, String(b));
+}
+
 void SerialBuffer::AddMsg(uint8_t Code, int i)
 {
 	AddMsg(Code, String(i));

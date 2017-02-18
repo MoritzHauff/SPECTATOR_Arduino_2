@@ -34,6 +34,7 @@ protected:
 public:
 	SerialBuffer();
 
+	void AddMsg(uint8_t Code, bool State);
 	void AddMsg(uint8_t Code, int Value);
 	void AddMsg(uint8_t Code, double Value);
 	void AddMsg(uint8_t Code, double Value, uint8_t Genauigkeit);

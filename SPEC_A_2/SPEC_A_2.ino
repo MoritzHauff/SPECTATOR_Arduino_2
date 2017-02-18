@@ -3,9 +3,9 @@
 *** Dieses Programm läuft auf dem SPECTATOR-Arduino und überwacht dessen Sensoren.
 ***
 *** Test der schnelleren IO-Bibliothek. Und angeschlossener SHARP-Distanzsensoren,
-*** sowie des MPU6050s.
+*** sowie des MPU6050s. ZeitTests der MLX-Temp-Sensoren und der Stoßsensoren Vorne.
 ***
-*** ZeitTests der MLX-Temp-Sensoren.
+*** Serielle Übertragung aller Sensorwerte.
 ***
 *** Moritz Hauff, 18.02.2017
 **/
@@ -29,6 +29,10 @@
 // The I/O 2 functions use special data type for pin
 // Pin codes, such as DP13 are defined in pins2_arduino.h
 const GPIO_pin_t led_pin = DP32;  // Achtung: Pins nur für ihren im Setup angegeben Zweck nutzen, sonst kann es zur Beschädigung des ATmegas2560 kommen!
+const GPIO_pin_t switchLinks_Pin = DP23;
+const GPIO_pin_t switchRechts_Pin = DP25;
+
+const uint8_t analog_Pin = A1;
 
 const uint8_t DELAY_TIME = 100;
 
@@ -41,7 +45,7 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-SharpIR sharplinksvorne(analog_pin, SHARPMEASUREMTS);
+SharpIR sharplinksvorne(analog_Pin, SHARPMEASUREMTS);
 SharpIR sharprechtsvorne(A2, SHARPMEASUREMTS);
 SharpIR sharplinkshinten(A3, SHARPMEASUREMTS);
 SharpIR sharprechtshinten(A4, SHARPMEASUREMTS);
@@ -57,11 +61,16 @@ SerialBuffer serialBuffer = SerialBuffer();
 float sensorValue;
 bool ledState = false;
 
+bool swtLinks = false;
+bool swtRechts = false;
+
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
 {	
 	pinMode2f(led_pin, OUTPUT);
+	pinMode2f(switchLinks_Pin, INPUT);
+	pinMode2f(switchRechts_Pin, INPUT);
 	
 	Serial.begin(250000);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
@@ -122,6 +131,11 @@ void loop()
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
 	}
 
+	swtLinks = digitalRead2f(switchLinks_Pin);
+	swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
+
+	serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
+	serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
 
 	serialBuffer.Flush();
 
@@ -130,39 +144,6 @@ void loop()
 	Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);    // Die jetztige loop-Schleife führt zu keinen Fifo-Overflows!
 	Serial.println(" us."); 
-
-	/*eins = micros();
-	serialBuffer.AddMsg(65, 3400);
-	serialBuffer.AddMsg(66, 3400);
-	serialBuffer.AddMsg(67, 3500);
-	serialBuffer.AddMsg(68, 3400);
-	serialBuffer.AddMsg(69, 3600);
-	serialBuffer.AddMsg(61, 3004);
-	serialBuffer.AddMsg(62, 3004); 
-	serialBuffer.AddMsg(63, 3400);
-	serialBuffer.AddMsg(64, 3400);  // 780 us
-	serialBuffer.AddMsg(65, 3400);
-	serialBuffer.AddMsg(66, 3400);
-	serialBuffer.AddMsg(67, 3500);
-	serialBuffer.AddMsg(68, 3400);
-	serialBuffer.AddMsg(69, 3600);
-	serialBuffer.AddMsg(61, 3400);
-	serialBuffer.AddMsg(62, 3400);
-	serialBuffer.AddMsg(63, 3400);
-	serialBuffer.AddMsg(65, 3400);
-	serialBuffer.AddMsg(66, 3400);
-	serialBuffer.AddMsg(67, 3500);
-	serialBuffer.AddMsg(68, 3400);
-	serialBuffer.AddMsg(69, 3600);
-	serialBuffer.AddMsg(61, 3400);
-	serialBuffer.AddMsg(62, 3400);
-	serialBuffer.AddMsg(63, 3400);    // bei so vielen Daten kommte es ab und zu wieder zu einem Fifo Overflow. Vlt hilft es dtan everteilt über den loop zu schicken, damit der serielle output buffer zeit hat die daten loszuwerden.
-	serialBuffer.Flush();
-	zwei = micros();
-	drei = zwei - eins;
-
-	Serial.print("mit Klasse: ");  
-	Serial.print(drei); */
 
 
 	ledState = !ledState;
