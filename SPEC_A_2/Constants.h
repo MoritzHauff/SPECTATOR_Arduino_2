@@ -18,6 +18,10 @@
 #define C_MLXVorne 0x22
 #define C_MLXRechts 0x23
 
+#define C_MPUYaw 0x26
+#define C_MPUPitch 0x27
+#define C_MPURoll 0x26
+
 #define C_SharpLV 0x31
 #define C_SharpLH 0x32
 #define C_SharpRV 0x33

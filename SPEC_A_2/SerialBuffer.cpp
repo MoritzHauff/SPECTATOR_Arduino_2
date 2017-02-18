@@ -81,5 +81,9 @@ void SerialBuffer::AddMsg(uint8_t Code, int i)
 
 void SerialBuffer::AddMsg(uint8_t Code, double d)
 {
-	AddMsg(Code, String(d, 6));   // hier kann die genauigkait der übertragenen double Werte eingestellt werden.
+	AddMsg(Code, String(d, 6));   // hier kann die standard-genauigkait der übertragenen double Werte eingestellt werden.
+}
+void SerialBuffer::AddMsg(uint8_t Code, double d, uint8_t Genauigkeit)
+{
+	AddMsg(Code, String(d, Genauigkeit));
 }
