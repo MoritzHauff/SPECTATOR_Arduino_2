@@ -74,7 +74,7 @@ void SerialBuffer::Flush()
 
 void SerialBuffer::AddMsg(uint8_t Code, String Msg)
 {
-	if (currentPos + Msg.length() >= MAX_SERIALBUFFER_LENGTH)   // es soll kein Overflow erzeugt werden.
+	if (currentPos + Msg.length() + 2 >= MAX_SERIALBUFFER_LENGTH)   // es soll kein Overflow erzeugt werden.
 	{
 		#if defined(autoFlush) && (autoFlush) == 1
 			Flush();
@@ -101,19 +101,7 @@ void SerialBuffer::AddMsg(uint8_t Code, int i)
 	AddMsg(Code, String(i));
 }
 
-/*void SerialBuffer::Send(uint8_t Code, int i)
+void SerialBuffer::AddMsg(uint8_t Code, double d)
 {
-	Serial.write(C_MSGSTART);
-	Serial.write(Code);
-	Serial.println(i);
-	//Serial.println(C_MSGEND);
+	AddMsg(Code, String(d, 6));   // hier kann die genauigkait der übertragenen double Werte eingestellt werden.
 }
-
-void SerialBuffer::Send(uint8_t Code, double d)
-{
-	Serial.print(C_MSGSTART);
-	Serial.print(Code);
-	Serial.print(d);
-	Serial.println(C_MSGEND);
-}*/
-
