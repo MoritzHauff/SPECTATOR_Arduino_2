@@ -119,15 +119,18 @@ void MPU::Update()
 			mpu.dmpGetQuaternion(&q, fifoBuffer);
 			mpu.dmpGetGravity(&gravity, &q);
 			mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);  // Die gesamte Berechnung benötigt ca. 980 us. Das ist OK.
-			
-			Serial.print("\t\t\typr\t");
+
+			/*Serial.print("\t\t\typr\t");
 			Serial.print(ypr[0] - ypr_correction[0], 4);  // das Weglassen einer Umrechnung bringt nochmal 180 us.
 			Serial.print("\t");
 			Serial.print(ypr[1] - ypr_correction[1], 4);  // todo: Bias-Normalisierung auf 0 - 2pi
 			Serial.print("\t");
-			Serial.println(ypr[2] - ypr_correction[2], 4);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
+			Serial.println(ypr[2] - ypr_correction[2], 4); */ // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
 
-			//todo: Tue irgendetwas mit den Daten.
+			normalisedypr[0] = ypr[0] - ypr_correction[0] + PI;   // todo: Zeit der Umrechnung messen.
+			normalisedypr[1] = ypr[1] - ypr_correction[1] + PI;
+			normalisedypr[2] = ypr[2] - ypr_correction[2] + PI;
+			DataUpdated = true;
 		}
 	}
 }
@@ -163,4 +166,25 @@ uint8_t MPU::WaitForCalibration(uint16_t Timeout)
 		}
 	}
 	return CALIBRATION_ERROR;
+}
+
+float MPU::GetYaw()
+{
+	DataUpdated = false;
+	return normalisedypr[0];
+}
+float MPU::GetPitch()
+{
+	DataUpdated = false;
+	return normalisedypr[1];
+}
+float MPU::GetRoll()
+{
+	DataUpdated = false;
+	return normalisedypr[2];
+}
+
+bool MPU::NewDataAvaible()
+{
+	return DataUpdated;
 }

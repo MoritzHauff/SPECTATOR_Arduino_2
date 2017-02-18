@@ -1,5 +1,4 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.c
+// MLX90614Class.h - Moritz Hauff - 06.01.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,14 +22,34 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
+#ifndef _MLX90614CLASS_h
+#define _MLX90614CLASS_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include <avr/io.h>
-
-
-
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "arduino.h"
+#else
+	#include "WProgram.h"
 #endif
 
+#include <Wire.h>
+#include <Adafruit_MLX90614.h>
+
+///////////////////////////////////////////////////////////////////////////
+///MLX90614Class
+/* Diese Klasse dient dem Überwachen eines MLX90614 Temperatursensor von Adafruit.*/
+class MLX90614Class
+{
+ protected:
+	 byte _address;
+	 Adafruit_MLX90614 mlx;
+
+ public:
+	 MLX90614Class(byte Address = 0x5A);
+	 /*Returns the object temperature in °C.*/
+	 float GetObjTemp();
+	 
+};
+
+#endif
