@@ -19,9 +19,9 @@
 #include "MPU.h"
 #include "MLX90614Class.h"
 
-#include "SerialBuffer.h"
+#include "SerialWraper.h"
 
-#include "Functions.c"
+#include "Functions.h"
  
 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,12 +54,16 @@ MLX90614Class MLXLinks = MLX90614Class(0x2C);
 MLX90614Class MLXVorne = MLX90614Class(0x2A);
 MLX90614Class MLXRechts = MLX90614Class(0x2B);
 
-SerialBuffer serialBuffer = SerialBuffer();
+SerialWraper serialBuffer = SerialWraper();
 
 float sensorValue;
 bool ledState = false;
 
-
+inline void SendToRP(uint8_t Code, int Value)
+{
+	Serial.write(Code);
+	Serial.println(Value);
+}
 
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
@@ -129,8 +133,8 @@ void loop()
 	Serial.println(" us.");*/
 
 	eins = micros();
-	serialBuffer.AddMSG(65, 34);
-	serialBuffer.Flush();
+	//serialBuffer.Send(65, 34);
+	SendToRP(65, 34);
 	zwei = micros();
 	drei = zwei - eins;
 	eins = micros();

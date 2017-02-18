@@ -36,7 +36,7 @@
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SerialBuffer.h">
+    <ClInclude Include="SerialWraper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -56,7 +56,7 @@
     <ClCompile Include="MLX90614Class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SerialBuffer.cpp">
+    <ClCompile Include="SerialWraper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
