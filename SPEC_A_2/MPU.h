@@ -64,8 +64,11 @@ protected:
 	// orientation/motion vars
 	Quaternion q;           // [w, x, y, z]         quaternion container
 	VectorFloat gravity;    // [x, y, z]            gravity vector
-	float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+	float ypr[3];           // [yaw, pitch, roll]   raw yaw/pitch/roll container and gravity vector
 	float ypr_correction[3];// yaw/pitch/roll container for offset-correction
+	float normalisedypr[3];
+
+	bool DataUpdated = false; 
 
 public: 
 	MPU();
@@ -77,6 +80,12 @@ public:
 	/*Führt eine Kalibrierung des MPU durchs. Wartet bis sich die Werte stabilisiert haben und
 	stellt anhand dessen dann das Offset ein. Bricht nach einem gewissen Timeout (ms) die Fkt. ab falls sie zu lange kein Ergebnis liefert.*/
 	uint8_t WaitForCalibration(uint16_t Timeout);
+
+	/*Gibt an ob seit dem letzten Auslesen der Ýaw/Pitch/Roll-Werte diese aktualisiert wurden.*/
+	bool NewDataAvaible();
+	float GetYaw();
+	float GetPitch();
+	float GetRoll();
 };
 
 #endif

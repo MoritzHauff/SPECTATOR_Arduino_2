@@ -30,8 +30,6 @@
 // Pin codes, such as DP13 are defined in pins2_arduino.h
 const GPIO_pin_t led_pin = DP32;  // Achtung: Pins nur für ihren im Setup angegeben Zweck nutzen, sonst kann es zur Beschädigung des ATmegas2560 kommen!
 
-const uint8_t analog_pin = A1;
-
 const uint8_t DELAY_TIME = 100;
 
 const uint8_t SHARPMEASUREMTS = 8;   // acht sharp-Messungen an einem Sensor dauern genau 940 us. Diese reium an allen würden damit 4 ms dauern.
@@ -117,7 +115,13 @@ void loop()
 	}
 	
 	mpu.Update();
-	//todo: Tue etwas mit den Daten
+	if (mpu.NewDataAvaible())
+	{
+		serialBuffer.AddMsg(C_MPUYaw, mpu.GetYaw(), 8);
+		serialBuffer.AddMsg(C_MPUPitch, mpu.GetPitch(), 8);
+		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
+	}
+
 
 	serialBuffer.Flush();
 
