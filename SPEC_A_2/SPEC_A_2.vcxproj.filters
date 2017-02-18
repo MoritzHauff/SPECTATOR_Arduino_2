@@ -30,6 +30,9 @@
     <ClInclude Include="MPU.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MLX90614Class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Functions.c">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MPU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MLX90614Class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

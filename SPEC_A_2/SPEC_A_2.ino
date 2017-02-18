@@ -17,8 +17,7 @@
 
 #include "SharpIR.h"
 #include "MPU.h"
-
-#include <Adafruit_MLX90614.h>
+#include "MLX90614Class.h"
 
 #include "Functions.c"
  
@@ -49,11 +48,12 @@ SharpIR sharprechtshinten(A4, SHARPMEASUREMTS);
 
 MPU mpu = MPU();
 
-Adafruit_MLX90614 mlx = Adafruit_MLX90614(0x2B);
-
+MLX90614Class MLXLinks = MLX90614Class(0x2C);
+MLX90614Class MLXVorne = MLX90614Class(0x2A);
+MLX90614Class MLXRechts = MLX90614Class(0x2B);
 
 float sensorValue;
-bool ledstate = false;
+bool ledState = false;
 
 
 
@@ -63,7 +63,7 @@ void setup()
 {	
 	pinMode2f(led_pin, OUTPUT);
 	
-	Serial.begin(115200);
+	Serial.begin(250000);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
 	// join I2C bus (I2Cdev library doesn't do this automatically)
@@ -83,8 +83,6 @@ void setup()
 	{
 		Serial.println("MPU6050-Kalibrierung gescheitert!");
 	}*/
-
-	mlx.begin();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -107,9 +105,11 @@ void loop()
 	a = sharprechtshinten.GetValue();
 	//todo: Tue etwas mit den Daten.
 	
-	Wire.setClock(100000); // 100kHz I2C clock. MLX-I2C maximum speed.
-	//TWBR = ((F_CPU / 100000l) - 16) / 2; // Change the i2c clock to 100KHz // maybe this way of changing is even faster.
-	sensorValue = mlx.readObjectTempC();   // mlx is to slow for 400 kHz I2C.   // Ändern des Wire-Speeds und auslesen eines MLX: 500us
+	Wire.setClock(100000); // Change the i2c clock to 100KHz because mlx is to slow for 400 kHz I2C. 
+	//TWBR = ((F_CPU / 100000l) - 16) / 2; // 100kHz I2C clock. // maybe this way of changing is even faster.
+	sensorValue = MLXLinks.GetObjTemp();   // Ändern des Wire-Speeds und auslesen eines MLX: ca. 500us (auch mit Klasse)
+	sensorValue = MLXVorne.GetObjTemp(); 
+	sensorValue = MLXRechts.GetObjTemp();  // Sollte es zu Timing Problemem kommen, kann auch in einem Tick das MPU ausgelesen werden und im nächsten die Wärme sensoren
 
 	Wire.setClock(400000); // 400kHz I2C clock. Go back to "fullspeed" for MPU and Motorshield.
 	//TWBR = ((F_CPU / 400000l) - 16) / 2; // Change the i2c clock to 400KHz 
@@ -120,11 +120,11 @@ void loop()
 
 	Serial.print(" ");
 	Serial.print(sensorValue);  
-	Serial.print(" Zeit: ");  // 9300 us bei neuen MPU Daten, sonst 4700 us.
+	Serial.print(" Zeit: ");  // 10500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);
 	Serial.println(" us.");
 
-	ledstate = !ledstate;
-	digitalWrite2f(led_pin, ledstate);   // Make the heartbeat.
+	ledState = !ledState;
+	digitalWrite2f(led_pin, ledState);   // Make the heartbeat.
 }
 
