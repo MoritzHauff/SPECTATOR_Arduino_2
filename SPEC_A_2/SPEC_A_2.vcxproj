@@ -79,9 +79,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="MLX90614Class.h" />
     <ClInclude Include="MPU.h" />
+    <ClInclude Include="SerialBuffer.h" />
     <ClInclude Include="SharpIR.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
   </ItemGroup>
@@ -90,6 +92,7 @@
     <ClCompile Include="MedianFilter.cpp" />
     <ClCompile Include="MLX90614Class.cpp" />
     <ClCompile Include="MPU.cpp" />
+    <ClCompile Include="SerialBuffer.cpp" />
     <ClCompile Include="SharpIR.cpp" />
   </ItemGroup>
   <PropertyGroup>

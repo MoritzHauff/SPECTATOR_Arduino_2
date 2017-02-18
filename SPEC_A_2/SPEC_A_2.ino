@@ -19,6 +19,8 @@
 #include "MPU.h"
 #include "MLX90614Class.h"
 
+#include "SerialBuffer.h"
+
 #include "Functions.c"
  
 
@@ -51,6 +53,8 @@ MPU mpu = MPU();
 MLX90614Class MLXLinks = MLX90614Class(0x2C);
 MLX90614Class MLXVorne = MLX90614Class(0x2A);
 MLX90614Class MLXRechts = MLX90614Class(0x2B);
+
+SerialBuffer serialBuffer = SerialBuffer();
 
 float sensorValue;
 bool ledState = false;
@@ -108,7 +112,7 @@ void loop()
 	Wire.setClock(100000); // Change the i2c clock to 100KHz because mlx is to slow for 400 kHz I2C. 
 	//TWBR = ((F_CPU / 100000l) - 16) / 2; // 100kHz I2C clock. // maybe this way of changing is even faster.
 	sensorValue = MLXLinks.GetObjTemp();   // Ändern des Wire-Speeds und auslesen eines MLX: ca. 500us (auch mit Klasse)
-	sensorValue = MLXVorne.GetObjTemp(); 
+	sensorValue = MLXVorne.GetObjTemp();   // Generell müssen die MLX vlt auch nur alle 10 Ticks ausgelesen werden und dann an den RaspberryPi geschickt werden.
 	sensorValue = MLXRechts.GetObjTemp();  // Sollte es zu Timing Problemem kommen, kann auch in einem Tick das MPU ausgelesen werden und im nächsten die Wärme sensoren
 
 	Wire.setClock(400000); // 400kHz I2C clock. Go back to "fullspeed" for MPU and Motorshield.
@@ -118,11 +122,25 @@ void loop()
 
 	zwei = micros();
 
-	Serial.print(" ");
+	/*Serial.print(" ");
 	Serial.print(sensorValue);  
 	Serial.print(" Zeit: ");  // 10500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);
-	Serial.println(" us.");
+	Serial.println(" us.");*/
+
+	eins = micros();
+	serialBuffer.AddMSG(65, 34);
+	serialBuffer.Flush();
+	zwei = micros();
+	drei = zwei - eins;
+	eins = micros();
+	Serial.println("aA34c");
+	zwei = micros();
+	Serial.print("mit Klasse: ");  // 139 oder mit dsprintf soagr 140 us
+	Serial.print(drei);
+	Serial.print(" ohne Klasse: ");   // 80 us. 
+	Serial.println(zwei - eins);   // vielleicht sollten die daten gar nicht zusammengeapckt werden sondern einfach an Serial geschickt werden und fertig.
+
 
 	ledState = !ledState;
 	digitalWrite2f(led_pin, ledState);   // Make the heartbeat.
