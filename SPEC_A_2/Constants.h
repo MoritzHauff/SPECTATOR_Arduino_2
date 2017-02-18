@@ -44,6 +44,9 @@
 #define C_MPUPitch 0x27
 #define C_MPURoll 0x26
 
+#define C_SwitchLinks 0x27
+#define C_SwitchRechts 0x28
+
 #define C_SharpLV 0x31
 #define C_SharpLH 0x32
 #define C_SharpRV 0x33
