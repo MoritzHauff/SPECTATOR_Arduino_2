@@ -59,7 +59,11 @@ SerialBuffer serialBuffer = SerialBuffer();
 float sensorValue;
 bool ledState = false;
 
-
+inline void SendToRP(uint8_t Code, int Value)
+{
+	Serial.write(Code);
+	Serial.println(Value);
+}
 
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
@@ -129,14 +133,39 @@ void loop()
 	Serial.println(" us.");*/
 
 	eins = micros();
-	serialBuffer.AddMSG(65, 34);
+	serialBuffer.AddMsg(65, 34);
+	serialBuffer.AddMsg(66, 34);
+	serialBuffer.AddMsg(67, 35);
+	serialBuffer.AddMsg(68, 34);
+	serialBuffer.AddMsg(69, 36);
+	serialBuffer.AddMsg(61, 34);
+	serialBuffer.AddMsg(62, 34); 
+	serialBuffer.AddMsg(63, 34);
+	serialBuffer.AddMsg(64, 34);  // 780 us
 	serialBuffer.Flush();
 	zwei = micros();
 	drei = zwei - eins;
 	eins = micros();
-	Serial.println("aA34c");
+	/*Serial.print("aA34c");
+	Serial.print("b34");
+	Serial.print("c34");
+	Serial.print("d36");
+	Serial.print("e34");
+	Serial.print("f34");
+	Serial.print("g34");
+	Serial.print("h34");
+	Serial.println("i34F");*/  // 350 us
+	/*SendToRP(65, 34);
+	SendToRP(66, 34);
+	SendToRP(67, 35);
+	SendToRP(68, 34);
+	SendToRP(69, 36);
+	SendToRP(61, 34);
+	SendToRP(62, 34);
+	SendToRP(63, 34);
+	SendToRP(64, 34);*/   // 1400 us  -> Klasse lohtn sich durchaus ersparnis von ca. der Hälfte der Zeit.
 	zwei = micros();
-	Serial.print("mit Klasse: ");  // 139 oder mit dsprintf soagr 140 us
+	Serial.print("mit Klasse: ");  // einzelne Übertragung: 120 oder mit dsprintf sogar 140 us: Gleich lang wie mit inlineFunktion!
 	Serial.print(drei);
 	Serial.print(" ohne Klasse: ");   // 80 us. 
 	Serial.println(zwei - eins);   // vielleicht sollten die daten gar nicht zusammengeapckt werden sondern einfach an Serial geschickt werden und fertig.
