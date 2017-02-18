@@ -17,7 +17,7 @@
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
 const int MAX_SERIALBUFFER_LENGTH = 120; // max serial buffer msg length. for more information see: http://forum.arduino.cc/index.php?topic=14898.0
-#define autoFlush 1
+#define autoFlush 1  // Soll der Buffer automatsich gesendet werden, wenn eine neue Nachricht zu einerm Overflow führen würde?
 
 ///////////////////////////////////////////////////////////////////////////
 ///SerialBuffer-Class
@@ -30,14 +30,20 @@ protected:
 	int currentPos;
 
 	void AddMsg(uint8_t Code, String Msg);
+
 public:
 	SerialBuffer();
 
 	void AddMsg(uint8_t Code, int Value);
 	void AddMsg(uint8_t Code, double Value);
 
+	/*Leert den Buffer ohne die Daten zu senden.*/
 	void Clear();
+	/*Sendet alle Daten im Buffer und leert diesen.*/
 	void Flush();
 };
+
+// Werden zu viele Daten auf einmal gesendet geht die Ausfühungszeit stark noch oben. 
+// Vielleicht hilft das mehrfache Aufrufen von Flush verteilt über die loop Funktion.
 
 #endif

@@ -59,12 +59,6 @@ SerialBuffer serialBuffer = SerialBuffer();
 float sensorValue;
 bool ledState = false;
 
-inline void SendToRP(uint8_t Code, int Value)
-{
-	Serial.write(Code);
-	Serial.println(Value);
-}
-
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
@@ -106,69 +100,65 @@ void loop()
 		sharprechtshinten.Update();   // Alle Sensoren zu aktualsieren dauert ca. 4400 us.
 	}
 
-	int a;
-	a = sharplinksvorne.GetValue();
-	a = sharprechtsvorne.GetValue();
-	a = sharplinkshinten.GetValue();
-	a = sharprechtshinten.GetValue();
-	//todo: Tue etwas mit den Daten.
+	serialBuffer.AddMsg(C_SharpLV, sharplinksvorne.GetValue());
+	serialBuffer.AddMsg(C_SharpLH, sharplinkshinten.GetValue());
+	serialBuffer.AddMsg(C_SharpRV, sharprechtsvorne.GetValue());
+	serialBuffer.AddMsg(C_SharpRH, sharprechtshinten.GetValue());
 	
-	Wire.setClock(100000); // Change the i2c clock to 100KHz because mlx is to slow for 400 kHz I2C. 
-	//TWBR = ((F_CPU / 100000l) - 16) / 2; // 100kHz I2C clock. // maybe this way of changing is even faster.
-	sensorValue = MLXLinks.GetObjTemp();   // Ändern des Wire-Speeds und auslesen eines MLX: ca. 500us (auch mit Klasse)
-	sensorValue = MLXVorne.GetObjTemp();   // Generell müssen die MLX vlt auch nur alle 10 Ticks ausgelesen werden und dann an den RaspberryPi geschickt werden.
-	sensorValue = MLXRechts.GetObjTemp();  // Sollte es zu Timing Problemem kommen, kann auch in einem Tick das MPU ausgelesen werden und im nächsten die Wärme sensoren
-
-	Wire.setClock(400000); // 400kHz I2C clock. Go back to "fullspeed" for MPU and Motorshield.
-	//TWBR = ((F_CPU / 400000l) - 16) / 2; // Change the i2c clock to 400KHz 
+	if (ledState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
+	{
+		Wire.setClock(100000); // Change the i2c clock to 100KHz because mlx is to slow for 400 kHz I2C. 
+		//TWBR = ((F_CPU / 100000l) - 16) / 2; // 100kHz I2C clock. // maybe this way of changing is even faster.
+		serialBuffer.AddMsg(C_MLXLinks, MLXLinks.GetObjTemp());   // Ändern des Wire-Speeds und auslesen eines MLX: ca. 500us (auch mit Klasse)
+		serialBuffer.AddMsg(C_MLXVorne, MLXVorne.GetObjTemp());   // Generell müssen die MLX vlt auch nur alle 10 Ticks ausgelesen werden und dann an den RaspberryPi geschickt werden.
+		serialBuffer.AddMsg(C_MLXRechts, MLXRechts.GetObjTemp());  // Sollte es zu Timing Problemem kommen, kann auch in einem Tick das MPU ausgelesen werden und im nächsten die Wärme sensoren
+		Wire.setClock(400000); // 400kHz I2C clock. Go back to "fullspeed" for MPU and Motorshield.
+		//TWBR = ((F_CPU / 400000l) - 16) / 2; // Change the i2c clock to 400KHz 
+	}
+	
 	mpu.Update();
+	//todo: Tue etwas mit den Daten
 
+	serialBuffer.Flush();
 
 	zwei = micros();
 
-	/*Serial.print(" ");
-	Serial.print(sensorValue);  
-	Serial.print(" Zeit: ");  // 10500 us bei neuen MPU Daten, sonst 6030 us.
-	Serial.print(zwei - eins);
-	Serial.println(" us.");*/
+	Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
+	Serial.print(zwei - eins);    // Die jetztige loop-Schleife führt zu keinen Fifo-Overflows!
+	Serial.println(" us."); 
 
-	eins = micros();
-	serialBuffer.AddMsg(65, 34);
-	serialBuffer.AddMsg(66, 34);
-	serialBuffer.AddMsg(67, 35);
-	serialBuffer.AddMsg(68, 34);
-	serialBuffer.AddMsg(69, 36);
-	serialBuffer.AddMsg(61, 34);
-	serialBuffer.AddMsg(62, 34); 
-	serialBuffer.AddMsg(63, 34);
-	serialBuffer.AddMsg(64, 34);  // 780 us
+	/*eins = micros();
+	serialBuffer.AddMsg(65, 3400);
+	serialBuffer.AddMsg(66, 3400);
+	serialBuffer.AddMsg(67, 3500);
+	serialBuffer.AddMsg(68, 3400);
+	serialBuffer.AddMsg(69, 3600);
+	serialBuffer.AddMsg(61, 3004);
+	serialBuffer.AddMsg(62, 3004); 
+	serialBuffer.AddMsg(63, 3400);
+	serialBuffer.AddMsg(64, 3400);  // 780 us
+	serialBuffer.AddMsg(65, 3400);
+	serialBuffer.AddMsg(66, 3400);
+	serialBuffer.AddMsg(67, 3500);
+	serialBuffer.AddMsg(68, 3400);
+	serialBuffer.AddMsg(69, 3600);
+	serialBuffer.AddMsg(61, 3400);
+	serialBuffer.AddMsg(62, 3400);
+	serialBuffer.AddMsg(63, 3400);
+	serialBuffer.AddMsg(65, 3400);
+	serialBuffer.AddMsg(66, 3400);
+	serialBuffer.AddMsg(67, 3500);
+	serialBuffer.AddMsg(68, 3400);
+	serialBuffer.AddMsg(69, 3600);
+	serialBuffer.AddMsg(61, 3400);
+	serialBuffer.AddMsg(62, 3400);
+	serialBuffer.AddMsg(63, 3400);    // bei so vielen Daten kommte es ab und zu wieder zu einem Fifo Overflow. Vlt hilft es dtan everteilt über den loop zu schicken, damit der serielle output buffer zeit hat die daten loszuwerden.
 	serialBuffer.Flush();
 	zwei = micros();
 	drei = zwei - eins;
-	eins = micros();
-	/*Serial.print("aA34c");
-	Serial.print("b34");
-	Serial.print("c34");
-	Serial.print("d36");
-	Serial.print("e34");
-	Serial.print("f34");
-	Serial.print("g34");
-	Serial.print("h34");
-	Serial.println("i34F");*/  // 350 us
-	/*SendToRP(65, 34);
-	SendToRP(66, 34);
-	SendToRP(67, 35);
-	SendToRP(68, 34);
-	SendToRP(69, 36);
-	SendToRP(61, 34);
-	SendToRP(62, 34);
-	SendToRP(63, 34);
-	SendToRP(64, 34);*/   // 1400 us  -> Klasse lohtn sich durchaus ersparnis von ca. der Hälfte der Zeit.
-	zwei = micros();
-	Serial.print("mit Klasse: ");  // einzelne Übertragung: 120 oder mit dsprintf sogar 140 us: Gleich lang wie mit inlineFunktion!
-	Serial.print(drei);
-	Serial.print(" ohne Klasse: ");   // 80 us. 
-	Serial.println(zwei - eins);   // vielleicht sollten die daten gar nicht zusammengeapckt werden sondern einfach an Serial geschickt werden und fertig.
+
+	Serial.print("mit Klasse: ");  
+	Serial.print(drei); */
 
 
 	ledState = !ledState;
