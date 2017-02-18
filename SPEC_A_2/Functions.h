@@ -6,13 +6,9 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#if defined(ARDUINO) && ARDUINO >= 100
-#include "arduino.h"
-#else
-#include "WProgram.h"
-#endif
+#include <avr/io.h>
 
-void SendToRP(uint8_t Code, int Value);
+
 
 #endif
 
