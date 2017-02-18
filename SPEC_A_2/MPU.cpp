@@ -123,7 +123,7 @@ void MPU::Update()
 			Serial.print("\t\t\typr\t");
 			Serial.print(ypr[0] - ypr_correction[0], 4);  // das Weglassen einer Umrechnung bringt nochmal 180 us.
 			Serial.print("\t");
-			Serial.print(ypr[1] - ypr_correction[1], 4);
+			Serial.print(ypr[1] - ypr_correction[1], 4);  // todo: Bias-Normalisierung auf 0 - 2pi
 			Serial.print("\t");
 			Serial.println(ypr[2] - ypr_correction[2], 4);  // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
 
