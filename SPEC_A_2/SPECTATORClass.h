@@ -14,11 +14,11 @@
 #define  GPIO2_PREFER_SPEED    1   // results in even faster execution
 #include <arduino2.h>   // include the fast I/O 2 functions
 
-#include <Adafruit_MotorShield.h>
-
 #include "SharpIR.h"
 #include "MPU.h"
 #include "MLX90614Class.h"
+
+#include "SPECMotoren.h"
 
 #include "SerialBuffer.h"
 
@@ -71,6 +71,8 @@ class SPECTATORClass
 	MLX90614Class MLXLinks = MLX90614Class(0x2C);
 	MLX90614Class MLXVorne = MLX90614Class(0x2A);
 	MLX90614Class MLXRechts = MLX90614Class(0x2B);
+
+	SPECMotorenClass Motoren = SPECMotorenClass(1, 2, 3, 4);
 
 	SerialBuffer serialBuffer = SerialBuffer();
 
