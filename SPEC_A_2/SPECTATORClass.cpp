@@ -62,6 +62,9 @@ void SPECTATORClass::Init()
 	mpu.Init();
 	Serial.println("MPU initialisiert.");
 
+	Motoren.Init();
+	Motoren.Kontrolllauf();
+
 	//MPUCalibration();
 }
 

@@ -28,13 +28,6 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-
-Adafruit_DCMotor *MotorL = AFMS.getMotor(1);		// Select which 'port' M1, M2, M3 or M4.
-Adafruit_DCMotor *MotorR = AFMS.getMotor(2);
-Adafruit_DCMotor *RescueMotoren = AFMS.getMotor(3);
-Adafruit_DCMotor *UnterflurBeleuchtung = AFMS.getMotor(4);
-
 float sensorValue;
 bool ledState = false;
 
@@ -50,10 +43,7 @@ void setup()
 {	
 	SA.Init();
 
-	Serial.print("Starte MotorShield.");
-	AFMS.begin();  // create with the default frequency 1.6KHz
-	Kontrolllauf();
-	Serial.print("MotorShield gestartet.");
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -87,88 +77,12 @@ void loop()
 
 	//functions.handleSerial();   // Später werden damit die ankommenden seriellen Nachrichten analysiert.
 	leseSerial();
-	SetMotoren(l, r);
+	SA.Motoren.SetMotoren(l, r);
 
 	ledState = !ledState;
 	digitalWrite2f(led_pin, ledState);   // Make the heartbeat.
 }
 
-///////////////////////////////////////////////////////////////////////////
-///Funktionen
-bool SetMotorR(int Speed)
-{
-	if (Speed > 0 && Speed <= 255)
-	{
-		MotorR->run(FORWARD);
-	}
-	else if (Speed < 0 && Speed >= -255)
-	{
-		MotorR->run(BACKWARD);
-		Speed = -Speed;
-	}
-	else if (Speed == 0)
-	{
-		MotorR->run(RELEASE);
-	}
-	else
-	{
-		Serial.println("MotorR speed out of bounds");
-		return false;
-	}
-	MotorR->setSpeed(Speed);
-	return true;
-}
-
-bool SetMotorL(int Speed)
-{
-	if (Speed > 0 && Speed <= 255)
-	{
-		MotorL->run(FORWARD);
-	}
-	else if (Speed < 0 && Speed >= -255)
-	{
-		MotorL->run(BACKWARD);
-		Speed = -Speed;
-	}
-	else if (Speed == 0)
-	{
-		MotorL->run(RELEASE);
-	}
-	else
-	{
-		Serial.println("MotorL speed out of bounds");
-		return false;
-	}
-	MotorL->setSpeed(Speed);
-	return true;
-}
-
-bool SetMotoren(int SpeedL, int SpeedR)
-{
-	if (SetMotorL(SpeedL) && SetMotorR(SpeedR))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void Kontrolllauf(void)
-{
-	SetMotorR(-150);
-	SetMotorL(-150);
-	//delay(1000);
-	delay(100);
-
-	SetMotorR(0);
-	SetMotorL(0);
-	/*delay(1000);
-
-	LED.switchOn();
-	RescueKitAbwerfen();*/
-}
 
 
 int c_array_to_int(char Value[4])
