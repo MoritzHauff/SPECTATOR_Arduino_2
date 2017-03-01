@@ -45,6 +45,7 @@
 #include "SerialBuffer.h"
 
 #include "Functions.h"
+#include "Constants.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
@@ -70,10 +71,17 @@ Funktionen zusammen. Die Klasse ist eine Singleton-Instanz.*/
 class SPECTATORClass
 {
  protected:
-
+	 void MPUCalibration();
 
  public:
 	void Init();
+
+	/*Liest die vier Sharp-Werte aus und speichert diese im SerialBuffer.*/
+	void UpdateSharp();
+	/*Liest die MLX-Werte aus und speichert diese im SerialBuffer.*/
+	void UpdateMLX();
+	/*Liest die MPU-Werte aus und speichert diese sofern neue vorhanden sind im SerialBuffer.*/
+	void UpdateMPU();
 
 	SharpIR sharplinksvorne = SharpIR(analog_Pin, SHARPMEASUREMTS);
 	SharpIR sharprechtsvorne = SharpIR(A2, SHARPMEASUREMTS);
