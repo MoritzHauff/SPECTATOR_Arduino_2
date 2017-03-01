@@ -1,14 +1,34 @@
 // Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.c
+// see Functions.cpp
 
 #ifndef _FUNCTIONS_h
 #define _FUNCTIONS_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include <avr/io.h>
-
-
-
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "arduino.h"
+#else
+	#include "WProgram.h"
 #endif
 
+///////////////////////////////////////////////////////////////////////////
+///Konstanten
+#define SERIALBUFF_SIZE 32 // make it big enough to hold your longest command
+
+///////////////////////////////////////////////////////////////////////////
+///Functions-Class
+/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
+class Functions
+{
+protected:
+	void handleReceivedMessage(char *msg);
+
+public:
+	void handleSerial();
+	
+};
+
+extern Functions functions;
+
+#endif
