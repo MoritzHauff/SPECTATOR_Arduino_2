@@ -41,9 +41,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Functions.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SharpIR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SerialBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

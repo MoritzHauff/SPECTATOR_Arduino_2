@@ -1,5 +1,10 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+/** Functions.cpp
+***
+*** Alle übrig gebliebenen Funktionen, die in keine andere Datei gepasst
+*** haben. 
+***
+*** Moritz Hauff, 17.02.2017
+**/
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,34 +28,49 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
-
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "Functions.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Konstanten
-#define SERIALBUFF_SIZE 32 // make it big enough to hold your longest command
+///Instanz
+Functions functions;
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///Functions
+void Functions::handleSerial()
 {
-protected:
-	void handleReceivedMessage(char *msg);
+	static char buffer[SERIALBUFF_SIZE + 1]; // +1 allows space for the null terminator
+	static int length = 0; // number of characters currently in the buffer
 
-public:
-	void handleSerial();
-	
-};
+	while (Serial.available())
+	{
+		char c = Serial.read();
+		if ((c == '\r') || (c == '\n'))
+		{
+			// end-of-line received
+			if (length > 0)
+			{
+				handleReceivedMessage(buffer);
+			}
+			length = 0;
+		}
+		else
+		{
+			if (length < SERIALBUFF_SIZE)
+			{
+				buffer[length++] = c; // append the received character to the array
+				buffer[length] = 0; // append the null terminator
+			}
+			else
+			{
+				// buffer full - discard the received character
+			}
+		}
+	}
+}
 
-extern Functions functions;
-
-#endif
+void Functions::handleReceivedMessage(char *msg)
+{
+	//...
+}
