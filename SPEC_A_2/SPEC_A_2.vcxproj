@@ -85,6 +85,7 @@
     <ClInclude Include="MPU.h" />
     <ClInclude Include="SerialBuffer.h" />
     <ClInclude Include="SharpIR.h" />
+    <ClInclude Include="SPECTATORClass.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +95,7 @@
     <ClCompile Include="MPU.cpp" />
     <ClCompile Include="SerialBuffer.cpp" />
     <ClCompile Include="SharpIR.cpp" />
+    <ClCompile Include="SPECTATORClass.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
