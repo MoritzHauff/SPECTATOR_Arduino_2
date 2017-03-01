@@ -19,6 +19,7 @@
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
 #include "SPECTATORClass.h"
+#include "Constants.h"
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -60,37 +61,15 @@ void setup()
 void loop()
 {
 	eins = micros();
-	for (int i = 0; i < SHARPMEASUREMTS; i++)
-	{
-		SA.sharplinksvorne.Update();    
-		SA.sharprechtsvorne.Update();    // Sensoren nacheinander abfragen, damit diese sich aktualisieren können.
-		SA.sharplinkshinten.Update();
-		SA.sharprechtshinten.Update();   // Alle Sensoren zu aktualsieren dauert ca. 4400 us.
-	}
-
-	SA.serialBuffer.AddMsg(C_SharpLV, SA.sharplinksvorne.GetValue());
-	SA.serialBuffer.AddMsg(C_SharpLH, SA.sharplinkshinten.GetValue());
-	SA.serialBuffer.AddMsg(C_SharpRV, SA.sharprechtsvorne.GetValue());
-	SA.serialBuffer.AddMsg(C_SharpRH, SA.sharprechtshinten.GetValue());
+	
+	SA.UpdateSharp();
 	
 	if (ledState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
 	{
-		Wire.setClock(100000); // Change the i2c clock to 100KHz because mlx is to slow for 400 kHz I2C. 
-		//TWBR = ((F_CPU / 100000l) - 16) / 2; // 100kHz I2C clock. // maybe this way of changing is even faster.
-		SA.serialBuffer.AddMsg(C_MLXLinks, SA.MLXLinks.GetObjTemp());   // Ändern des Wire-Speeds und auslesen eines MLX: ca. 500us (auch mit Klasse)
-		SA.serialBuffer.AddMsg(C_MLXVorne, SA.MLXVorne.GetObjTemp());   // Generell müssen die MLX vlt auch nur alle 10 Ticks ausgelesen werden und dann an den RaspberryPi geschickt werden.
-		SA.serialBuffer.AddMsg(C_MLXRechts, SA.MLXRechts.GetObjTemp());  // Sollte es zu Timing Problemem kommen, kann auch in einem Tick das MPU ausgelesen werden und im nächsten die Wärme sensoren
-		Wire.setClock(400000); // 400kHz I2C clock. Go back to "fullspeed" for MPU and Motorshield.
-		//TWBR = ((F_CPU / 400000l) - 16) / 2; // Change the i2c clock to 400KHz 
+		SA.UpdateMLX();
 	}
 	
-	SA.mpu.Update();
-	if (SA.mpu.NewDataAvaible())
-	{
-		SA.serialBuffer.AddMsg(C_MPUYaw, SA.mpu.GetYaw(), 8);
-		SA.serialBuffer.AddMsg(C_MPUPitch, SA.mpu.GetPitch(), 8);
-		SA.serialBuffer.AddMsg(C_MPURoll, SA.mpu.GetRoll(), 8);
-	}
+	SA.UpdateMPU();
 
 	swtLinks = digitalRead2f(switchLinks_Pin);
 	swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
