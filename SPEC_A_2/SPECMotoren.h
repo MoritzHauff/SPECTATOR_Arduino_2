@@ -14,6 +14,11 @@
 #include <Adafruit_MotorShield.h>
 
 ///////////////////////////////////////////////////////////////////////////
+///Constants
+const int PWR_LEDRichtung = FORWARD;
+const int PWR_MotorenRichtung = BACKWARD;
+
+///////////////////////////////////////////////////////////////////////////
 ///SPECMotorenClass
 /*Steuert das Adafruit Motorshield.*/
 class SPECMotorenClass
@@ -35,6 +40,16 @@ class SPECMotorenClass
 
 	bool SetMotoren(int SpeedL, int SpeedR);
 	void Kontrolllauf();
+
+	/*Aktiviert die Unterflurbeleuchtung.*/
+	void TurnLEDOn();
+	/*Deaktivieert die Unterflurbeleuchtung.*/
+	void TurnLEDOff();
+
+	/*Aktiviert die Rescue-Kit Motoren.*/
+	void TurnRescueOn();
+	/*Deaktiviert die Rescue-Kit Motoren.*/
+	void TurnRescueOff();
 };
 
 #endif

@@ -10,6 +10,9 @@
 #ifndef _CONSTANTS_h
 #define _CCONSTANTS_h
 
+#define C_TELEOPSTART 0x62  // Bekundet den Start einer manuellen Motorensteuerung. ('b')
+#define C_TELEOPSTOP 0x65   // Bekundet das Ende einer manuellen Motorensteuerung. ('e')
+
 #define C_MSGSTART 0x03
 #define C_MSGEND 0x04
 #define C_MSGSEPARATOR 0x05

@@ -102,3 +102,43 @@ void SPECMotorenClass::Kontrolllauf(void)
 	LED.switchOn();
 	RescueKitAbwerfen();*/
 }
+
+void SPECMotorenClass::TurnLEDOn()
+{
+	if (PWR_LEDRichtung == FORWARD)
+	{
+		UnterflurBeleuchtung->run(FORWARD);
+		UnterflurBeleuchtung->setSpeed(240);
+	}
+	if (PWR_LEDRichtung == BACKWARD)
+	{
+		UnterflurBeleuchtung->run(BACKWARD);
+		UnterflurBeleuchtung->setSpeed(240);
+	}
+}
+
+void SPECMotorenClass::TurnLEDOff()
+{
+	UnterflurBeleuchtung->run(RELEASE);
+	UnterflurBeleuchtung->setSpeed(0);
+}
+
+void SPECMotorenClass::TurnRescueOn()
+{
+	if (PWR_LEDRichtung == FORWARD)
+	{
+		RescueMotoren->run(FORWARD);
+		RescueMotoren->setSpeed(240);
+	}
+	if (PWR_LEDRichtung == BACKWARD)
+	{
+		RescueMotoren->run(BACKWARD);
+		RescueMotoren->setSpeed(240);
+	}
+}
+
+void SPECMotorenClass::TurnRescueOff()
+{
+	RescueMotoren->run(RELEASE);
+	RescueMotoren->setSpeed(0);
+}
