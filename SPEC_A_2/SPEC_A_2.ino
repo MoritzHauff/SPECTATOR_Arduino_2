@@ -67,17 +67,25 @@ void loop()
 	SA.serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
 	SA.serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
 
-	SA.serialBuffer.Flush();
+	//SA.serialBuffer.Flush();
+	SA.serialBuffer.Clear();
 
 	zwei = micros();
 
-	Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
+	/*Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);    // Die jetztige loop-Schleife führt zu keinen Fifo-Overflows!
-	Serial.println(" us."); 
+	Serial.println(" us."); */
 
-	//functions.handleSerial();   // Später werden damit die ankommenden seriellen Nachrichten analysiert.
-	leseSerial();
-	SA.Motoren.SetMotoren(l, r);
+	eins = micros();
+	functions.handleSerial();   // Später werden damit die ankommenden seriellen Nachrichten analysiert.
+	//leseSerial();
+	SA.Motoren.SetMotoren(functions.l, functions.r);
+	zwei = micros();
+
+	/*Serial.print("Serial-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
+	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
+	Serial.println(" us.");      */    // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
+
 
 	ledState = !ledState;
 	digitalWrite2f(led_pin, ledState);   // Make the heartbeat.

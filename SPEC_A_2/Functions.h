@@ -34,6 +34,8 @@
 	#include "WProgram.h"
 #endif
 
+#include "Constants.h"
+
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
 #define SERIALBUFF_SIZE 32 // make it big enough to hold your longest command
@@ -44,11 +46,14 @@
 class Functions
 {
 protected:
+	int ConvertCharToVorzeichen(char c);
+
 	void handleReceivedMessage(char *msg);
 
 public:
 	void handleSerial();
 	
+	int r, l;
 };
 
 extern Functions functions;
