@@ -29,7 +29,7 @@ protected:
 	void handleReceivedMessage(char *msg);
 
 public:
-	void handleSerial();
+	void handleSerial();   // todo: In SerialAnalyserClass packen.
 	
 	int r, l;
 };
