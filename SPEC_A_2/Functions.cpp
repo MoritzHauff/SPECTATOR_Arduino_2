@@ -41,26 +41,37 @@ Functions functions;
 void Functions::handleSerial()
 {
 	char buffer[SERIALBUFF_SIZE + 1]; // +1 allows space for the null terminator
-	int length = 0; // number of characters currently in the buffer
+	int pos = 0; // number of characters currently in the buffer
 
 	while (Serial.available())
 	{
 		char c = Serial.read();
+
+		//Serial.print((byte)c);
+		//Serial.print(" ");
+
 		if ((c == '\r') || (c == '\n'))  // Nachrichten müssen daher auch unbedingt mit einem Zeilenende versehen werden!
 		{
 			// end-of-line received
+			/*Serial.print("length=");
+			Serial.print(length);    // manchmal ist beim ende der nachricht die länge falsch (=0)
 			if (length > 0)
 			{
+				Serial.println(" >>");
 				handleReceivedMessage(buffer);
 			}
-			length = 0;
+			length = 0;*/
+			handleReceivedMessage(buffer);
+			pos = 0;
+
+			//Serial.println(" >>");
 		}
 		else
 		{
-			if (length < SERIALBUFF_SIZE)
+			if (pos < SERIALBUFF_SIZE)
 			{
-				buffer[length++] = c; // append the received character to the array
-				buffer[length] = 0; // append the null terminator
+				buffer[pos++] = c; // append the received character to the array
+				buffer[pos] = 0; // append the null terminator
 			}
 			else
 			{
@@ -68,6 +79,9 @@ void Functions::handleSerial()
 			}
 		}
 	}
+
+	// if there was no newline analyse you could analyse it her anyway
+	//handleReceivedMessage(buffer);
 }
 
 int Functions::ConvertCharToVorzeichen(char c)
@@ -90,14 +104,15 @@ int Functions::ConvertCharToVorzeichen(char c)
 //Protokoll für manuelle MotorenSteuerung: C_TELEOPSTART +/- ValueLinks +/- ValueRechts C_TELEOPSTOP
 void Functions::handleReceivedMessage(char *msg)
 {
-	/*//Debug
-	Serial.println("Analysiere Daten");
+	//Debug
+	//Serial.println("Analysiere Daten");
 
-	for (int i = 0; i < SERIALBUFF_SIZE; i++)
+	/*for (int i = 0; i < SERIALBUFF_SIZE; i++)
 	{
 		Serial.print((byte)msg[i]);
 		Serial.print(" ");
-	}*/
+	}
+	Serial.println(" >>");*/
 	
 	if (msg[0] == C_TELEOPSTART)
 	{

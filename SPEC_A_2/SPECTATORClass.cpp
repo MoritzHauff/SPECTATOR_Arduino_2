@@ -45,7 +45,7 @@ void SPECTATORClass::Init()
 	pinMode2f(switchLinks_Pin, INPUT);
 	pinMode2f(switchRechts_Pin, INPUT);
 
-	Serial.begin(250000);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
+	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
 	// join I2C bus (I2Cdev library doesn't do this automatically)
