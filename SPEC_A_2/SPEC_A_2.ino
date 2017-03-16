@@ -79,44 +79,6 @@ void loop()
 
 	ledState = !ledState;
 	digitalWrite2f(led_pin, ledState);   // Make the heartbeat.
-}
-
-
-
-int c_array_to_int(char Value[4])
-{
-	int returnvalue;
-
-	//Serial.print("c_Array: ");
-	//Serial.println(Value);
-
-	returnvalue = 0;     // Beispielsumrechnung: Char zu int konvertieren, geschieht durch -48
-						 //Serial1.println(returnvalue);  // Nur für Testzwecke
-
-	for (int i = 1; i < 4; i++)   // Nur die Zahlen analysieren.
-	{
-		//Serial.print(Value[i]);
-		if (Value[i] != ' ')    // Nochmal eine Kontrolle
-		{
-			returnvalue = returnvalue * 10;
-			returnvalue = returnvalue + Value[i] - 48;
-		}
-		//Serial.println(returnvalue);    //Nur für Testzwecke
-	}
-
-	if (Value[0] == '-')
-	{
-		returnvalue = returnvalue * -1;
-	}
-	else if (Value[0] == '+')
-	{
-		// do nothing
-	}
-	else
-	{
-		//Serial.println("Fehler in der Datenübertragung");
-	}
-
-	//Serial.println(returnvalue);        //Nur für Testzwecke
-	return returnvalue;
+	
+	//delay(10000);
 }
