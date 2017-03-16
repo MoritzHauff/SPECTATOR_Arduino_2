@@ -52,7 +52,7 @@ void SPECMotorenClass::Init()
 ///Funktionen
 bool SPECMotorenClass::SetMotorR(int Speed)
 {
-	if (Speed > 0 && Speed <= 255)
+	if (Speed > 1 && Speed <= 255)
 	{
 		MotorR->run(FORWARD);
 	}
@@ -61,7 +61,7 @@ bool SPECMotorenClass::SetMotorR(int Speed)
 		MotorR->run(BACKWARD);
 		Speed = -Speed;
 	}
-	else if (Speed == 0)
+	else if (Speed == 1 || Speed == 0)
 	{
 		MotorR->run(RELEASE);
 	}
@@ -76,7 +76,7 @@ bool SPECMotorenClass::SetMotorR(int Speed)
 
 bool SPECMotorenClass::SetMotorL(int Speed)
 {
-	if (Speed > 0 && Speed <= 255)
+	if (Speed > 1 && Speed <= 255)
 	{
 		MotorL->run(FORWARD);
 	}
@@ -85,7 +85,7 @@ bool SPECMotorenClass::SetMotorL(int Speed)
 		MotorL->run(BACKWARD);
 		Speed = -Speed;
 	}
-	else if (Speed == 0)
+	else if (Speed == 1 || Speed == 0)
 	{
 		MotorL->run(RELEASE);
 	}
