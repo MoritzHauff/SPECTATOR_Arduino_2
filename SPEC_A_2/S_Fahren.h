@@ -1,5 +1,4 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+// S_Fahren.h - Moritz Hauff - 17.03.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
+#ifndef _S_FAHREN_h
+#define _S_FAHREN_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -34,18 +33,24 @@
 	#include "WProgram.h"
 #endif
 
+#include "State.h"
+
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///State-Class
+/*Beschreibt den StandardFahrmodus.*/
+class S_FahrenClass : public StateClass   // todo: Zeitersparnis mit static / const???  // public: Zugriff auf BasisKlasse ermöglichen.
 {
-protected:
-	
-public:
-	
+ protected:
+	 bool toggleState;
 
+ public:
+	 S_FahrenClass(SPECTATORClass *Spectator) : StateClass(Spectator)
+		{ }
+
+	 void Init();
+	 void Sense();
+	 void Think();
+	 void Act();
 };
-
-extern Functions functions;
 
 #endif

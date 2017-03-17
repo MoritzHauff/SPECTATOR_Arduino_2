@@ -1,5 +1,4 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+// StateMachine.h - Moritz Hauff - 17.03.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
+#ifndef _STATEMACHINE_h
+#define _STATEMACHINE_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -34,18 +33,43 @@
 	#include "WProgram.h"
 #endif
 
+#include "Constants.h"
+
+#include "SPECTATORClass.h"
+#include "S_Fahren.h"
+
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///Konstanten
+#define SERIALBUFF_SIZE 32 // make it big enough to hold your longest command
+
+///////////////////////////////////////////////////////////////////////////
+///StateMachine-Class
+/*Diese Klasse überwacht die aktuellen Aufgaben des Roboters.
+Analysiert außerdem die seriellen Befehle.*/
+class StateMachineClass
 {
-protected:
-	
-public:
-	
+ protected:
+	 SPECTATORClass *spectator;
 
+	 S_FahrenClass *s_Fahren;
+
+	 StateClass *currentState;
+	 
+	 /*Analysiert die seriellen Befehle und wechselt bei Bedarf den aktuellen Modus.*/
+	 void handleSerial();
+	 /*Wechslet in einen anderen Modus und führt die initilaisierunsfunkiton des neuen modus aus.*/
+	 void changeState(StateClass *NextState);
+
+	 //Hilfsfunktionen
+	 int convertCharToVorzeichen(char c);
+	 void handleReceivedMessage(char *msg);
+
+ public:
+	 StateMachineClass(SPECTATORClass *Spectator);
+	 ~StateMachineClass();
+	
+	 /*Führt die im aktuellen Modus benötigten Schritte aus. Dies sollte einmal in jedem loop() geschehen.*/
+	 void DoAction();
 };
-
-extern Functions functions;
 
 #endif

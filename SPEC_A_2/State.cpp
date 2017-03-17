@@ -1,5 +1,9 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+/** State.cpp
+***
+*** todo
+***
+*** Moritz Hauff, 17.03.2017
+**/
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,29 +27,13 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
-
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "State.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///Konstruktoren
+StateClass::StateClass(SPECTATORClass *Spectator)
 {
-protected:
-	
-public:
-	
-
-};
-
-extern Functions functions;
-
-#endif
+	spectator = Spectator;
+}
