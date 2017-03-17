@@ -125,6 +125,14 @@ void Functions::handleReceivedMessage(char *msg)
 			Serial.print(l);
 			Serial.print(" r=");
 			Serial.println(r);*/
+			zielRichtung = 4;
+		}
+		if (msg[3] == C_TELEOPSTOP)
+		{
+			if (msg[1] == 'd')
+			{
+				zielRichtung = (byte)msg[2];
+			}
 		}
 	}
 }

@@ -43,8 +43,8 @@
 #define C_MLXVorne 0x22
 #define C_MLXRechts 0x23
 
-#define C_MPUYaw 0x26
-#define C_MPUPitch 0x27
+#define C_MPUYaw 0x24
+#define C_MPUPitch 0x25
 #define C_MPURoll 0x26
 
 #define C_SwitchLinks 0x27
