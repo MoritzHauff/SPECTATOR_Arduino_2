@@ -39,11 +39,13 @@
 ///State-Class
 class StateClass  // abstrakte Klasse mit virtuellen Funktionen
 {
+private:
+	 String name;
  protected:
 	 SPECTATORClass *spectator;
 
  public:
-	 StateClass(SPECTATORClass *Spectator);
+	 StateClass(SPECTATORClass *Spectator, const char Name[]);
 	 // todo: virtueller Destruktor?
 
 	 virtual void Sense() = 0;  // noch keine Methodenimplemtierung -> siehe vererbte Klassen
@@ -51,6 +53,8 @@ class StateClass  // abstrakte Klasse mit virtuellen Funktionen
 	 virtual void Act() = 0;
 	 /*Wird immer aufgerufen wenn in den Modus gewechselt wird.*/
 	 virtual void Init() = 0;
+
+	 String GetName();
 };
 
 #endif

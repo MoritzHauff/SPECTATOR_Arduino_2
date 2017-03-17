@@ -33,7 +33,16 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren
-StateClass::StateClass(SPECTATORClass *Spectator)
+StateClass::StateClass(SPECTATORClass *Spectator, const char Name[])
 {
 	spectator = Spectator;
+	
+	name = String(Name);
+}
+
+///////////////////////////////////////////////////////////////////////////
+///Functions
+String StateClass::GetName()
+{
+	return name;
 }
