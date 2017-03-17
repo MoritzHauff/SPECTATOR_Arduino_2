@@ -52,8 +52,7 @@ class SPECTATORClass
  protected:
 	 void MPUCalibration();
 
-	 int motorSpeedL;
-	 int motorSpeedR;
+	
 
  public:
 	void Init();
@@ -83,7 +82,8 @@ class SPECTATORClass
 
 
 	int zielRichtung;  // todo: this should be somewhere totally else!
-
+	int MotorSpeedL;  // sollen diese Werte wirklcih hier gespeichert werden?
+	int MotorSpeedR;
 };
 
 extern SPECTATORClass SA;

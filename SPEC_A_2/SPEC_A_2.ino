@@ -12,9 +12,14 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "S_Fahren.h"
+#include "State.h"
+#include "StateMachine.h"
 #include "MPUFahrer.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
+
+#include "StateMachine.h"
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -30,12 +35,15 @@ bool swtLinks = false;
 bool swtRechts = false;
 
 ///////////////////////////////////////////////////////////////////////////
+///Instanzen
+StateMachineClass stateMachine(&SA);
+
+///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
 {	
 	SA.Init();
 
-	
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,46 +52,31 @@ void loop()
 {
 	eins = micros();
 	
-	SA.UpdateSharp();
-	
-	if (ledState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		SA.UpdateMLX();
-	}
-	
-	SA.UpdateMPU();
+	// todo: StateMachine zeitlich ausmessen.
 
-	swtLinks = digitalRead2f(switchLinks_Pin);
+	swtLinks = digitalRead2f(switchLinks_Pin);   // this should be done also in the S_FahrenClass. You need probably a ney SwicthHandlerClass!
 	swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
 
 	SA.serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
 	SA.serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
 
-	SA.serialBuffer.Flush();
-	//SA.serialBuffer.Clear();
+	stateMachine.DoAction();
 
 	zwei = micros();
 
-	/*Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
+	Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);    // Die jetztige loop-Schleife führt zu keinen Fifo-Overflows!
-	Serial.println(" us."); */
+	Serial.println(" us."); 
 
 	eins = micros();
-	functions.handleSerial();   // Später werden damit die ankommenden seriellen Nachrichten analysiert.
-	if (functions.zielRichtung == 4)
-	{
-		SA.Motoren.SetMotoren(functions.l, functions.r);
-		SA.zielRichtung = 4;
-	}
-	else
-	{
-		SA.zielRichtung = functions.zielRichtung;
-	}
+	
+	// todo: Zeitmessung der StateMachine!
+
 	zwei = micros();
 
-	Serial.print("Serial-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
-	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
-	Serial.println(" us.");          // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
+	//Serial.print("Serial-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
+	//Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
+	//Serial.println(" us.");          // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
 
 	ledState = !ledState;

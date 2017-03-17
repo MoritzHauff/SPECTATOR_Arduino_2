@@ -18,8 +18,8 @@ SPECTATORClass SA;  // Die HauptInstanz des SPECTATOR-Arduinos.
 ///Konstruktoren 
 void SPECTATORClass::Init()
 {
-	motorSpeedL = 0;
-	motorSpeedR = 0;
+	MotorSpeedL = 0;
+	MotorSpeedR = 0;
 	zielRichtung = 4; //4 bedeutet keine drehung // todo: externe StateMachine zur Steuerung des aktuellen Fahrverhaltens.
 
 	// pinModes
@@ -100,13 +100,13 @@ void SPECTATORClass::UpdateMPU()
 		serialBuffer.AddMsg(C_MPUPitch, mpu.GetPitch(), 8);
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
 
-		if (zielRichtung != 4)
+		/*if (zielRichtung != 4)   // this should be done in a ney state.
 		{
-			if (mpuFahrer.BerechneDrehen(zielRichtung, mpu.GetYaw(), &motorSpeedL, &motorSpeedR))  // Drehen beendet
+			if (mpuFahrer.BerechneDrehen(zielRichtung, mpu.GetYaw(), &MotorSpeedL, &MotorSpeedR))  // Drehen beendet
 			{
 				zielRichtung = 4;
 			}
-			Motoren.SetMotoren(motorSpeedL, motorSpeedR);
-		}
+			Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
+		}*/
 	}
 }

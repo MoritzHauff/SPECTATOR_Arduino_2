@@ -12,27 +12,16 @@
 	#include "WProgram.h"
 #endif
 
-#include "Constants.h"
-
-///////////////////////////////////////////////////////////////////////////
-///Konstanten
-#define SERIALBUFF_SIZE 32 // make it big enough to hold your longest command
-
 ///////////////////////////////////////////////////////////////////////////
 ///Functions-Class
 /*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
 class Functions
 {
 protected:
-	int ConvertCharToVorzeichen(char c);
-
-	void handleReceivedMessage(char *msg);
-
-public:
-	void handleSerial();   // todo: In SerialAnalyserClass packen.
 	
-	int r, l;
-	byte zielRichtung = 4;
+public:
+	
+
 };
 
 extern Functions functions;
