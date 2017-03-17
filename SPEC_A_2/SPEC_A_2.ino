@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "MPUFahrer.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
  
@@ -34,7 +35,7 @@ void setup()
 {	
 	SA.Init();
 
-
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -69,12 +70,20 @@ void loop()
 
 	eins = micros();
 	functions.handleSerial();   // Später werden damit die ankommenden seriellen Nachrichten analysiert.
-	SA.Motoren.SetMotoren(functions.l, functions.r);
+	if (functions.zielRichtung == 4)
+	{
+		SA.Motoren.SetMotoren(functions.l, functions.r);
+		SA.zielRichtung = 4;
+	}
+	else
+	{
+		SA.zielRichtung = functions.zielRichtung;
+	}
 	zwei = micros();
 
-	/*Serial.print("Serial-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
+	Serial.print("Serial-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
 	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
-	Serial.println(" us.");      */    // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
+	Serial.println(" us.");          // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
 
 	ledState = !ledState;

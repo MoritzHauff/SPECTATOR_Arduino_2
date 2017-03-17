@@ -1,7 +1,7 @@
 /** SPECTATORClass.cpp
 ***
 *** Hier laufen alle andern benötigten Instanzen und die dazugehörigen 
-*** Funktionen zusammen
+*** Funktionen zusammen.
 ***
 *** Moritz Hauff, 01.03.2017
 **/
@@ -18,6 +18,10 @@ SPECTATORClass SA;  // Die HauptInstanz des SPECTATOR-Arduinos.
 ///Konstruktoren 
 void SPECTATORClass::Init()
 {
+	motorSpeedL = 0;
+	motorSpeedR = 0;
+	zielRichtung = 4; //4 bedeutet keine drehung // todo: externe StateMachine zur Steuerung des aktuellen Fahrverhaltens.
+
 	// pinModes
 	pinMode2f(led_pin, OUTPUT);
 	pinMode2f(switchLinks_Pin, INPUT);
@@ -43,7 +47,7 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	//MPUCalibration();
+	MPUCalibration();
 }
 
 void SPECTATORClass::MPUCalibration()
@@ -53,6 +57,9 @@ void SPECTATORClass::MPUCalibration()
 	{
 		Serial.println("MPU6050-Kalibrierung gescheitert!");
 	}
+
+	mpu.Update();
+	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo:  should normally done be the RaPi.
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -92,5 +99,14 @@ void SPECTATORClass::UpdateMPU()
 		serialBuffer.AddMsg(C_MPUYaw, mpu.GetYaw(), 8);
 		serialBuffer.AddMsg(C_MPUPitch, mpu.GetPitch(), 8);
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
+
+		if (zielRichtung != 4)
+		{
+			if (mpuFahrer.BerechneDrehen(zielRichtung, mpu.GetYaw(), &motorSpeedL, &motorSpeedR))  // Drehen beendet
+			{
+				zielRichtung = 4;
+			}
+			Motoren.SetMotoren(motorSpeedL, motorSpeedR);
+		}
 	}
 }

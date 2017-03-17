@@ -32,6 +32,7 @@ public:
 	void handleSerial();   // todo: In SerialAnalyserClass packen.
 	
 	int r, l;
+	byte zielRichtung = 4;
 };
 
 extern Functions functions;

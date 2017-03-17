@@ -21,6 +21,7 @@
 #include "SPECMotoren.h"
 
 #include "SerialBuffer.h"
+#include "MPUFahrer.h"
 
 #include "Functions.h"
 #include "Constants.h"
@@ -51,6 +52,9 @@ class SPECTATORClass
  protected:
 	 void MPUCalibration();
 
+	 int motorSpeedL;
+	 int motorSpeedR;
+
  public:
 	void Init();
 
@@ -75,6 +79,10 @@ class SPECTATORClass
 	SPECMotorenClass Motoren = SPECMotorenClass(1, 2, 3, 4);
 
 	SerialBuffer serialBuffer = SerialBuffer();
+	MPUFahrerClass mpuFahrer = MPUFahrerClass();
+
+
+	int zielRichtung;  // todo: this should be somewhere totally else!
 
 };
 
