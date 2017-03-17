@@ -22,7 +22,7 @@ class S_FahrenClass : public StateClass   // todo: Zeitersparnis mit static / co
 	 bool toggleState;
 
  public:
-	 S_FahrenClass(SPECTATORClass *Spectator) : StateClass(Spectator)
+	 S_FahrenClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
 		{ }
 
 	 void Init();

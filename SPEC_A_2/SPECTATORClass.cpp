@@ -47,7 +47,7 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	MPUCalibration();
+	//MPUCalibration();
 }
 
 void SPECTATORClass::MPUCalibration()

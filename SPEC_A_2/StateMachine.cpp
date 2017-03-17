@@ -13,9 +13,10 @@
 StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 {
 	spectator = Spectator;
-	//curentState = &Idle;
+	//curentState = Idle;
 
-	s_Fahren = new S_FahrenClass(spectator);
+	s_Fahren = new S_FahrenClass(spectator, "Fahren");
+	currentState = s_Fahren;
 }
 
 StateMachineClass::~StateMachineClass()
@@ -137,6 +138,8 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		currentState = NextState;
 		currentState->Init();
+
+		Serial.println(String("Neuer Modus: " + currentState->GetName()));  // for debugging on the RaPi
 	}
 }
 
