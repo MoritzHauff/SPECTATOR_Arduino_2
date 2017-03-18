@@ -1,14 +1,23 @@
-// 
-// todo
-// 
+/** S_Fahren.cpp
+***
+*** Beschreibt den StandardFahrmodus.
+***
+*** Moritz Hauff, 18.03.2017
+**/
 
+///////////////////////////////////////////////////////////////////////////
+///Includes
 #include "S_Fahren.h"
 
+///////////////////////////////////////////////////////////////////////////
+///Konstruktoren
 void S_FahrenClass::Init()
 {
 	toggleState = false;
 }
 
+///////////////////////////////////////////////////////////////////////////
+///Functions
 void S_FahrenClass::Sense()
 {
 	spectator->UpdateSharp();
@@ -19,6 +28,8 @@ void S_FahrenClass::Sense()
 	}
 
 	spectator->UpdateMPU();
+
+	spectator->UpdateSwitches();
 
 	spectator->serialBuffer.Flush();
 	//spectator->serialBuffer.Clear();
@@ -37,5 +48,5 @@ void S_FahrenClass::Act()
 
 	//Serial.println("Motorspeed gesetzt");
 
-	// todo: make heartbeat.
+	spectator->HeartbeatLED.Toggle();
 }

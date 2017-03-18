@@ -28,6 +28,8 @@ class DigitalIOClass
 	 /*The Pin refered by this object.*/
 	 GPIO_pin_t pin;
 
+	 bool lastState;
+
  public:
 	 DigitalIOClass(const GPIO_pin_t Pin, const uint8_t PinMode);
 	 /*Bereitet den Pin auf den Lese/Schreibzugriff vor.*/
@@ -44,10 +46,16 @@ class DigitalIOClass
 	 void Write(uint8_t Value);
 	 /*Aquivalent of digital Write for bool variables with the fast IO-functions.*/
 	 void WriteBool(bool State);
+	 /*Liest den aktuellen anliegenden Wert aus und speichert diesen in der Klasseninstanz.
+	 Kann mithilfe GetLastState wieder ausgelesen werden.*/
+	 void Update();
+
+	 bool GetLastState();
+
 };
 
 /*Diese kleine vererbte Klasse ermöglicht das Steuern von LEDs.*/
-class LEDClass : public DigitalIOClass
+class LEDClass : DigitalIOClass
 {
 protected:
 	bool state;
@@ -57,6 +65,8 @@ public:
 		state = false;
 		Write(state);
 	}
+
+	using DigitalIOClass::Init;  // Nur die Init Funktion soll öffentlich sichtbar sein.
 
 	void Toggle();
 };

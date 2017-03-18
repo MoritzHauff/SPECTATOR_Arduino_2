@@ -41,6 +41,16 @@ void DigitalIOClass::WriteBool(bool State)
 	digitalWrite2f(pin, State);
 }
 
+void DigitalIOClass::Update()
+{
+	lastState = Read();
+}
+
+bool DigitalIOClass::GetLastState()
+{
+	return lastState;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 ///LED-Functions
 void LEDClass::Toggle()
