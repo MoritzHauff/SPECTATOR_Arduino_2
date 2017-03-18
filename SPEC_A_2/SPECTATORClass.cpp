@@ -45,10 +45,11 @@ void SPECTATORClass::Init()
 	zielRichtung = 4; //4 bedeutet keine drehung // todo: externe StateMachine zur Steuerung des aktuellen Fahrverhaltens.
 
 	// pinModes
-	pinMode2f(led_pin, OUTPUT);
-	pinMode2f(switchLinks_Pin, INPUT);
-	pinMode2f(switchRechts_Pin, INPUT);
+	HeartbeatLED.Init();
+	switchLinks.Init();
+	switchRechts.Init();
 
+	// Serial communication
 	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
@@ -86,6 +87,15 @@ void SPECTATORClass::MPUCalibration()
 
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
+void SPECTATORClass::UpdateSwitches()
+{
+	//swtLinks = digitalRead2f(switchLinks_Pin);
+	//swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
+
+	//serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
+	//serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
+}
+
 void SPECTATORClass::UpdateSharp()
 {
 	for (int i = 0; i < SHARPMEASUREMTS; i++)

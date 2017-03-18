@@ -46,7 +46,7 @@ void DigitalIOClass::Init()
 	pinMode2f(pin, isOutput);
 }
 
-inline bool DigitalIOClass::Read()  // is inline faster?
+bool DigitalIOClass::Read()  // is inline faster?
 {
 	return digitalRead2f(pin);
 }
