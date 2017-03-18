@@ -12,10 +12,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_Fahren.h"
-#include "State.h"
-#include "StateMachine.h"
-#include "MPUFahrer.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
 
@@ -57,12 +53,14 @@ void loop()
 	swtLinks = digitalRead2f(switchLinks_Pin);   // this should be done also in the S_FahrenClass. You need probably a ney SwicthHandlerClass!
 	swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
 
+	zwei = micros();  // 4 us.
+
 	SA.serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
 	SA.serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
 
 	stateMachine.DoAction();
 
-	zwei = micros();
+	
 
 	Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);    // Die jetztige loop-Schleife führt zu keinen Fifo-Overflows!
