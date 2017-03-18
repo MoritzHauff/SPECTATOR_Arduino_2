@@ -24,7 +24,9 @@ void DigitalIOClass::Init()
 	pinMode2f(pin, isOutput);
 }
 
-bool DigitalIOClass::Read()  // is inline faster?
+///////////////////////////////////////////////////////////////////////////
+///Functions
+bool DigitalIOClass::Read()  // todo: implement it with inline/sth else so that it is faster.
 {
 	return digitalRead2f(pin);
 }
@@ -37,4 +39,12 @@ void DigitalIOClass::Write(uint8_t Value)
 void DigitalIOClass::WriteBool(bool State)
 {
 	digitalWrite2f(pin, State);
+}
+
+///////////////////////////////////////////////////////////////////////////
+///LED-Functions
+void LEDClass::Toggle()
+{
+	state = !state;
+	Write(state);
 }
