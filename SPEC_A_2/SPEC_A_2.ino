@@ -16,6 +16,8 @@
 #include "Constants.h"
 
 #include "StateMachine.h"
+
+#include "DigitalIO.h"
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -34,12 +36,15 @@ bool swtRechts = false;
 ///Instanzen
 StateMachineClass stateMachine(&SA);
 
+DigitalIOClass dioled = DigitalIOClass(DP32, OUTPUT);
+
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
 {	
 	SA.Init();
 
+	dioled.Init();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -50,10 +55,10 @@ void loop()
 	
 	// todo: StateMachine zeitlich ausmessen.
 
-	swtLinks = digitalRead2f(switchLinks_Pin);   // this should be done also in the S_FahrenClass. You need probably a ney SwicthHandlerClass!
-	swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
+	swtLinks = SA.switchLinks.Read();
+	swtRechts = SA.switchRechts.Read();  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
 
-	zwei = micros();  // 4 us.
+	zwei = micros();  // 8 us.
 
 	SA.serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
 	SA.serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
@@ -80,5 +85,6 @@ void loop()
 	ledState = !ledState;
 	digitalWrite2f(led_pin, ledState);   // Make the heartbeat.
 	
+
 	//delay(10000);
 }

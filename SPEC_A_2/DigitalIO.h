@@ -34,11 +34,11 @@ class DigitalIOClass
 	 void Init();
 
 	 /*Reads the current State of the Pin, if it's an input Pin.*/
-	 inline bool Read();
+	 bool Read();
 	 /*Aquivalent of digital Write with the fast IO-functions.*/
-	 inline void Write(uint8_t Value);
+	 void Write(uint8_t Value);
 	 /*Aquivalent of digital Write for bool variables with the fast IO-functions.*/
-	 inline void WriteBool(bool State);
+	 void WriteBool(bool State);
 };
 
 #endif

@@ -11,9 +11,7 @@
 	#include "WProgram.h"
 #endif
 
-#define  GPIO2_PREFER_SPEED    1   // results in even faster execution
-#include <arduino2.h>   // include the fast I/O 2 functions
-
+#include "DigitalIO.h"
 #include "SharpIR.h"
 #include "MPU.h"
 #include "MLX90614Class.h"
@@ -57,12 +55,18 @@ class SPECTATORClass
  public:
 	void Init();
 
+	void UpdateSwitches();
 	/*Liest die vier Sharp-Werte aus und speichert diese im SerialBuffer.*/
 	void UpdateSharp();
 	/*Liest die MLX-Werte aus und speichert diese im SerialBuffer.*/
 	void UpdateMLX();
 	/*Liest die MPU-Werte aus und speichert diese sofern neue vorhanden sind im SerialBuffer.*/
 	void UpdateMPU();
+
+	DigitalIOClass HeartbeatLED = DigitalIOClass(DP32, OUTPUT);
+
+	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT);
+	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);
 
 	SharpIR sharplinksvorne = SharpIR(analog_Pin, SHARPMEASUREMTS);
 	SharpIR sharprechtsvorne = SharpIR(A2, SHARPMEASUREMTS);
