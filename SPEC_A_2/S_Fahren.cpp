@@ -59,9 +59,9 @@ void S_FahrenClass::Sense()
 
 void S_FahrenClass::Think()
 {
-	// do nothing
-
 	toggleState = !toggleState;
+	/*Serial.print("ToggleState: ");
+	Serial.println(toggleState);*/
 }
 
 void S_FahrenClass::Act()
