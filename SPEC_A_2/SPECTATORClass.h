@@ -85,7 +85,8 @@ class SPECTATORClass
 	/*Liest die MPU-Werte aus und speichert diese sofern neue vorhanden sind im SerialBuffer.*/
 	void UpdateMPU();
 
-	DigitalIOClass HeartbeatLED = DigitalIOClass(DP32, OUTPUT);
+	LEDClass HeartbeatLED = LEDClass(DP32);
+	//DigitalIOClass HeartbeatLED = DigitalIOClass(DP32, OUTPUT);
 
 	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT);
 	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);

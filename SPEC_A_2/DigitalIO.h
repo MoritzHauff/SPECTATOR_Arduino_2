@@ -1,4 +1,4 @@
-// DigitalIO.h - Moritz Hauff - 17.03.2017
+// DigitalIO.h - Moritz Hauff - 18.03.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -55,12 +55,32 @@ class DigitalIOClass
 	 /*Bereitet den Pin auf den Lese/Schreibzugriff vor.*/
 	 void Init();
 
+	 //is explicit inline - also not really faster
+	 /*inline bool Read() const {
+		 return digitalRead2f(pin);
+	 }*/
+
 	 /*Reads the current State of the Pin, if it's an input Pin.*/
 	 bool Read();
 	 /*Aquivalent of digital Write with the fast IO-functions.*/
 	 void Write(uint8_t Value);
 	 /*Aquivalent of digital Write for bool variables with the fast IO-functions.*/
 	 void WriteBool(bool State);
+};
+
+/*Diese kleine vererbte Klasse ermöglicht das Steuern von LEDs.*/
+class LEDClass : public DigitalIOClass
+{
+protected:
+	bool state;
+public:
+	LEDClass(const GPIO_pin_t Pin) : DigitalIOClass(Pin, OUTPUT)
+	{
+		state = false;
+		Write(state);
+	}
+
+	void Toggle();
 };
 
 #endif
