@@ -16,7 +16,8 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	//curentState = Idle;
 
 	s_Fahren = new S_FahrenClass(spectator, "Fahren");
-	currentState = s_Fahren;
+	
+	changeState(s_Fahren);
 }
 
 StateMachineClass::~StateMachineClass()
@@ -137,7 +138,11 @@ void StateMachineClass::changeState(StateClass *NextState)
 	if (currentState != NextState)
 	{
 		currentState = NextState;
-		currentState->Init();
+		
+		if (currentState == s_Fahren)
+		{
+			s_Fahren->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
+		}
 
 		Serial.println(String("Neuer Modus: " + currentState->GetName()));  // for debugging on the RaPi
 	}
@@ -147,10 +152,15 @@ void StateMachineClass::DoAction()
 {
 	handleSerial();
 
-	if (currentState != 0) 
+	if (currentState == s_Fahren) 
 	{
-		currentState->Sense();
+		/*currentState->Sense();
 		currentState->Think();
-		currentState->Act();
+		currentState->Act();*/
+		s_Fahren->Sense();   // wird über die gecastete Instanz currentState zugegriffen werden Variablen die innerhalb des States definiert und verwendet werden (wie z.B. Toggle) nicht korrekt angesprochen.
+		s_Fahren->Think();
+		s_Fahren->Act();
 	}
+
+	
 }

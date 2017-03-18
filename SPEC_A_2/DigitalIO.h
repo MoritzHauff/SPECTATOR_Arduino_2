@@ -67,6 +67,7 @@ public:
 	}
 
 	using DigitalIOClass::Init;  // Nur die Init Funktion soll öffentlich sichtbar sein.
+	using DigitalIOClass::Write;
 
 	void Toggle();
 };

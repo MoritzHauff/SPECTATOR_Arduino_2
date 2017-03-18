@@ -40,6 +40,7 @@ class SPECTATORClass
  public:
 	void Init();
 
+	/*Liest die zwei Switch-Werte aus und speichert diese im SerialBuffer.*/
 	void UpdateSwitches();
 	/*Liest die vier Sharp-Werte aus und speichert diese im SerialBuffer.*/
 	void UpdateSharp();
@@ -49,9 +50,8 @@ class SPECTATORClass
 	void UpdateMPU();
 
 	LEDClass HeartbeatLED = LEDClass(DP32);
-	//DigitalIOClass HeartbeatLED = DigitalIOClass(DP32, OUTPUT);
 
-	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT);
+	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
 	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);
 
 	SharpIR sharplinksvorne = SharpIR(A1, SHARPMEASUREMTS);
