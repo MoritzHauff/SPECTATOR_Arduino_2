@@ -87,13 +87,13 @@ void SPECTATORClass::MPUCalibration()
 
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
-void SPECTATORClass::UpdateSwitches()
+void SPECTATORClass::UpdateSwitches()  // 128 us
 {
-	//swtLinks = digitalRead2f(switchLinks_Pin);
-	//swtRechts = digitalRead2f(switchRechts_Pin);  // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
+	switchLinks.Update();
+	switchRechts.Update();   // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
 
-	//serialBuffer.AddMsg(C_SwitchLinks, swtLinks);
-	//serialBuffer.AddMsg(C_SwitchRechts, swtRechts);
+	serialBuffer.AddMsg(C_SwitchLinks, switchLinks.GetLastState());
+	serialBuffer.AddMsg(C_SwitchRechts, switchRechts.GetLastState());
 }
 
 void SPECTATORClass::UpdateSharp()

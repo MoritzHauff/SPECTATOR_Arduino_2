@@ -48,20 +48,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
-// The I/O 2 functions use special data type for pin
-// Pin codes, such as DP13 are defined in pins2_arduino.h
-const GPIO_pin_t led_pin = DP32;  // Achtung: Pins nur für ihren im Setup angegeben Zweck nutzen, sonst kann es zur Beschädigung des ATmegas2560 kommen!
-const GPIO_pin_t switchLinks_Pin = DP23;
-const GPIO_pin_t switchRechts_Pin = DP25;
-
-const uint8_t analog_Pin = A1;
-
-const uint8_t DELAY_TIME = 100;
-
 const uint8_t SHARPMEASUREMTS = 8;   // acht sharp-Messungen an einem Sensor dauern genau 940 us. Diese reium an allen würden damit 4 ms dauern.
-
-const int Length_of_SerialMessage = 13;
-const int length_of_information = 5;
 
 ///////////////////////////////////////////////////////////////////////////
 ///SPECTATORClass
@@ -71,8 +58,6 @@ class SPECTATORClass
 {
  protected:
 	 void MPUCalibration();
-
-	
 
  public:
 	void Init();
@@ -91,7 +76,7 @@ class SPECTATORClass
 	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT);
 	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);
 
-	SharpIR sharplinksvorne = SharpIR(analog_Pin, SHARPMEASUREMTS);
+	SharpIR sharplinksvorne = SharpIR(A1, SHARPMEASUREMTS);
 	SharpIR sharprechtsvorne = SharpIR(A2, SHARPMEASUREMTS);
 	SharpIR sharplinkshinten = SharpIR(A3, SHARPMEASUREMTS);
 	SharpIR sharprechtshinten = SharpIR(A4, SHARPMEASUREMTS);
