@@ -127,9 +127,9 @@ void MPU::Update()
 			Serial.print("\t");
 			Serial.println(ypr[2] - ypr_correction[2], 4); */ // Die Ausgabe benötigt ca. 1400 us. Das ist gerade so in Ordnung.
 
-			normalisedypr[0] = ypr[0] - ypr_correction[0] + PI;   // todo: Zeit der Umrechnung messen.
-			normalisedypr[1] = ypr[1] - ypr_correction[1] + PI;
-			normalisedypr[2] = ypr[2] - ypr_correction[2] + PI;
+			normalisedypr[0] = ypr[0] + PI; // Der Yaw-Wert soll von 0 bis 2*PI gehen.  // todo: Zeit der Umrechnung messen.
+			normalisedypr[1] = ypr[1] - ypr_correction[1];   // Die Pitch und Roll Werte sollen positiv und negativ um herum 0 sein.
+			normalisedypr[2] = ypr[2] - ypr_correction[2];
 			DataUpdated = true;
 		}
 	}

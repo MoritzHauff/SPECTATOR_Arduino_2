@@ -36,7 +36,7 @@ void setup()
 	SA.Init();
 	
 	stateMachine = new StateMachineClass(&SA);
-	//stateMachine->Init();
+	stateMachine->Init();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -50,9 +50,9 @@ void loop()
 
 	zwei = micros();
 
-	Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
+	/*Serial.print("loop-Zeit: ");  // 11500 us bei neuen MPU Daten, sonst 6030 us.
 	Serial.print(zwei - eins);    // Die jetztige loop-Schleife führt zu keinen Fifo-Overflows!
-	Serial.println(" us.");
+	Serial.println(" us.");*/
 
 	eins = micros();
 	
