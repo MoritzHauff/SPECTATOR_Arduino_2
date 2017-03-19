@@ -33,7 +33,7 @@ class S_DrehenClass : public StateClass
 	 void Think();
 	 void Act();
 
-	 int ZielRichtung;
+	 byte ZielRichtung;
 	 
 };
 
