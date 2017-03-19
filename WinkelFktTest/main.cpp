@@ -17,12 +17,13 @@ int main()
         float win;
         cin >> win;
 
-        cout << "Additionswinkel eingeben: " << endl;
-        float wplus;
-        cin >> wplus;
+        mpuFahrer.SetNorden(win);
 
-        cout << win << " + " << wplus << " = ";
-        cout << mpuFahrer.winkelvergroessern(win, wplus) << endl;
+        cout << "Orientierundwinkel: " << endl;
+        cout << "\tn:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('n')] << endl;
+        cout << "\to:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('o')] << endl;
+        cout << "\ts:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('s')] << endl;
+        cout << "\tw:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('w')] << endl;
 
         if(win == -100)
         {

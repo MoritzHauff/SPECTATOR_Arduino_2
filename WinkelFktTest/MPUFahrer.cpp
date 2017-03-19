@@ -16,10 +16,10 @@ using namespace std;
 ///Konstruktoren
 MPUFahrerClass::MPUFahrerClass()
 {
-	orientierungswinkel[0] = 0;
-	orientierungswinkel[1] = 1/2 * PI;
-	orientierungswinkel[2] = PI;
-	orientierungswinkel[3] = 3/2 * PI;
+	orientierungswinkel[R_NORDEN] = 0;
+	orientierungswinkel[R_OSTEN] = PI2;
+	orientierungswinkel[R_SUEDEN] = PI;
+	orientierungswinkel[R_WESTEN] = PI + PI2;
 
 	zielRichtung = R_NORDEN;
 }
@@ -72,7 +72,7 @@ MPUFahrerClass::MPUFahrerClass()
 ///Funktionen
 bool MPUFahrerClass::BerechneDrehen(short ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR)  // todo: notfall timer wenn er festhängt.   // todo: nur korrektur anweisungen zurückgeben (+/- Geschwindigkeit -> rechts/lnks drehen) einheitlich zu berechne vorwärts
 {
-	float zielWinkel = orientierungswinkel[ZielRichtung-1];
+	float zielWinkel = orientierungswinkel[ZielRichtung];
 
 	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);
 																																														//int winkelabstand = minWinkelAbstand(aktYaw, zielWinkel);
@@ -128,29 +128,29 @@ void MPUFahrerClass::BerechneVorwaerts(short ZielRichtung, float aktYaw, int *mo
 
 void MPUFahrerClass::SetRichtungsWinkel(short Richtung, float degree)
 {
-	orientierungswinkel[Richtung-1] = degree;
+	orientierungswinkel[Richtung] = degree;
 }
 
 void MPUFahrerClass::SetNorden(float degree)
 {
-	float winkel = degree;
+    if(degree < 0 || degree > ZWEIPI)
+    {
+        // todo: Fehlermeldung ausgeben
+    }
 
-	SetRichtungsWinkel(R_NORDEN, winkel);
+    float winkel = degree;
 
-	winkel = winkelvergroessern(winkel, 1/2*PI);
-	SetRichtungsWinkel(R_OSTEN, winkel);
+    winkel = winkelvergroessern(winkel, 0); // auf 0 ... 2*Pi normieren.
+    SetRichtungsWinkel(R_NORDEN, winkel);
 
-	winkel = winkelvergroessern(winkel, 1/2*PI);
-	SetRichtungsWinkel(R_SUEDEN, winkel);
+    winkel = winkelvergroessern(winkel, PI2);
+    SetRichtungsWinkel(R_OSTEN, winkel);
 
-	winkel = winkelvergroessern(winkel, 1/2*PI);
-	SetRichtungsWinkel(R_WESTEN, winkel);
+    winkel = winkelvergroessern(winkel, PI2);
+    SetRichtungsWinkel(R_SUEDEN, winkel);
 
-	cout << ("Orientierungswinkel: ");
-	cout << (orientierungswinkel[0]) << endl;
-	cout << (orientierungswinkel[1]) << endl;
-	cout << (orientierungswinkel[2]) << endl;
-	cout << (orientierungswinkel[3]) << endl;
+    winkel = winkelvergroessern(winkel, PI2);
+    SetRichtungsWinkel(R_WESTEN, winkel);
 }
 
 float MPUFahrerClass::winkelverkleinern(float alterwinkel, float umwieviel)

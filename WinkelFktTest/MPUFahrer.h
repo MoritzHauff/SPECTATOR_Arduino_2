@@ -17,6 +17,8 @@
 #define R_WESTEN 4
 
 #define PI 3.141592653589
+#define PI2 1.5707963267945
+#define ZWEIPI 6.283185307178
 
 ///////////////////////////////////////////////////////////////////////////
 ///MPUFahrer-Class
@@ -35,7 +37,7 @@ class MPUFahrerClass
 	 const float obereGrenze = 2*PI;
 
 	 /* Hier werden die den vier Himmelrichtungen entsprechenden Yaw-Winkel gespeichert.*/
-	 float orientierungswinkel[4];
+	 float orientierungswinkel[5];
 
 	 /* Gibt momentane Zielrichtung an (sowohl zum Drehen als auch zum Fahren).
 	 dabei ist relativ zur anfangskalibiereung 'Norden': 1 Norden - 2 Osten - 3 Sueden - 4 Westen.*/
