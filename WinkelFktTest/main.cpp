@@ -12,20 +12,21 @@ int main()
 
     while(1)
     {
-        cout << "Startwinkel eingeben: "<< endl;
+        cout << "Winkel 1 eingeben: ";
+        float weins;
+        cin >> weins;
 
-        float win;
-        cin >> win;
+        cout << "Winkel 2 eingeben: ";
+        float wzwei;
+        cin >> wzwei;
 
-        mpuFahrer.SetNorden(win);
+        cout << "pos. Winkelabstand: ";
+        cout << mpuFahrer.winkelAbstand(weins, wzwei) << endl;
 
-        cout << "Orientierundwinkel: " << endl;
-        cout << "\tn:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('n')] << endl;
-        cout << "\to:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('o')] << endl;
-        cout << "\ts:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('s')] << endl;
-        cout << "\tw:" << mpuFahrer.orientierungswinkel[mpuFahrer.CharToRichtung('w')] << endl;
+        cout << "min. Winkelabstand: ";
+        cout << mpuFahrer.minWinkelAbstand(weins, wzwei) << endl;
 
-        if(win == -100)
+        if(weins == -100)
         {
             break;
         }

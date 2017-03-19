@@ -56,13 +56,13 @@ class MPUFahrerClass
 	 /// <summary>
 	 /// Gibt den größt möglichen Winkel an. (Zur Berechnung, wann ein gesamter Kreis überstrichen wurde.)
 	 /// </summary>
-	 const float obereGrenze = 2*PI;
+	 const float obereGrenze = ZWEIPI;
 
 	 /* Hier werden die den vier Himmelrichtungen entsprechenden Yaw-Winkel gespeichert.*/
 	 float orientierungswinkel[5];
 
 	 /* Gibt momentane Zielrichtung an (sowohl zum Drehen als auch zum Fahren).
-	 dabei ist relativ zur anfangskalibiereung 'Norden': 1 Norden - 2 Osten - 3 Sueden - 4 Westen.*/
+	 dabei ist relativ zur anfangskalibiereung 'Norden': 1=Norden - 2=Osten - 3=Sueden - 4=Westen.*/
 	 short zielRichtung;
 
 	/* Verringert den übergebenen Winkel um den gewünschten Wert und beachtet dabei dass ein Kreis geschlossen ist.
