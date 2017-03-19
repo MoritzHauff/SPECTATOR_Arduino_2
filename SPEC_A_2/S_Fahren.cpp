@@ -31,8 +31,8 @@ void S_FahrenClass::Sense()
 
 	spectator->UpdateSwitches();
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
 }
 
 void S_FahrenClass::Think()
