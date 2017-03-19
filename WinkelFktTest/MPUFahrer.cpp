@@ -97,18 +97,28 @@ bool MPUFahrerClass::BerechneDrehen(short ZielRichtung, float aktYaw, int *motor
 	float zielWinkel = orientierungswinkel[ZielRichtung];
 
 	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);
-																																														//int winkelabstand = minWinkelAbstand(aktYaw, zielWinkel);
-	int motorspeed = (int)(winkelAbstand * 360);   // todo: insert a convenient function
-	motorspeed = min(motorspeed, 180); // cap at 180
-	motorspeed = max(motorspeed, 60);  // below 60 the motors wont turn.
 
-	if (abs(winkelAbstand) <= 0.1)  // stopp-toleranz
+	if (abs(winkelAbstand) <= 0.07)  // stopp-toleranz   // 0.1 = 5,7°
 	{
 		*motorSpeedL = 0;
 		*motorSpeedR = 0;
 
 		return true; // true wenn drehen abgeschlossen
 	}
+																																														//int winkelabstand = minWinkelAbstand(aktYaw, zielWinkel);
+	int motorspeed = (int)(winkelAbstand * 450);   // todo: insert a convenient function   // 360
+	if(motorspeed > 0)
+    {
+        motorspeed = min(motorspeed, 180); // cap at 180
+        motorspeed = max(motorspeed, 60);  // below 60 the motors wont turn.
+    }
+	if(motorspeed < 0)
+    {
+        motorspeed = max(motorspeed, -180); // cap at 180
+        motorspeed = min(motorspeed, -60);  // below 60 the motors wont turn.
+    }
+
+
 	/*else if (winkelabstand < 0)
 	{
 		*motorSpeedL = -motorspeed;
@@ -119,12 +129,10 @@ bool MPUFahrerClass::BerechneDrehen(short ZielRichtung, float aktYaw, int *motor
 		*motorSpeedL = motorspeed;
 		*motorSpeedR = -motorspeed;   // should be done automaticall in minWinkelAbstand
 	}*/
-	else
-	{
-		*motorSpeedL = motorspeed;
-		*motorSpeedR = -motorspeed;
+
+    *motorSpeedL = motorspeed;
+    *motorSpeedR = -motorspeed;
 		//Serial.println("Sth went wrong in the MPUFahrer!");
-	}
 
 	return false;
 }
