@@ -68,9 +68,9 @@ MPUFahrerClass::MPUFahrerClass()
 
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
-bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR)  // todo: notfall timer wenn er festhängt.
+bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR)  // todo: notfall timer wenn er festhängt.   // todo: nur korrektur anweisungen zurückgeben (+/- Geschwindigkeit -> rechts/lnks drehen) einheitlich zu berechne vorwärts
 {
-	float zielWinkel = orientierungswinkel[ZielRichtung];
+	float zielWinkel = orientierungswinkel[ZielRichtung-1];
 	
 	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);  
 																																														//int winkelabstand = minWinkelAbstand(aktYaw, zielWinkel);

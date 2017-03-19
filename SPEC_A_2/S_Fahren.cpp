@@ -44,7 +44,7 @@ void S_FahrenClass::Think()
 
 void S_FahrenClass::Act()
 {
-	spectator->Motoren.SetMotoren(spectator->MotorSpeedL, spectator->MotorSpeedR);
+	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
 
 	//Serial.println("Motorspeed gesetzt");
 
