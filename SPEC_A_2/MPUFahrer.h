@@ -18,13 +18,17 @@
 #define R_SUEDEN 3
 #define R_WESTEN 4
 
+#define PI 3.141592653589
+#define PI2 1.5707963267945
+#define ZWEIPI 6.283185307178
+
 ///////////////////////////////////////////////////////////////////////////
 ///MPUFahrer-Class
-/*Diese Klasse verwaltet die MPU Werte und berechnet anhand der aktuellen die nötigen 
+/*Diese Klasse verwaltet die MPU Werte und berechnet anhand der aktuellen die nötigen
 Korrekturen um in eine bestimmte Richtung zu fahren oder zu drehen.*/
 class MPUFahrerClass
 {
- protected:
+ public:
 	 /// <summary>
 	 /// Gibt den kleinst möglichen Winkel an. (Zur Berechnung, wann ein gesamter Kreis überstrichen wurde.)
 	 /// </summary>
@@ -32,13 +36,13 @@ class MPUFahrerClass
 	 /// <summary>
 	 /// Gibt den größt möglichen Winkel an. (Zur Berechnung, wann ein gesamter Kreis überstrichen wurde.)
 	 /// </summary>
-	 const float obereGrenze = 2*PI;
+	 const float obereGrenze = ZWEIPI;
 
 	 /* Hier werden die den vier Himmelrichtungen entsprechenden Yaw-Winkel gespeichert.*/
-	 float orientierungswinkel[4];
+	 float orientierungswinkel[5];
 
 	 /* Gibt momentane Zielrichtung an (sowohl zum Drehen als auch zum Fahren).
-	 dabei ist relativ zur anfangskalibiereung 'Norden': 1 Norden - 2 Osten - 3 Sueden - 4 Westen.*/
+	 dabei ist relativ zur anfangskalibiereung 'Norden': 1=Norden - 2=Osten - 3=Sueden - 4=Westen.*/
 	 byte zielRichtung;
 
 	/* Verringert den übergebenen Winkel um den gewünschten Wert und beachtet dabei dass ein Kreis geschlossen ist.
@@ -46,7 +50,7 @@ class MPUFahrerClass
 		 /// <param name="alterwinkel">Der Winkel der verkleinert werden soll.</param>
 		 /// <param name="umwieviel">Gibt an um wie viel der Winkel verkleinert werden soll.</param>*/
 	 float winkelverkleinern(float alterwinkel, float umwieviel);
-	 
+
 	 float winkelvergroessern(float alterwinkel, float umwieviel);
 	 /* Gibt den im mathematisch positiven Abstand eines Winkels zu einem anderen aus.*/
 	 float winkelAbstand(float value1, float value2);
@@ -63,7 +67,7 @@ class MPUFahrerClass
 	 /*Setzt den Ziel - Winkel für die gewünschte Richtung auf den angegebenn Wert.
 	 Sollte nur in Ausnahmefällen einzeln aufgerufen werden.*/
 	 void SetRichtungsWinkel(byte Richtung, float degree);
-	 /*Setzt den übergeben Winkel als neues 'Norden' und passt alle anderen 
+	 /*Setzt den übergeben Winkel als neues 'Norden' und passt alle anderen
 	 Himmelsrichtungen daran an. Mit dieser Funktion sollte normalerweise kalibriert werden.*/
 	 void SetNorden(float degree);
 
