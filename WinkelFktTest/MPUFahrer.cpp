@@ -133,7 +133,7 @@ void MPUFahrerClass::SetRichtungsWinkel(short Richtung, float degree)
 
 void MPUFahrerClass::SetNorden(float degree)
 {
-    if(degree < 0 || degree > ZWEIPI)
+    if(degree < untereGrenze || degree > obereGrenze)
     {
         // todo: Fehlermeldung ausgeben
     }
