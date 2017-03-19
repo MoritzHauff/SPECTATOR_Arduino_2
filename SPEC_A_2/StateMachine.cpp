@@ -150,7 +150,14 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 			if (msg[1] == 'd')
 			{
 				changeState(s_Drehen);
-				s_Drehen->ZielRichtung = (int)msg[2];
+				if (msg[2] < 10)
+				{
+					s_Drehen->ZielRichtung = (int)msg[2];
+				}
+				else
+				{
+					s_Drehen->ZielRichtung = spectator->mpuFahrer.CharToRichtung(msg[2]);
+				}
 			}
 		}
 	}

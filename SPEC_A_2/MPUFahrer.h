@@ -35,10 +35,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
-#define R_NORDEN 0
-#define R_OSTEN 1
-#define R_SUEDEN 2
-#define R_WESTEN 3
+#define R_NORDEN 1
+#define R_OSTEN 2
+#define R_SUEDEN 3
+#define R_WESTEN 4
 
 ///////////////////////////////////////////////////////////////////////////
 ///MPUFahrer-Class
@@ -92,6 +92,9 @@ class MPUFahrerClass
 
 	 void BerechneVorwaerts(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR);
 	 bool BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR);
+
+	 /*Konvertiert 'n', 'o', 's', 'w' in die entsprechende byte-Richtung für die Berechnunsfunktionen.*/
+	 byte CharToRichtung(char c);
 };
 
 #endif

@@ -243,3 +243,28 @@ bool MPUFahrerClass::groesser(float value1, float value2, float abweichung)
 
 	return false;
 }
+
+byte MPUFahrerClass::CharToRichtung(char c)
+{
+	if (c == 'n')
+	{
+		return R_NORDEN;
+	}
+	if (c == 'o')
+	{
+		return R_OSTEN;
+	}
+	if (c == 's')
+	{
+		return R_SUEDEN;
+	}
+	if (c == 'w')
+	{
+		return R_WESTEN;
+	}
+	else
+	{
+		// todo: Fehlerausgabe
+		return 5;
+	}
+}
