@@ -72,6 +72,7 @@ class StateMachineClass
  public:
 	 StateMachineClass(SPECTATORClass *Spectator);
 	 ~StateMachineClass();
+	 void Init();
 	
 	 /*Führt die im aktuellen Modus benötigten Schritte aus. Dies sollte einmal in jedem loop() geschehen.*/
 	 void DoAction();

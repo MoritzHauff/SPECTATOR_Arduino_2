@@ -66,7 +66,7 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	//MPUCalibration();
+	MPUCalibration();
 }
 
 void SPECTATORClass::MPUCalibration()
@@ -79,6 +79,7 @@ void SPECTATORClass::MPUCalibration()
 
 	mpu.Update();
 	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
+	
 	Serial.println("MPU6050 kalibriert.");
 }
 

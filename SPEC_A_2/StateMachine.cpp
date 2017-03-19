@@ -40,7 +40,14 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_Fahren = new S_FahrenClass(spectator, "Fahren");
 	s_Drehen = new S_DrehenClass(spectator, "Drehen");
 	
+	currentState = 0;
+}
+
+void StateMachineClass::Init()
+{
 	changeState(s_Fahren);
+	s_Fahren->MotorSpeedL = 0;
+	s_Fahren->MotorSpeedR = 0;
 }
 
 StateMachineClass::~StateMachineClass()
