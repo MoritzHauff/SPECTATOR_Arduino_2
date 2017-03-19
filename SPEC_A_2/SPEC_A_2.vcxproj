@@ -91,6 +91,7 @@
     <ClInclude Include="SPECTATORClass.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="S_Drehen.h" />
     <ClInclude Include="S_Fahren.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
   </ItemGroup>
@@ -107,6 +108,7 @@
     <ClCompile Include="SPECTATORClass.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="S_Drehen.cpp" />
     <ClCompile Include="S_Fahren.cpp" />
   </ItemGroup>
   <PropertyGroup>

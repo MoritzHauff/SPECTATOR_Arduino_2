@@ -59,8 +59,8 @@ class MPUFahrerClass
 	 /* Hier werden die den vier Himmelrichtungen entsprechenden Yaw-Winkel gespeichert.*/
 	 float orientierungswinkel[4];
 
-	 /* Gibt momentane Zilerichtung an (sowohl zum Drehen als auch zum Fahren).
-	 dabei ist relativ zur anfangskalibiereung 'Norden': 0 Norden - 1 Osten - 2 Sueden - 3 Westen.*/
+	 /* Gibt momentane Zielrichtung an (sowohl zum Drehen als auch zum Fahren).
+	 dabei ist relativ zur anfangskalibiereung 'Norden': 1 Norden - 2 Osten - 3 Sueden - 4 Westen.*/
 	 byte zielRichtung;
 
 	/* Verringert den übergebenen Winkel um den gewünschten Wert und beachtet dabei dass ein Kreis geschlossen ist.

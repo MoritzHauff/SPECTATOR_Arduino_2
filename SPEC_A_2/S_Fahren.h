@@ -51,6 +51,10 @@ class S_FahrenClass : public StateClass   // todo: Zeitersparnis mit static / co
 	 void Sense();
 	 void Think();
 	 void Act();
+
+	 int MotorSpeedL;
+	 int MotorSpeedR;
+
 };
 
 #endif

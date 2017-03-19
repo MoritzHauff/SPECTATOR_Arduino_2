@@ -40,11 +40,7 @@ SPECTATORClass SA;  // Die HauptInstanz des SPECTATOR-Arduinos.
 ///Konstruktoren 
 void SPECTATORClass::Init()
 {
-	MotorSpeedL = 0;
-	MotorSpeedR = 0;
-	zielRichtung = 4; //4 bedeutet keine drehung // todo: externe StateMachine zur Steuerung des aktuellen Fahrverhaltens.
-
-	// pinModes
+	// Digital Pins
 	HeartbeatLED.Init();
 	switchLinks.Init();
 	switchRechts.Init();
@@ -53,7 +49,7 @@ void SPECTATORClass::Init()
 	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
-	// join I2C bus (I2Cdev library doesn't do this automatically)
+	// Join I2C bus (I2Cdev library doesn't do this automatically)
 	#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 		Wire.begin();
 		Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
@@ -63,7 +59,7 @@ void SPECTATORClass::Init()
 
 	Serial.println("SPEC_A_2 - Joined I2C.");
 
-	Serial.println("Init MPU");
+	Serial.println("Init MPU...");
 	mpu.Init();
 	Serial.println("MPU initialisiert.");
 
@@ -75,14 +71,15 @@ void SPECTATORClass::Init()
 
 void SPECTATORClass::MPUCalibration()
 {
-	Serial.println("MPU6050-Kalibrierung: ");
+	Serial.println("MPU6050-Kalibrierung...");
 	if (mpu.WaitForCalibration(40000) != CALIBRATION_SUCCESS)  // Rückgabewert kann zum Beispiel an Raspberry gesendet werden.
 	{
 		Serial.println("MPU6050-Kalibrierung gescheitert!");
 	}
 
 	mpu.Update();
-	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo:  should normally done be the RaPi.
+	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
+	Serial.println("MPU6050 kalibriert.");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -132,13 +129,5 @@ void SPECTATORClass::UpdateMPU()
 		serialBuffer.AddMsg(C_MPUPitch, mpu.GetPitch(), 8);
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
 
-		/*if (zielRichtung != 4)   // this should be done in a ney state.
-		{
-			if (mpuFahrer.BerechneDrehen(zielRichtung, mpu.GetYaw(), &MotorSpeedL, &MotorSpeedR))  // Drehen beendet
-			{
-				zielRichtung = 4;
-			}
-			Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-		}*/
 	}
 }

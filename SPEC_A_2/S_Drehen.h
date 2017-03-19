@@ -1,9 +1,4 @@
-/** S_Fahren.cpp
-***
-*** Beschreibt den StandardFahrmodus.
-***
-*** Moritz Hauff, 18.03.2017
-**/
+// S_Drehen.h - Moritz Hauff - 19.03.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -27,48 +22,41 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
+#ifndef _S_DREHEN_h
+#define _S_DREHEN_h
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_Fahren.h"
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "arduino.h"
+#else
+	#include "WProgram.h"
+#endif
+
+#include "State.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Konstruktoren
-void S_FahrenClass::Init()
+///State-Class
+/*Beschreibt den Drehe-nach-Himmelsrichtung-Modus.*/
+class S_DrehenClass : public StateClass
 {
-	toggleState = false;
-}
+ protected:
+	 int counter;
 
-///////////////////////////////////////////////////////////////////////////
-///Functions
-void S_FahrenClass::Sense()
-{
-	spectator->UpdateSharp();
+	 int MotorSpeedL;
+	 int MotorSpeedR;
 
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		spectator->UpdateMLX();
-	}
+ public:
+	 S_DrehenClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
+	 { }
 
-	spectator->UpdateMPU();
+	 void Init();
+	 void Sense();
+	 void Think();
+	 void Act();
 
-	spectator->UpdateSwitches();
+	 int ZielRichtung;
+	 
+};
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
-}
-
-void S_FahrenClass::Think()
-{
-	toggleState = !toggleState;
-	/*Serial.print("ToggleState: ");
-	Serial.println(toggleState);*/
-}
-
-void S_FahrenClass::Act()
-{
-	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-
-	//Serial.println("Motorspeed gesetzt");
-
-	spectator->HeartbeatLED.Toggle();
-}
+#endif

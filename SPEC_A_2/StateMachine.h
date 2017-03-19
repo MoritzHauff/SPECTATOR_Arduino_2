@@ -37,6 +37,7 @@
 
 #include "SPECTATORClass.h"
 #include "S_Fahren.h"
+#include "S_Drehen.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -52,17 +53,21 @@ class StateMachineClass
 	 SPECTATORClass *spectator;
 
 	 S_FahrenClass *s_Fahren;
+	 S_DrehenClass *s_Drehen;
 
 	 StateClass *currentState;
 	 
-	 /*Analysiert die seriellen Befehle und wechselt bei Bedarf den aktuellen Modus.*/
+	 /*Überwacht den seriellen Eingangsstream und teilt diesen in einzelne Befehle auf,
+	 die dann analysiert werden können. Dies sollte stets einmal pro loop-Durchgang geschehen.*/
 	 void handleSerial();
-	 /*Wechslet in einen anderen Modus und führt die initilaisierunsfunkiton des neuen modus aus.*/
+	 /*Analysiert die seriellen Befehle und wechselt bei Bedarf den aktuellen Modus.*/
+	 void handleReceivedMessage(char *msg);
+	 /*Wechslet in einen anderen Modus und führt die initilaisierunsfunktion des neuen Modus aus.*/
 	 void changeState(StateClass *NextState);
 
 	 //Hilfsfunktionen
+	 /*Gibt bei '+' 1, '-' -1 und sonst 0 zurück.*/
 	 int convertCharToVorzeichen(char c);
-	 void handleReceivedMessage(char *msg);
 
  public:
 	 StateMachineClass(SPECTATORClass *Spectator);
