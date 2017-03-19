@@ -126,7 +126,7 @@ void MPUFahrerClass::BerechneVorwaerts(byte ZielRichtung, float aktYaw, int *mot
 
 void MPUFahrerClass::SetRichtungsWinkel(byte Richtung, float degree)
 {
-	orientierungswinkel[Richtung] = degree;
+	orientierungswinkel[Richtung-1] = degree;
 }
 
 void MPUFahrerClass::SetNorden(float degree)
@@ -143,6 +143,12 @@ void MPUFahrerClass::SetNorden(float degree)
 
 	winkel = winkelvergroessern(winkel, 1/2*PI);
 	SetRichtungsWinkel(R_WESTEN, winkel);
+
+	Serial.print("Orientierungswinkel: ");
+	Serial.println(orientierungswinkel[0]);
+	Serial.println(orientierungswinkel[1]);
+	Serial.println(orientierungswinkel[2]);
+	Serial.println(orientierungswinkel[3]);
 }
 
 float MPUFahrerClass::winkelverkleinern(float alterwinkel, float umwieviel)
