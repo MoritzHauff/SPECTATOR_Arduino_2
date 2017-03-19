@@ -136,7 +136,7 @@ uint8_t MPU::WaitForCalibration(uint16_t Timeout)
 				ypr_correction[2] = ypr[2];
 
 				Serial.print("MPU-Kalibrierung erfolgreich. Kalibrierungszeit: ");
-				Serial.println(millis() - startZeitpunkt);
+				Serial.print(millis() - startZeitpunkt);
 				Serial.println(" ms.");
 
 				return CALIBRATION_SUCCESS;

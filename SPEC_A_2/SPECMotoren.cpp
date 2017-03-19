@@ -21,9 +21,9 @@ SPECMotorenClass::SPECMotorenClass(uint8_t MotorPortLinks, uint8_t MotorPortRech
 
 void SPECMotorenClass::Init()
 {
-	Serial.print("Starte MotorShield.");
+	Serial.println("Starte MotorShield.");
 	AFMS.begin();  // create with the default frequency 1.6KHz
-	Serial.print("MotorShield gestartet.");
+	Serial.println("MotorShield gestartet.");
 }
 
 ///////////////////////////////////////////////////////////////////////////
