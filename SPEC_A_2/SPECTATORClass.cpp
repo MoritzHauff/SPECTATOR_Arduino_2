@@ -66,7 +66,7 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	MPUCalibration();
+	MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
 }
 
 void SPECTATORClass::MPUCalibration()
@@ -80,7 +80,8 @@ void SPECTATORClass::MPUCalibration()
 	mpu.Update();
 	Serial.print("aktueller Yaw-Wert: ");
 	Serial.println(mpu.GetYaw());
-	//mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
+	
+	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
 	
 	Serial.println("MPU6050 kalibriert.");
 }
