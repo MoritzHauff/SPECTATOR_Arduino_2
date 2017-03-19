@@ -24,7 +24,7 @@
 Korrekturen um in eine bestimmte Richtung zu fahren oder zu drehen.*/
 class MPUFahrerClass
 {
- protected:
+ public:
 	 /// <summary>
 	 /// Gibt den kleinst möglichen Winkel an. (Zur Berechnung, wann ein gesamter Kreis überstrichen wurde.)
 	 /// </summary>
