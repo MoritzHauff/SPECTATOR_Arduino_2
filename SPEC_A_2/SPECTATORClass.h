@@ -52,8 +52,8 @@
 // The I/O 2 functions use special data type for pin
 // Pin codes, such as DP13 are defined in pins2_arduino.h
 const GPIO_pin_t led_pin = DP32;  // Achtung: Pins nur für ihren im Setup angegeben Zweck nutzen, sonst kann es zur Beschädigung des ATmegas2560 kommen!
-const GPIO_pin_t switchLinks_Pin = DP23;
-const GPIO_pin_t switchRechts_Pin = DP25;
+const GPIO_pin_t switchLinks_Pin = DP53;
+const GPIO_pin_t switchRechts_Pin = DP51;
 
 const uint8_t analog_Pin = A1;
 
@@ -83,10 +83,10 @@ class SPECTATORClass
 	/*Liest die MPU-Werte aus und speichert diese sofern neue vorhanden sind im SerialBuffer.*/
 	void UpdateMPU();
 
-	SharpIR sharplinksvorne = SharpIR(analog_Pin, SHARPMEASUREMTS);
-	SharpIR sharprechtsvorne = SharpIR(A2, SHARPMEASUREMTS);
-	SharpIR sharplinkshinten = SharpIR(A3, SHARPMEASUREMTS);
-	SharpIR sharprechtshinten = SharpIR(A4, SHARPMEASUREMTS);
+	SharpIR sharplinksvorne = SharpIR(A12, SHARPMEASUREMTS);
+	SharpIR sharprechtsvorne = SharpIR(A13, SHARPMEASUREMTS);
+	SharpIR sharplinkshinten = SharpIR(A14, SHARPMEASUREMTS);
+	SharpIR sharprechtshinten = SharpIR(A15, SHARPMEASUREMTS);
 
 	MPU mpu = MPU();
 
@@ -94,7 +94,7 @@ class SPECTATORClass
 	MLX90614Class MLXVorne = MLX90614Class(0x2A);
 	MLX90614Class MLXRechts = MLX90614Class(0x2B);
 
-	SPECMotorenClass Motoren = SPECMotorenClass(1, 2, 3, 4);
+	SPECMotorenClass Motoren = SPECMotorenClass(3, 2, 1, 4);
 
 	SerialBuffer serialBuffer = SerialBuffer();
 

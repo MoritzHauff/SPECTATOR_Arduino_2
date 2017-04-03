@@ -45,7 +45,7 @@ void loop()
 	
 	SA.UpdateSharp();
 	
-	if (ledState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
+	if (ledState || true)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
 	{
 		SA.UpdateMLX();
 	}
