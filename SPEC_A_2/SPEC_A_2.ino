@@ -30,27 +30,18 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
-HCSr04_InterruptClass usInterrupt(18, DP24);
-HCSr04_InterruptClass usInterrupt2(19, DP22);
+HCSr04_InterruptClass usInterruptH(18, DP24);
+HCSr04_InterruptClass usInterruptV(19, DP22);
 
 static void ISRUSH()   // for the interrupt callback you need a real function
-				// for more information see: http://stackoverflow.com/questions/400257/how-can-i-pass-a-class-member-function-as-a-callback
+					   // for more information see: http://stackoverflow.com/questions/400257/how-can-i-pass-a-class-member-function-as-a-callback
 {
-	//Serial.println("Interrupt");
-	/*if (usInterrupt) // check if it was initialized
-	{
-		usInterrupt->HandleInterrupt();
-	}*/
-	usInterrupt.HandleInterrupt();
+	usInterruptH.HandleInterrupt();
 }
 
 static void ISRUSV()
 {
-	//Serial.println("Interrupt");
-	/*if (usInterrupt2) // check if it was initialized
-	{
-		usInterrupt2->HandleInterrupt();
-	}*/
+	usInterruptV.HandleInterrupt();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -62,11 +53,11 @@ void setup()
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
 
-	usInterrupt.Init();
-	usInterrupt2.Init();
+	usInterruptH.Init();
+	usInterruptV.Init();
 
-	attachInterrupt(digitalPinToInterrupt(18), ISRUSH, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(19), ISRUSV, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(usInterruptH.GetEchoPin()), ISRUSH, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(usInterruptV.GetEchoPin()), ISRUSV, CHANGE);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -90,19 +81,19 @@ void loop()
 	/*SA.ultraschallRechts.Update();  // abhängig von der entfernung 10000 us - >25000 us
 	Serial.print("Rechts: ");
 	Serial.println(SA.ultraschallRechts.GetDistance());*/
-	if (usInterrupt.IsFinished())
+	if (usInterruptH.IsFinished())
 	{
-		//usInterrupt.Update();
+		//usInterruptH.Update();
 		Serial.print("Hinten: ");
-		Serial.println(usInterrupt.GetDistance());
-		usInterrupt.StartMeasurement();
+		Serial.println(usInterruptH.GetDistance());
+		usInterruptH.StartMeasurement();
 	}
-	/*if (usInterrupt2->IsFinished())
+	if (usInterruptV.IsFinished())
 	{
 		Serial.print("Vorne: ");
-		Serial.println(usInterrupt2->GetDistance());
-		usInterrupt2->StartMeasurement();
-	}*/
+		Serial.println(usInterruptV.GetDistance());
+		usInterruptV.StartMeasurement();
+	}
 
 	zwei = micros();
 
