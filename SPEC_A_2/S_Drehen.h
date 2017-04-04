@@ -1,5 +1,4 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+// S_Drehen.h - Moritz Hauff - 19.03.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
+#ifndef _S_DREHEN_h
+#define _S_DREHEN_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -34,18 +33,30 @@
 	#include "WProgram.h"
 #endif
 
+#include "State.h"
+
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///State-Class
+/*Beschreibt den Drehe-nach-Himmelsrichtung-Modus.*/
+class S_DrehenClass : public StateClass
 {
-protected:
-	
-public:
-	
+ protected:
+	 int counter;
 
+	 int MotorSpeedL;
+	 int MotorSpeedR;
+
+ public:
+	 S_DrehenClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
+	 { }
+
+	 void Init();
+	 void Sense();
+	 void Think();
+	 void Act();
+
+	 byte ZielRichtung;
+	 
 };
-
-extern Functions functions;
 
 #endif

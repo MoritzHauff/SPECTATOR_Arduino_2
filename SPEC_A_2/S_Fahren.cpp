@@ -1,5 +1,9 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+/** S_Fahren.cpp
+***
+*** Beschreibt den StandardFahrmodus.
+***
+*** Moritz Hauff, 18.03.2017
+**/
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,29 +27,48 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
-
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "S_Fahren.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///Konstruktoren
+void S_FahrenClass::Init()
 {
-protected:
-	
-public:
-	
+	toggleState = false;
+}
 
-};
+///////////////////////////////////////////////////////////////////////////
+///Functions
+void S_FahrenClass::Sense()
+{
+	spectator->UpdateSharp();
 
-extern Functions functions;
+	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
+	{
+		spectator->UpdateMLX();
+	}
 
-#endif
+	spectator->UpdateMPU();
+
+	spectator->UpdateSwitches();
+
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
+}
+
+void S_FahrenClass::Think()
+{
+	toggleState = !toggleState;
+	/*Serial.print("ToggleState: ");
+	Serial.println(toggleState);*/
+}
+
+void S_FahrenClass::Act()
+{
+	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
+
+	//Serial.println("Motorspeed gesetzt");
+
+	spectator->HeartbeatLED.Toggle();
+}

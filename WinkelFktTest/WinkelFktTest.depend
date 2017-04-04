@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1489931745 source:c:\users\morit\onedrive - bwedu\dokumente\moritz\programmieren\programmieren jahr 7\2. arduinoprogrammierung\spectator_arduino_2\winkelfkttest\main.cpp
+	<iostream>
+	"MPUFahrer.h"
+
+1489931076 c:\users\morit\onedrive - bwedu\dokumente\moritz\programmieren\programmieren jahr 7\2. arduinoprogrammierung\spectator_arduino_2\winkelfkttest\mpufahrer.h
+	<iostream>
+	<algorithm>
+	<cmath>
+
+1489931384 source:c:\users\morit\onedrive - bwedu\dokumente\moritz\programmieren\programmieren jahr 7\2. arduinoprogrammierung\spectator_arduino_2\winkelfkttest\mpufahrer.cpp
+	"MPUFahrer.h"
+

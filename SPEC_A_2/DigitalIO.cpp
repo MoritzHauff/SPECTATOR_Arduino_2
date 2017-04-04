@@ -1,5 +1,11 @@
-// Functions.h - Moritz Hauff - 17.02.2017
-// see Functions.cpp
+/** DigitalIO.cpp
+***
+*** Diese Klasse stellt die schnellen IO-Funktionen als Lese oder Schreib-Objekt 
+*** zur Verfügung. So kann auf die einzelnen Pins genauso wie auf andere Sensoren 
+*** zugegriffen werden.
+***
+*** Moritz Hauff, 18.03.2017
+**/
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -23,29 +29,54 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _FUNCTIONS_h
-#define _FUNCTIONS_h
-
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "DigitalIO.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions-Class
-/*Beinhaltet sämtliche sonst nicht zugeordneten Funktionen.*/
-class Functions
+///Konstruktoren
+DigitalIOClass::DigitalIOClass(const GPIO_pin_t Pin, const uint8_t PinMode)
 {
-protected:
-	
-public:
-	
+	pin = Pin;
+	isOutput = PinMode;
+}
 
-};
+void DigitalIOClass::Init()
+{
+	pinMode2f(pin, isOutput);
+}
 
-extern Functions functions;
+///////////////////////////////////////////////////////////////////////////
+///Functions
+bool DigitalIOClass::Read()  // todo: implement it with inline/sth else so that it is faster.
+{
+	return digitalRead2f(pin);
+}
 
-#endif
+void DigitalIOClass::Write(uint8_t Value)
+{
+	digitalWrite2f(pin, Value);
+}
+
+void DigitalIOClass::WriteBool(bool State)
+{
+	digitalWrite2f(pin, State);
+}
+
+void DigitalIOClass::Update()
+{
+	lastState = Read();
+}
+
+bool DigitalIOClass::GetLastState()
+{
+	return lastState;
+}
+
+///////////////////////////////////////////////////////////////////////////
+///LED-Functions
+void LEDClass::Toggle()
+{
+	state = !state;
+	Write(state);
+}

@@ -17,3 +17,6 @@ Debug/
 
 # ignoriert alle Dateien im __vm/ Verzeichnis
 __vm/
+
+# ignoriert die Code::Blocks Layout-Dateien
+*.layout
