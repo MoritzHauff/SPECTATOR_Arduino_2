@@ -35,6 +35,17 @@ Diese Bibliothek von Adafruit wurde leicht verändert damit die sonst etablierte
 Kommunikation nicht gestört wird. Aus diesem Grund muss man selbst dafür sorgen, dass 
 Wire.begin() vor dem ersten Zugriff auf einen MLX aufgerufen wird.
 
+## Adafruit-VL53L0X
+
+Diese Bibliothek von Adafruit wurde leicht mithilfe dem VL53L0X-St-Guide Seite 42
+verändert, um die Dauer einer Messung mithilfe von zwei neuen Funktionen von 
+40 ms auf 6 ms zu reduzieren. Folgendermaßen sollen die Funktionen aufgerufen werden: 
+  if(lox.CheckMeasurementSucces(&measure, true))
+  {
+    Serial.print("Distance (mm): "); Serial.print(measure.RangeMilliMeter);
+    lox.StartContiniousMeasurement(true);
+  }
+
 ## Credits
 
 Moritz Hauff, 16.02.2017

@@ -17,7 +17,7 @@
 
 #include "StateMachine.h"
 
-#include <VL53L0X.h>  // Es wird die Polulo-Bibliothek verwendet: https://github.com/pololu/vl53l0x-arduino
+#include <Adafruit_VL53L0X.h>  // Es wird die angepasste Adafruit-Bibliothek verwendet.
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -30,7 +30,7 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
-VL53L0X sensor;
+Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
@@ -40,16 +40,13 @@ void setup()
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
-	
 
-	sensor.init();
-	sensor.setTimeout(500);
+	if (!lox.begin()) {   // todo: set sensor-Settings
+		Serial.println(F("Failed to boot VL53L0X"));
+		while (1);
+	}
 
-	// Start continuous back-to-back mode (take readings as
-	// fast as possible).  To use continuous timed mode
-	// instead, provide a desired inter-measurement period in
-	// ms (e.g. sensor.startContinuous(100)).
-	sensor.startContinuous();
+	lox.StartContiniousMeasurement(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -70,10 +67,13 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
-	Serial.print(sensor.readRangeContinuousMillimeters());     // mind. 32000 us. Das ist eindeutig zu lang.
-	if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
 
-	Serial.println();
+	VL53L0X_RangingMeasurementData_t measure;
+	if (lox.CheckMeasurementSucces(&measure, true))   // konstant 6800 us.
+	{
+		Serial.print("Distance (mm): "); Serial.print(measure.RangeMilliMeter); 
+		lox.StartContiniousMeasurement(true);
+	}
 
 	zwei = micros();
 
