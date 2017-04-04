@@ -1,7 +1,7 @@
 /** SPECTATORClass.cpp
 ***
 *** Hier laufen alle andern benötigten Instanzen und die dazugehörigen 
-*** Funktionen zusammen
+*** Funktionen zusammen.
 ***
 *** Moritz Hauff, 01.03.2017
 **/
@@ -18,15 +18,16 @@ SPECTATORClass SA;  // Die HauptInstanz des SPECTATOR-Arduinos.
 ///Konstruktoren 
 void SPECTATORClass::Init()
 {
-	// pinModes
-	pinMode2f(led_pin, OUTPUT);
-	pinMode2f(switchLinks_Pin, INPUT);
-	pinMode2f(switchRechts_Pin, INPUT);
+	// Digital Pins
+	HeartbeatLED.Init();
+	switchLinks.Init();
+	switchRechts.Init();
 
+	// Serial communication
 	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
-	// join I2C bus (I2Cdev library doesn't do this automatically)
+	// Join I2C bus (I2Cdev library doesn't do this automatically)
 	#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 		Wire.begin();
 		Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
@@ -36,27 +37,44 @@ void SPECTATORClass::Init()
 
 	Serial.println("SPEC_A_2 - Joined I2C.");
 
-	Serial.println("Init MPU");
+	Serial.println("Init MPU...");
 	mpu.Init();
 	Serial.println("MPU initialisiert.");
 
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	//MPUCalibration();
+	MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
 }
 
 void SPECTATORClass::MPUCalibration()
 {
-	Serial.println("MPU6050-Kalibrierung: ");
+	Serial.println("MPU6050-Kalibrierung...");
 	if (mpu.WaitForCalibration(40000) != CALIBRATION_SUCCESS)  // Rückgabewert kann zum Beispiel an Raspberry gesendet werden.
 	{
 		Serial.println("MPU6050-Kalibrierung gescheitert!");
 	}
+
+	mpu.Update();
+	Serial.print("aktueller Yaw-Wert: ");
+	Serial.println(mpu.GetYaw());
+	
+	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
+	
+	Serial.println("MPU6050 kalibriert.");
 }
 
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
+void SPECTATORClass::UpdateSwitches()  // 128 us
+{
+	switchLinks.Update();
+	switchRechts.Update();   // auch bei extremst kurzem Betätigen der Switches wird zumindest 2 Ticks lang ihr Status auf "True" gesetzt.
+
+	serialBuffer.AddMsg(C_SwitchLinks, switchLinks.GetLastState());
+	serialBuffer.AddMsg(C_SwitchRechts, switchRechts.GetLastState());
+}
+
 void SPECTATORClass::UpdateSharp()
 {
 	for (int i = 0; i < SHARPMEASUREMTS; i++)
@@ -92,5 +110,6 @@ void SPECTATORClass::UpdateMPU()
 		serialBuffer.AddMsg(C_MPUYaw, mpu.GetYaw(), 8);
 		serialBuffer.AddMsg(C_MPUPitch, mpu.GetPitch(), 8);
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
+
 	}
 }

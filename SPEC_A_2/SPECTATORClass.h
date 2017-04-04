@@ -11,9 +11,7 @@
 	#include "WProgram.h"
 #endif
 
-#define  GPIO2_PREFER_SPEED    1   // results in even faster execution
-#include <arduino2.h>   // include the fast I/O 2 functions
-
+#include "DigitalIO.h"
 #include "SharpIR.h"
 #include "MPU.h"
 #include "MLX90614Class.h"
@@ -21,26 +19,14 @@
 #include "SPECMotoren.h"
 
 #include "SerialBuffer.h"
+#include "MPUFahrer.h"
 
 #include "Functions.h"
 #include "Constants.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
-// The I/O 2 functions use special data type for pin
-// Pin codes, such as DP13 are defined in pins2_arduino.h
-const GPIO_pin_t led_pin = DP32;  // Achtung: Pins nur für ihren im Setup angegeben Zweck nutzen, sonst kann es zur Beschädigung des ATmegas2560 kommen!
-const GPIO_pin_t switchLinks_Pin = DP53;
-const GPIO_pin_t switchRechts_Pin = DP51;
-
-const uint8_t analog_Pin = A1;
-
-const uint8_t DELAY_TIME = 100;
-
 const uint8_t SHARPMEASUREMTS = 8;   // acht sharp-Messungen an einem Sensor dauern genau 940 us. Diese reium an allen würden damit 4 ms dauern.
-
-const int Length_of_SerialMessage = 13;
-const int length_of_information = 5;
 
 ///////////////////////////////////////////////////////////////////////////
 ///SPECTATORClass
@@ -54,12 +40,19 @@ class SPECTATORClass
  public:
 	void Init();
 
+	/*Liest die zwei Switch-Werte aus und speichert diese im SerialBuffer.*/
+	void UpdateSwitches();
 	/*Liest die vier Sharp-Werte aus und speichert diese im SerialBuffer.*/
 	void UpdateSharp();
 	/*Liest die MLX-Werte aus und speichert diese im SerialBuffer.*/
 	void UpdateMLX();
 	/*Liest die MPU-Werte aus und speichert diese sofern neue vorhanden sind im SerialBuffer.*/
 	void UpdateMPU();
+
+	LEDClass HeartbeatLED = LEDClass(DP32);
+
+	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
+	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);
 
 	SharpIR sharplinksvorne = SharpIR(A12, SHARPMEASUREMTS);
 	SharpIR sharprechtsvorne = SharpIR(A13, SHARPMEASUREMTS);
@@ -75,6 +68,7 @@ class SPECTATORClass
 	SPECMotorenClass Motoren = SPECMotorenClass(3, 2, 1, 4);
 
 	SerialBuffer serialBuffer = SerialBuffer();
+	MPUFahrerClass mpuFahrer = MPUFahrerClass();
 
 };
 

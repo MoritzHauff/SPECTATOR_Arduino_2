@@ -80,24 +80,36 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="DigitalIO.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="MLX90614Class.h" />
     <ClInclude Include="MPU.h" />
+    <ClInclude Include="MPUFahrer.h" />
     <ClInclude Include="SerialBuffer.h" />
     <ClInclude Include="SharpIR.h" />
     <ClInclude Include="SPECMotoren.h" />
     <ClInclude Include="SPECTATORClass.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="S_Drehen.h" />
+    <ClInclude Include="S_Fahren.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DigitalIO.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="MedianFilter.cpp" />
     <ClCompile Include="MLX90614Class.cpp" />
     <ClCompile Include="MPU.cpp" />
+    <ClCompile Include="MPUFahrer.cpp" />
     <ClCompile Include="SerialBuffer.cpp" />
     <ClCompile Include="SharpIR.cpp" />
     <ClCompile Include="SPECMotoren.cpp" />
     <ClCompile Include="SPECTATORClass.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="S_Drehen.cpp" />
+    <ClCompile Include="S_Fahren.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
