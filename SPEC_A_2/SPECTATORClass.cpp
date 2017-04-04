@@ -37,6 +37,19 @@
 SPECTATORClass SA;  // Die HauptInstanz des SPECTATOR-Arduinos.
 
 ///////////////////////////////////////////////////////////////////////////
+///ISR (statische Funktionen)
+static void ISRUSV()   // for the interrupt callback you need a real function not a method.
+					   // for more information see: http://stackoverflow.com/questions/400257/how-can-i-pass-a-class-member-function-as-a-callback
+{
+	SA.ultraschallVorne.HandleInterrupt();
+}
+
+static void ISRUSH()
+{
+	SA.ultraschallHinten.HandleInterrupt();
+}
+
+///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren 
 void SPECTATORClass::Init()
 {
@@ -45,8 +58,15 @@ void SPECTATORClass::Init()
 	switchLinks.Init();
 	switchRechts.Init();
 
+	// ultrasonic-distance-sensors
 	ultraschallLinks.Init();
+	ultraschallVorne.Init();
 	ultraschallRechts.Init();
+	ultraschallHinten.Init();
+
+	// attach the ultrasonic-sensor interrupts
+	attachInterrupt(digitalPinToInterrupt(ultraschallVorne.GetEchoPin()), ISRUSV, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(ultraschallHinten.GetEchoPin()), ISRUSH, CHANGE);
 
 	// Serial communication
 	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
@@ -146,4 +166,19 @@ void SPECTATORClass::UpdateHCSr04Seitlich()
 
 	serialBuffer.AddMsg(C_UltraschallL, ultraschallLinks.GetDistance());
 	serialBuffer.AddMsg(C_UltraschallR, ultraschallRechts.GetDistance());
+}
+
+void SPECTATORClass::UpdateHCSr04VorneHinten()
+{
+	ultraschallVorne.Update();
+	if (ultraschallVorne.NewDataAvaible())
+	{
+		serialBuffer.AddMsg(C_UltraschallV, ultraschallVorne.GetDistance());
+	}
+
+	ultraschallHinten.Update();
+	if (ultraschallHinten.NewDataAvaible())
+	{
+		serialBuffer.AddMsg(C_UltraschallH, ultraschallHinten.GetDistance());
+	}
 }

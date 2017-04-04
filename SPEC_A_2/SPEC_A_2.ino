@@ -12,10 +12,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "HCSr04.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
-#include <arduino2.h>
 
 #include "StateMachine.h"
  
@@ -30,20 +28,6 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
-HCSr04_InterruptClass usInterruptH(18, DP24);
-HCSr04_InterruptClass usInterruptV(19, DP22);
-
-static void ISRUSH()   // for the interrupt callback you need a real function
-					   // for more information see: http://stackoverflow.com/questions/400257/how-can-i-pass-a-class-member-function-as-a-callback
-{
-	usInterruptH.HandleInterrupt();
-}
-
-static void ISRUSV()
-{
-	usInterruptV.HandleInterrupt();
-}
-
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
@@ -52,12 +36,7 @@ void setup()
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
-
-	usInterruptH.Init();
-	usInterruptV.Init();
-
-	attachInterrupt(digitalPinToInterrupt(usInterruptH.GetEchoPin()), ISRUSH, CHANGE);
-	attachInterrupt(digitalPinToInterrupt(usInterruptV.GetEchoPin()), ISRUSV, CHANGE);
+		
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -67,7 +46,7 @@ void loop()
 	eins = micros();
 	
 	// todo: StateMachine zeitlich ausmessen.
-	//stateMachine->DoAction();
+	stateMachine->DoAction();
 
 	zwei = micros();
 
@@ -78,21 +57,6 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
-	/*SA.ultraschallRechts.Update();  // abhängig von der entfernung 10000 us - >25000 us
-	Serial.print("Rechts: ");
-	Serial.println(SA.ultraschallRechts.GetDistance());*/
-	usInterruptH.Update();
-	if (usInterruptH.NewDataAvaible())
-	{
-		Serial.print("Hinten: ");
-		Serial.println(usInterruptH.GetDistance());
-	}
-	usInterruptV.Update();
-	if (usInterruptV.NewDataAvaible())
-	{
-		Serial.print("Vorne: ");
-		Serial.println(usInterruptV.GetDistance());
-	}
 
 	zwei = micros();
 
