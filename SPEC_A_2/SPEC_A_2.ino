@@ -16,6 +16,8 @@
 #include "Constants.h"
 
 #include "StateMachine.h"
+
+#include <VL53L0X.h>
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -28,6 +30,8 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
+VL53L0X sensor;
+
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
@@ -36,7 +40,16 @@ void setup()
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
-		
+	
+
+	sensor.init();
+	sensor.setTimeout(500);
+
+	// Start continuous back-to-back mode (take readings as
+	// fast as possible).  To use continuous timed mode
+	// instead, provide a desired inter-measurement period in
+	// ms (e.g. sensor.startContinuous(100)).
+	sensor.startContinuous();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -46,7 +59,7 @@ void loop()
 	eins = micros();
 	
 	// todo: StateMachine zeitlich ausmessen.
-	stateMachine->DoAction();
+	//stateMachine->DoAction();
 
 	zwei = micros();
 
@@ -57,6 +70,10 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
+	Serial.print(sensor.readRangeContinuousMillimeters());
+	if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
+
+	Serial.println();
 
 	zwei = micros();
 
