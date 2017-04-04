@@ -17,7 +17,7 @@
 
 #include "StateMachine.h"
 
-#include <VL53L0X.h>
+#include <VL53L0X.h>  // Es wird die Polulo-Bibliothek verwendet: https://github.com/pololu/vl53l0x-arduino
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -70,16 +70,16 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
-	Serial.print(sensor.readRangeContinuousMillimeters());
+	Serial.print(sensor.readRangeContinuousMillimeters());     // mind. 32000 us. Das ist eindeutig zu lang.
 	if (sensor.timeoutOccurred()) { Serial.print(" TIMEOUT"); }
 
 	Serial.println();
 
 	zwei = micros();
 
-	/*Serial.print("Ultraschall-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
+	Serial.print("ToF-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
 	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
-	Serial.println(" us.");*/          // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
+	Serial.println(" us.");        // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
 	//delay(10000);
 }
