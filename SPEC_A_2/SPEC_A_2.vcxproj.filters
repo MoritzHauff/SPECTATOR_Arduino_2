@@ -66,6 +66,9 @@
     <ClInclude Include="HCSr04.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VL53L0X.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SharpIR.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HCSr04.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VL53L0X.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

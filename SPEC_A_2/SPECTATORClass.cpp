@@ -50,6 +50,9 @@ void SPECTATORClass::Init()
 	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
+	// init Laser
+	laserVorne.Init();  // start this version of wire before the final one later (see below).
+
 	// Join I2C bus (I2Cdev library doesn't do this automatically)
 	#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 		Wire.begin();
@@ -158,5 +161,14 @@ void SPECTATORClass::UpdateHCSr04VorneHinten()
 	if (ultraschallHinten.NewDataAvaible())
 	{
 		serialBuffer.AddMsg(C_UltraschallH, ultraschallHinten.GetDistance());
+	}
+}
+
+void SPECTATORClass::UpdateLaser()
+{
+	laserVorne.Update();
+	if (laserVorne.NewDataAvaiable())
+	{
+		serialBuffer.AddMsg(C_LaserV, laserVorne.GetDistance());
 	}
 }

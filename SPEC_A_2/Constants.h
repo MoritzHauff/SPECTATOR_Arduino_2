@@ -38,4 +38,6 @@
 #define C_UltraschallR 0x37
 #define C_UltraschallH 0x38
 
+#define C_LaserV 0x39
+
 #endif
