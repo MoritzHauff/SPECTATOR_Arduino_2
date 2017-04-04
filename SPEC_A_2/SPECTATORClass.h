@@ -13,6 +13,7 @@
 
 #include "DigitalIO.h"
 #include "SharpIR.h"
+#include "HCSr04.h"
 #include "MPU.h"
 #include "MLX90614Class.h"
 
@@ -49,6 +50,8 @@ class SPECTATORClass
 	/*Liest die MPU-Werte aus und speichert diese sofern neue vorhanden sind im SerialBuffer.*/
 	void UpdateMPU();
 
+	void UpdateHCSr04Seitlich();
+
 	LEDClass HeartbeatLED = LEDClass(DP32);
 
 	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
@@ -58,6 +61,9 @@ class SPECTATORClass
 	SharpIR sharprechtsvorne = SharpIR(A13, SHARPMEASUREMTS);
 	SharpIR sharplinkshinten = SharpIR(A14, SHARPMEASUREMTS);
 	SharpIR sharprechtshinten = SharpIR(A15, SHARPMEASUREMTS);
+
+	HCSr04Class ultraschallLinks = HCSr04Class(43, DP41);
+	HCSr04Class ultraschallRechts = HCSr04Class(47, DP45);
 
 	MPU mpu = MPU();
 

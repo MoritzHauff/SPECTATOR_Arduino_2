@@ -37,7 +37,7 @@ private:
 
 public:
 
-	SharpIR (uint8_t ir_Pin, uint8_t NumberOfValues);
+	SharpIR(uint8_t ir_Pin, uint8_t NumberOfValues);
     
 	/*Gibt den median-Wert der letzten Updates zurück.*/
 	int GetValue();

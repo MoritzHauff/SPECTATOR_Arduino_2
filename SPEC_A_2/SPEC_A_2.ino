@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "HCSr04.h"
 #include "S_Drehen.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
@@ -57,6 +58,9 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
+	/*SA.ultraschallRechts.Update();
+	Serial.print("Rechts: ");
+	Serial.println(SA.ultraschallRechts.GetDistance());*/
 
 	zwei = micros();
 
