@@ -55,4 +55,9 @@
 #define C_SharpRV 0x33
 #define C_SharpRH 0x34
 
+#define C_UltraschallL 0x35
+#define C_UltraschallV 0x36
+#define C_UltraschallR 0x37
+#define C_UltraschallH 0x38
+
 #endif

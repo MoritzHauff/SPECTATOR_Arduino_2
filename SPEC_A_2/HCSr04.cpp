@@ -1,8 +1,8 @@
-/** S_Fahren.cpp
+/** HCSr04.cpp
 ***
-*** Beschreibt den StandardFahrmodus.
+*** Diese Klasse überwacht die HCSr04-Sensoren.
 ***
-*** Moritz Hauff, 18.03.2017
+*** created by Moritz Hauff, 04.04.2017
 **/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,48 +29,48 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_Fahren.h"
+#include "HCSr04.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren
-void S_FahrenClass::Init()
+HCSr04Class::HCSr04Class(const uint8_t Echo_Pin, const GPIO_pin_t Trig_Pin)
 {
-	toggleState = false;
+	_echo_Pin = Echo_Pin;
+	trigPin = new DigitalIOClass(Trig_Pin, OUTPUT);
+}
+
+HCSr04Class::~HCSr04Class()
+{
+	delete trigPin;
+}
+
+void HCSr04Class::Init()
+{
+	pinMode(_echo_Pin, INPUT);
+	trigPin->Init();
 }
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions
-void S_FahrenClass::Sense()
+///Funktionen
+void HCSr04Class::Update()
 {
-	spectator->UpdateSharp();
+	trigPin->Write(LOW);
+	delayMicroseconds(2);
+	trigPin->Write(HIGH);
+	delayMicroseconds(5);
+	trigPin->Write(LOW);
 
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		spectator->UpdateMLX();
-	}
+	pulsLaenge = pulseIn(_echo_Pin, HIGH);
 
-	spectator->UpdateMPU();
-
-	spectator->UpdateSwitches();
-
-	spectator->UpdateHCSr04Seitlich();
-
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	cm = convert(pulsLaenge);
 }
 
-void S_FahrenClass::Think()
+int HCSr04Class::convert(long PulsLaenge)
 {
-	toggleState = !toggleState;
-	/*Serial.print("ToggleState: ");
-	Serial.println(toggleState);*/
+	return (PulsLaenge * 34) / 2000;
 }
 
-void S_FahrenClass::Act()
+int HCSr04Class::GetDistance()
 {
-	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-
-	//Serial.println("Motorspeed gesetzt");
-
-	spectator->HeartbeatLED.Toggle();
+	return cm;
 }

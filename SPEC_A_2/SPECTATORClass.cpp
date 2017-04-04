@@ -45,6 +45,9 @@ void SPECTATORClass::Init()
 	switchLinks.Init();
 	switchRechts.Init();
 
+	ultraschallLinks.Init();
+	ultraschallRechts.Init();
+
 	// Serial communication
 	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
@@ -66,7 +69,7 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
+	//MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
 }
 
 void SPECTATORClass::MPUCalibration()
@@ -134,4 +137,13 @@ void SPECTATORClass::UpdateMPU()
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
 
 	}
+}
+
+void SPECTATORClass::UpdateHCSr04Seitlich()
+{
+	ultraschallLinks.Update();
+	ultraschallRechts.Update();
+
+	serialBuffer.AddMsg(C_UltraschallL, ultraschallLinks.GetDistance());
+	serialBuffer.AddMsg(C_UltraschallR, ultraschallRechts.GetDistance());
 }
