@@ -81,18 +81,17 @@ void loop()
 	/*SA.ultraschallRechts.Update();  // abhängig von der entfernung 10000 us - >25000 us
 	Serial.print("Rechts: ");
 	Serial.println(SA.ultraschallRechts.GetDistance());*/
-	if (usInterruptH.IsFinished())
+	usInterruptH.Update();
+	if (usInterruptH.NewDataAvaible())
 	{
-		//usInterruptH.Update();
 		Serial.print("Hinten: ");
 		Serial.println(usInterruptH.GetDistance());
-		usInterruptH.StartMeasurement();
 	}
-	if (usInterruptV.IsFinished())
+	usInterruptV.Update();
+	if (usInterruptV.NewDataAvaible())
 	{
 		Serial.print("Vorne: ");
 		Serial.println(usInterruptV.GetDistance());
-		usInterruptV.StartMeasurement();
 	}
 
 	zwei = micros();

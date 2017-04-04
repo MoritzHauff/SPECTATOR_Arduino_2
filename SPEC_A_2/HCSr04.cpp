@@ -49,6 +49,8 @@ void HCSr04Class::Update()
 	pulsLaenge = pulseIn(_echo_Pin, HIGH);
 
 	cm = convert(pulsLaenge);
+
+	dataUpdated = true;
 }
 
 int HCSr04Class::convert(long PulsLaenge)
@@ -58,7 +60,14 @@ int HCSr04Class::convert(long PulsLaenge)
 
 int HCSr04Class::GetDistance()
 {
+	dataUpdated = false;
+
 	return cm;
+}
+
+bool HCSr04Class::NewDataAvaible()
+{
+	return dataUpdated;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -73,21 +82,20 @@ HCSr04_InterruptClass::HCSr04_InterruptClass(const uint8_t Echo_Pin, const GPIO_
 	~HCSr04Class();
 }*/
 
-/*void HCSr04_InterruptClass::Init() 
-{
-	pinMode(_trigger, OUTPUT);
-	digitalWrite(_trigger, LOW);
-	pinMode(_echo, INPUT);
-	attachInterrupt(digitalPinToInterrupt(_echo), _echo_isr, CHANGE);
-}*/
-
 ///////////////////////////////////////////////////////////////////////////
 ///Iterrupt-Funktionen
-void HCSr04_InterruptClass::StartMeasurement()
+void HCSr04_InterruptClass::startMeasurement()
 {
-	//Serial.println("Messung gestartet.");
 	_finished = false;
 	ping();
+}
+
+void HCSr04_InterruptClass::Update()
+{
+	if (_finished)
+	{
+		startMeasurement();
+	}
 }
 
 void HCSr04_InterruptClass::HandleInterrupt() 
@@ -103,6 +111,7 @@ void HCSr04_InterruptClass::HandleInterrupt()
 			_end = micros();
 			_finished = true;
 			cm = convert(_end - _start);
+			dataUpdated = true;
 		}
 		break;
 	}
