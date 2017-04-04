@@ -46,6 +46,7 @@ class HCSr04Class
 
 	 long pulsLaenge;
 	 int cm;
+	 bool dataUpdated = false;
 
 	 /*Converts the pulsLaenge into cm.*/
 	 int convert(long PulsLaenge);
@@ -58,27 +59,29 @@ class HCSr04Class
 	 void Init();
 
 	 /*Führt eine Messung aus und speichert diese in der Klasseninstanz.*/
-	 void Update();
+	 virtual void Update();
 	 /*Gibt den aktuell gespeicherten Wert zurück.*/
 	 int GetDistance();
-
+	 /*Gibt an ob seit dem letzten Auslesen der Entfernungs-Wert aktualisiert wurden.*/
+	 bool NewDataAvaible();
 
 };
 
 class HCSr04_InterruptClass : public HCSr04Class
 {
 protected:
-
 	int _max;
 	volatile unsigned long _start, _end;
 	volatile bool _finished;
+
+	void startMeasurement();
+	
 
 public:
 	HCSr04_InterruptClass(const uint8_t Echo_Pin, const GPIO_pin_t Trig_Pin, int max_dist = 200);
 	//~HCSr04_InterruptClass();
 
-	void StartMeasurement();
-	bool IsFinished() { return _finished; }
+	virtual void Update();
 
 	void HandleInterrupt();
 	int GetEchoPin() { return _echo_Pin; }
