@@ -15,6 +15,7 @@
 #include "HCSr04.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
+#include <arduino2.h>
 
 #include "StateMachine.h"
  
@@ -29,8 +30,28 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
-//HCSr04_InterruptClass usInterrupt(22, 19);
-HCSr04_InterruptClass usInterrupt(24, 18);
+HCSr04_InterruptClass usInterrupt(18, DP24);
+HCSr04_InterruptClass usInterrupt2(19, DP22);
+
+static void ISRUSH()   // for the interrupt callback you need a real function
+				// for more information see: http://stackoverflow.com/questions/400257/how-can-i-pass-a-class-member-function-as-a-callback
+{
+	//Serial.println("Interrupt");
+	/*if (usInterrupt) // check if it was initialized
+	{
+		usInterrupt->HandleInterrupt();
+	}*/
+	usInterrupt.HandleInterrupt();
+}
+
+static void ISRUSV()
+{
+	//Serial.println("Interrupt");
+	/*if (usInterrupt2) // check if it was initialized
+	{
+		usInterrupt2->HandleInterrupt();
+	}*/
+}
 
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
@@ -41,7 +62,11 @@ void setup()
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
 
-	usInterrupt.begin();
+	usInterrupt.Init();
+	usInterrupt2.Init();
+
+	attachInterrupt(digitalPinToInterrupt(18), ISRUSH, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(19), ISRUSV, CHANGE);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -65,17 +90,18 @@ void loop()
 	/*SA.ultraschallRechts.Update();  // abhängig von der entfernung 10000 us - >25000 us
 	Serial.print("Rechts: ");
 	Serial.println(SA.ultraschallRechts.GetDistance());*/
-	if (usInterrupt.isFinished())
+	if (usInterrupt.IsFinished())
 	{
+		//usInterrupt.Update();
 		Serial.print("Hinten: ");
-		Serial.println(usInterrupt.getDistance());
-		usInterrupt.start();
+		Serial.println(usInterrupt.GetDistance());
+		usInterrupt.StartMeasurement();
 	}
-	/*if (usInterrupt2.isFinished())
+	/*if (usInterrupt2->IsFinished())
 	{
 		Serial.print("Vorne: ");
-		Serial.println(usInterrupt2.getDistance());
-		usInterrupt2.start();
+		Serial.println(usInterrupt2->GetDistance());
+		usInterrupt2->StartMeasurement();
 	}*/
 
 	zwei = micros();

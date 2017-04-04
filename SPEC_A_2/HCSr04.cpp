@@ -46,19 +46,27 @@ HCSr04Class::~HCSr04Class()
 
 void HCSr04Class::Init()
 {
-	pinMode(_echo_Pin, INPUT);
 	trigPin->Init();
+	trigPin->Write(LOW);
+	pinMode(_echo_Pin, INPUT);
 }
 
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
-void HCSr04Class::Update()
+void HCSr04Class::ping()
 {
 	trigPin->Write(LOW);
 	delayMicroseconds(2);
 	trigPin->Write(HIGH);
 	delayMicroseconds(5);
 	trigPin->Write(LOW);
+
+	//Serial.print("Ping gesendet.");
+}
+
+void HCSr04Class::Update()
+{
+	ping();
 
 	pulsLaenge = pulseIn(_echo_Pin, HIGH);
 
@@ -67,7 +75,7 @@ void HCSr04Class::Update()
 
 int HCSr04Class::convert(long PulsLaenge)
 {
-	return PulsLaenge / 58;   // only do one int-Calculation saves time.
+	return PulsLaenge / 58;   // only do one int-Calculation saves time.  / 58
 }
 
 int HCSr04Class::GetDistance()
@@ -75,51 +83,49 @@ int HCSr04Class::GetDistance()
 	return cm;
 }
 
+///////////////////////////////////////////////////////////////////////////
+///Iterrupt-Konstruktoren
+HCSr04_InterruptClass::HCSr04_InterruptClass(const uint8_t Echo_Pin, const GPIO_pin_t Trig_Pin, int max_dist)
+	: _max(max_dist), _finished(true),
+	HCSr04Class(Echo_Pin, Trig_Pin)
+{ }
 
-HCSr04_InterruptClass *HCSr04_InterruptClass::_instance(NULL);
-
-HCSr04_InterruptClass::HCSr04_InterruptClass(int trigger, int echo, int max_dist)
-	: _trigger(trigger), _echo(echo), _max(max_dist), _finished(false),
-	HCSr04Class(trigger, echo)
+/*HCSr04_InterruptClass::~HCSr04_InterruptClass()
 {
-	if (_instance == 0) _instance = this;
-}
+	~HCSr04Class();
+}*/
 
-void HCSr04_InterruptClass::begin() 
+/*void HCSr04_InterruptClass::Init() 
 {
 	pinMode(_trigger, OUTPUT);
 	digitalWrite(_trigger, LOW);
 	pinMode(_echo, INPUT);
 	attachInterrupt(digitalPinToInterrupt(_echo), _echo_isr, CHANGE);
-}
+}*/
 
 ///////////////////////////////////////////////////////////////////////////
-///Funktionen
-void HCSr04_InterruptClass::start() 
+///Iterrupt-Funktionen
+void HCSr04_InterruptClass::StartMeasurement()
 {
+	//Serial.println("Messung gestartet.");
 	_finished = false;
-	digitalWrite(_trigger, HIGH);
-	delayMicroseconds(15);
-	digitalWrite(_trigger, LOW);
+	ping();
 }
 
-unsigned int HCSr04_InterruptClass::getDistance() 
+void HCSr04_InterruptClass::HandleInterrupt() 
 {
-	return convert(_end - _start);
-}
-
-void HCSr04_InterruptClass::_echo_isr() 
-{
-	HCSr04_InterruptClass* _this = HCSr04_InterruptClass::instance();
-
-	switch (digitalRead(_this->_echo)) 
+	switch (digitalRead(_echo_Pin))
 	{
 	case HIGH:
-		_this->_start = micros();
+		_start = micros();
 		break;
 	case LOW:
-		_this->_end = micros();
-		_this->_finished = true;
+		if (_finished == false)
+		{
+			_end = micros();
+			_finished = true;
+			cm = convert(_end - _start);
+		}
 		break;
 	}
 }

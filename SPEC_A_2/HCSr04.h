@@ -49,9 +49,11 @@ class HCSr04Class
 
 	 /*Converts the pulsLaenge into cm.*/
 	 int convert(long PulsLaenge);
+	 /*Activates the HCSr04 and sends one "ping". Thereafter you need to analyse the Response of the sensor.*/
+	 void ping();
 
  public:
-	 HCSr04Class(uint8_t Echo_Pin, GPIO_pin_t Trig_Pin);
+	 HCSr04Class(const uint8_t Echo_Pin, const GPIO_pin_t Trig_Pin);
 	 ~HCSr04Class();
 	 void Init();
 
@@ -63,25 +65,23 @@ class HCSr04Class
 
 };
 
-class HCSr04_InterruptClass : HCSr04Class
+class HCSr04_InterruptClass : public HCSr04Class
 {
-private:
-	static void _echo_isr();
+protected:
 
-	int _trigger, _echo, _max;
+	int _max;
 	volatile unsigned long _start, _end;
 	volatile bool _finished;
-	static HCSr04_InterruptClass* _instance;
 
 public:
-	HCSr04_InterruptClass(int trigger, int echo, int max_dist = 200);
+	HCSr04_InterruptClass(const uint8_t Echo_Pin, const GPIO_pin_t Trig_Pin, int max_dist = 200);
+	//~HCSr04_InterruptClass();
 
-	void begin();
-	void start();
-	bool isFinished() { return _finished; }
-	unsigned int getDistance();
-	static HCSr04_InterruptClass* instance() { return _instance; }
+	void StartMeasurement();
+	bool IsFinished() { return _finished; }
 
+	void HandleInterrupt();
+	int GetEchoPin() { return _echo_Pin; }
 };
 
 #endif
