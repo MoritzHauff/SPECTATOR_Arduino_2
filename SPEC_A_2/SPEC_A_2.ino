@@ -13,7 +13,6 @@
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
 #include "HCSr04.h"
-#include "S_Drehen.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
 
@@ -30,6 +29,9 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
+//HCSr04_InterruptClass usInterrupt(22, 19);
+HCSr04_InterruptClass usInterrupt(24, 18);
+
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
@@ -38,6 +40,8 @@ void setup()
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
+
+	usInterrupt.begin();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -58,15 +62,27 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
-	SA.ultraschallRechts.Update();  // abhängig von der entfernung 10000 us - >25000 us
+	/*SA.ultraschallRechts.Update();  // abhängig von der entfernung 10000 us - >25000 us
 	Serial.print("Rechts: ");
-	Serial.println(SA.ultraschallRechts.GetDistance());
+	Serial.println(SA.ultraschallRechts.GetDistance());*/
+	if (usInterrupt.isFinished())
+	{
+		Serial.print("Hinten: ");
+		Serial.println(usInterrupt.getDistance());
+		usInterrupt.start();
+	}
+	/*if (usInterrupt2.isFinished())
+	{
+		Serial.print("Vorne: ");
+		Serial.println(usInterrupt2.getDistance());
+		usInterrupt2.start();
+	}*/
 
 	zwei = micros();
 
-	Serial.print("Ultraschall-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
+	/*Serial.print("Ultraschall-Zeit: ");   // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
 	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
-	Serial.println(" us.");          // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
+	Serial.println(" us.");*/          // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
 	//delay(10000);
 }
