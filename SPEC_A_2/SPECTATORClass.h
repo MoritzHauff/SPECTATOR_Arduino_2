@@ -52,6 +52,8 @@ class SPECTATORClass
 
 	void UpdateHCSr04Seitlich();
 
+	void UpdateHCSr04VorneHinten();
+
 	LEDClass HeartbeatLED = LEDClass(DP32);
 
 	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
@@ -63,7 +65,9 @@ class SPECTATORClass
 	SharpIR sharprechtshinten = SharpIR(A15, SHARPMEASUREMTS);
 
 	HCSr04Class ultraschallLinks = HCSr04Class(43, DP41);
+	HCSr04_InterruptClass ultraschallVorne = HCSr04_InterruptClass(19, DP22);
 	HCSr04Class ultraschallRechts = HCSr04Class(47, DP45);
+	HCSr04_InterruptClass ultraschallHinten = HCSr04_InterruptClass(18, DP24);
 
 	MPU mpu = MPU();
 

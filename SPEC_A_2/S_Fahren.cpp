@@ -31,7 +31,8 @@ void S_FahrenClass::Sense()
 
 	spectator->UpdateSwitches();
 
-	spectator->UpdateHCSr04Seitlich();
+	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.
+	spectator->UpdateHCSr04VorneHinten();
 
 	spectator->serialBuffer.Flush();
 	//spectator->serialBuffer.Clear();
