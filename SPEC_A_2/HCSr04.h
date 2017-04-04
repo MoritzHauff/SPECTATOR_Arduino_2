@@ -41,4 +41,25 @@ class HCSr04Class
 
 };
 
+class HCSr04_InterruptClass : HCSr04Class
+{
+private:
+	static void _echo_isr();
+
+	int _trigger, _echo, _max;
+	volatile unsigned long _start, _end;
+	volatile bool _finished;
+	static HCSr04_InterruptClass* _instance;
+
+public:
+	HCSr04_InterruptClass(int trigger, int echo, int max_dist = 200);
+
+	void begin();
+	void start();
+	bool isFinished() { return _finished; }
+	unsigned int getDistance();
+	static HCSr04_InterruptClass* instance() { return _instance; }
+
+};
+
 #endif
