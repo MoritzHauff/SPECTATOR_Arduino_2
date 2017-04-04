@@ -1,8 +1,8 @@
-/** S_Fahren.cpp
+/** VL53K0X.cpp
 ***
-*** Beschreibt den StandardFahrmodus.
+*** todo
 ***
-*** Moritz Hauff, 18.03.2017
+*** created by Moritz Hauff, 04.04.2017
 **/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,53 +29,35 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_Fahren.h"
+#include "VL53L0X.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren
-void S_FahrenClass::Init()
+void VL53L0XClass::Init()
 {
-	toggleState = false;
+	if (!lox.begin())   // todo: set sensor-Settings
+	{   
+		Serial.println(F("Failed to boot VL53L0X"));
+	}
+
+	lox.StartContiniousMeasurement(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions
-void S_FahrenClass::Sense()
+///Funktionen
+uint16_t VL53L0XClass::GetDistance()
 {
-	spectator->UpdateSharp();
+	dataUpdated = false;
 
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		spectator->UpdateMLX();
-	}
-	else
-	{
-		spectator->UpdateLaser();
-	}
-
-	spectator->UpdateMPU();
-
-	spectator->UpdateSwitches();
-
-	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.
-	spectator->UpdateHCSr04VorneHinten();
-
-	//spectator->serialBuffer.Flush();
-	spectator->serialBuffer.Clear();
+	return measure.RangeMilliMeter;
 }
 
-void S_FahrenClass::Think()
+void VL53L0XClass::Update()
 {
-	toggleState = !toggleState;
-	/*Serial.print("ToggleState: ");
-	Serial.println(toggleState);*/
-}
-
-void S_FahrenClass::Act()
-{
-	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-
-	//Serial.println("Motorspeed gesetzt");
-
-	spectator->HeartbeatLED.Toggle();
+	if (lox.CheckMeasurementSucces(&measure, true))   // konstant 6800 us.
+	{
+		//Serial.print("Distance (mm): "); Serial.print(measure.RangeMilliMeter);
+		dataUpdated = true;
+		lox.StartContiniousMeasurement(true);
+	}
 }

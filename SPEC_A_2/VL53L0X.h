@@ -1,9 +1,4 @@
-/** S_Fahren.cpp
-***
-*** Beschreibt den StandardFahrmodus.
-***
-*** Moritz Hauff, 18.03.2017
-**/
+// VL53L0X.h - Moritz Hauff - 04.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -27,55 +22,36 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
+#ifndef _VL53L0X_h
+#define _VL53L0X_h
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_Fahren.h"
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "arduino.h"
+#else
+	#include "WProgram.h"
+#endif
+
+#include <Adafruit_VL53L0X.h>  // Es wird die angepasste Adafruit-Bibliothek verwendet.
 
 ///////////////////////////////////////////////////////////////////////////
-///Konstruktoren
-void S_FahrenClass::Init()
+///VL53L0X-Class
+class VL53L0XClass
 {
-	toggleState = false;
-}
+protected:
+	bool dataUpdated = false;
+	VL53L0X_RangingMeasurementData_t measure;
 
-///////////////////////////////////////////////////////////////////////////
-///Functions
-void S_FahrenClass::Sense()
-{
-	spectator->UpdateSharp();
+	Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		spectator->UpdateMLX();
-	}
-	else
-	{
-		spectator->UpdateLaser();
-	}
+public:
+	void Init();
 
-	spectator->UpdateMPU();
+	void Update();
+	bool NewDataAvaiable() { return dataUpdated; }
+	uint16_t GetDistance();
 
-	spectator->UpdateSwitches();
+};
 
-	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.
-	spectator->UpdateHCSr04VorneHinten();
-
-	//spectator->serialBuffer.Flush();
-	spectator->serialBuffer.Clear();
-}
-
-void S_FahrenClass::Think()
-{
-	toggleState = !toggleState;
-	/*Serial.print("ToggleState: ");
-	Serial.println(toggleState);*/
-}
-
-void S_FahrenClass::Act()
-{
-	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-
-	//Serial.println("Motorspeed gesetzt");
-
-	spectator->HeartbeatLED.Toggle();
-}
+#endif

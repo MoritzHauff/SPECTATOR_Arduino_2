@@ -38,6 +38,7 @@
 #include "HCSr04.h"
 #include "MPU.h"
 #include "MLX90614Class.h"
+#include "VL53L0X.h"
 
 #include "SPECMotoren.h"
 
@@ -76,6 +77,8 @@ class SPECTATORClass
 
 	void UpdateHCSr04VorneHinten();
 
+	void UpdateLaser();
+
 	LEDClass HeartbeatLED = LEDClass(DP32);
 
 	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
@@ -90,6 +93,8 @@ class SPECTATORClass
 	HCSr04_InterruptClass ultraschallVorne = HCSr04_InterruptClass(19, DP22);
 	HCSr04Class ultraschallRechts = HCSr04Class(47, DP45);
 	HCSr04_InterruptClass ultraschallHinten = HCSr04_InterruptClass(18, DP24);
+
+	VL53L0XClass laserVorne = VL53L0XClass();
 
 	MPU mpu = MPU();
 
