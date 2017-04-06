@@ -17,6 +17,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
+const int PWR_MotorL = BACKWARD;
+const int PWR_MotorR = FORWARD;
 const int PWR_LEDRichtung = FORWARD;
 
 // change this to the number of steps on your motor
