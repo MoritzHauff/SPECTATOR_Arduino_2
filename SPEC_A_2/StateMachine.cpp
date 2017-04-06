@@ -146,9 +146,9 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	}
 	if (msg[0] == 'C' && msg[1] == 'O' && msg[2] == 'N' && msg[3] == 'T' && msg[4] == 'I' && msg[5] == 'N' && msg[6] == 'U' && msg[7] == 'E' && currentState == s_CoffeeBreak)  // todo: Achtung CoffeeBreak.LastState kann NULL sein.
 	{
-		resumeState(s_CoffeeBreak->LastState);
+		resumeState(s_CoffeeBreak->LastState, s_CoffeeBreak->GetTimerShiftAmount());
 	}
-	if (msg[0] == C_TELEOPSTART && currentState != s_CoffeeBreak)
+	if (msg[0] == C_TELEOPSTART)
 	{
 		if (msg[5] == C_TELEOPSTOP)
 		{
@@ -185,32 +185,42 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 ///State-Functions
 void StateMachineClass::changeState(StateClass *NextState)
 {
+	Serial.println(String("Starte Modus: " + currentState->GetName()));  // for debugging on the RaPi
+	
 	if (currentState != NextState)
 	{
 		currentState = NextState;
-		
-		if (currentState == s_TeleOp)
-		{
-			s_TeleOp->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
-		}
-		else if (currentState == s_Drehen)
-		{
-			s_Drehen->Init();
-		}
-		else if (currentState == s_CoffeeBreak)
-		{
-			s_CoffeeBreak->Init();
-		}
+	}
 
-		Serial.println(String("Neuer Modus: " + currentState->GetName()));  // for debugging on the RaPi
+	// Zurücksetzen aller Timer und Umgebungsvariablen beim neustarten eines Modus.
+	if (currentState == s_TeleOp)
+	{
+		s_TeleOp->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
+	}
+	else if (currentState == s_Drehen)
+	{
+		s_Drehen->Init();
+	}
+	else if (currentState == s_CoffeeBreak)
+	{
+		s_CoffeeBreak->Init();
 	}
 }
 
-void StateMachineClass::resumeState(StateClass *NextState)
+void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
 {
 	if (currentState != NextState)
 	{
 		currentState = NextState;
+
+		if (currentState == s_TeleOp)
+		{
+			s_TeleOp->ShiftTimers(TimerShiftAmount);
+		}
+		else if (currentState == s_Drehen)
+		{
+			s_Drehen->ShiftTimers(TimerShiftAmount);
+		}
 
 		spectator->Motoren.TurnLEDOn(); // Die KaffeePause könnte die LED ausgeschaltet haben.
 

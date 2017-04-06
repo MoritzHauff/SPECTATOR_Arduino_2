@@ -1,11 +1,12 @@
 // 
-// 
+// todo
 // 
 
 #include "S_Drehen.h"
 
 void S_DrehenClass::Init()
 {
+	startTime = millis();   // todo: stop when the timer is over
 	counter = 0;
 	
 	MotorSpeedL = 0;
@@ -27,12 +28,22 @@ void S_DrehenClass::Sense()
 		counter = 1;
 	}
 
-	spectator->serialBuffer.Flush();
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
 }
 
 void S_DrehenClass::Think()
 {
 	counter++;
+
+	if (startTime + S_Drehen_Timer < millis() && ZielRichtung != 5 && ZielRichtung != 6)
+	{
+		ZielRichtung = 6;
+		MotorSpeedL = 0;
+		MotorSpeedR = 0;
+
+		Serial.println("FAILURE: Drehen konnte nicht beendet werden.");
+	}
 	
 	if (ZielRichtung < 5 && ZielRichtung > 0)
 	{
@@ -54,4 +65,11 @@ void S_DrehenClass::Think()
 void S_DrehenClass::Act()
 {
 	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
+}
+
+void S_DrehenClass::ShiftTimers(unsigned long ShiftAmount)
+{
+	/*Serial.print("StartZeit angepasst um [ms]:  "); // debug
+	Serial.println(ShiftAmount);*/
+	startTime += ShiftAmount;
 }

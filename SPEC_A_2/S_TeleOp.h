@@ -52,6 +52,8 @@ class S_TeleOpClass : public StateClass   // todo: Zeitersparnis mit static / co
 	 void Think();
 	 void Act();
 
+	 void ShiftTimers(unsigned long ShiftAmount) { }
+
 	 int MotorSpeedL;
 	 int MotorSpeedR;
 

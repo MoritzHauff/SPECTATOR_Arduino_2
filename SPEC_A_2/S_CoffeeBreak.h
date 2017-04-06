@@ -47,6 +47,7 @@ Dies soll dem Debugging dienen.*/
 class S_CoffeeBreakClass : public StateClass
 {
  protected:
+	 unsigned long coffeBreakStart;
 	 unsigned long lastToggle;
 
  public:
@@ -57,6 +58,12 @@ class S_CoffeeBreakClass : public StateClass
 	 void Sense();
 	 void Think();
 	 void Act();
+
+	 void ShiftTimers(unsigned long ShiftAmount) { /* in the CoffeeBreak are no timers. */ }
+
+	 /*Gibt die verstrichenen Zeit [ms] seit der Aktivierung der KaffePause zurück,
+	 um beim Wiederaufnehmen der alten Aktion die Timer anpassen zu können.*/
+	 unsigned long GetTimerShiftAmount();
 
 	 StateClass *LastState;
 };
