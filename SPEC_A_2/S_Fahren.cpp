@@ -60,8 +60,8 @@ void S_FahrenClass::Sense()
 	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.
 	spectator->UpdateHCSr04VorneHinten();
 
-	//spectator->serialBuffer.Flush();
-	spectator->serialBuffer.Clear();
+	spectator->serialBuffer.Flush();
+	//spectator->serialBuffer.Clear();
 }
 
 void S_FahrenClass::Think()

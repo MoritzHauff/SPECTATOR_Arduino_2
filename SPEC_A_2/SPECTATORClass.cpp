@@ -69,7 +69,7 @@ void SPECTATORClass::Init()
 	attachInterrupt(digitalPinToInterrupt(ultraschallHinten.GetEchoPin()), ISRUSH, CHANGE);
 
 	// Serial communication
-	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
+	Serial.begin(250000);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
 	Serial.println("SPEC_A_2 - Serial Start");
 
 	// init Laser
@@ -92,7 +92,7 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
-	Motoren.TurnLEDOn();
+	//Motoren.TurnLEDOn();
 
 	//MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
 }
@@ -160,7 +160,6 @@ void SPECTATORClass::UpdateMPU()
 		serialBuffer.AddMsg(C_MPUYaw, mpu.GetYaw(), 8);
 		serialBuffer.AddMsg(C_MPUPitch, mpu.GetPitch(), 8);
 		serialBuffer.AddMsg(C_MPURoll, mpu.GetRoll(), 8);
-
 	}
 }
 

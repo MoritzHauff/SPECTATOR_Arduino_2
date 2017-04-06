@@ -81,8 +81,8 @@ class SPECTATORClass
 
 	LEDClass HeartbeatLED = LEDClass(DP13);
 
-	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
-	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);
+	DigitalIOClass switchLinks = DigitalIOClass(DP51, INPUT); // todo: PascalCase
+	DigitalIOClass switchRechts = DigitalIOClass(DP53, INPUT);
 
 	SharpIR sharplinksvorne = SharpIR(A12, SHARPMEASUREMTS);
 	SharpIR sharprechtsvorne = SharpIR(A13, SHARPMEASUREMTS);
