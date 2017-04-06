@@ -95,6 +95,7 @@
     <ClInclude Include="S_Drehen.h" />
     <ClInclude Include="S_Fahren.h" />
     <ClInclude Include="VL53L0X.h" />
+    <ClInclude Include="WheelEncoder.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +115,7 @@
     <ClCompile Include="S_Drehen.cpp" />
     <ClCompile Include="S_Fahren.cpp" />
     <ClCompile Include="VL53L0X.cpp" />
+    <ClCompile Include="WheelEncoder.cpp" />
   </ItemGroup>
   <PropertyGroup>
     <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>

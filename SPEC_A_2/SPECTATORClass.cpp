@@ -27,6 +27,17 @@ static void ISRUSH()
 	SA.ultraschallHinten.HandleInterrupt();
 }
 
+static void ISREL()  // call-back method for the left-wheel-encoder
+{
+	SA.Motoren.encoderLinks.HandleInterrupt();
+}
+
+static void ISRER()  // call-back method for the right-wheel-encoder
+{
+	SA.Motoren.encoderRechts.HandleInterrupt();
+}
+
+
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren 
 void SPECTATORClass::Init()
@@ -69,6 +80,10 @@ void SPECTATORClass::Init()
 
 	Motoren.Init();
 	Motoren.Kontrolllauf();
+
+	// attach the interrupts for the encoders. Must be called here because SA is the only global instance which can be refenrenced in the static functions.
+	attachInterrupt(digitalPinToInterrupt(2), ISREL, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(2), ISRER, CHANGE);
 
 	//Motoren.TurnLEDOn();
 
