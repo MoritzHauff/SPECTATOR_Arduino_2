@@ -87,6 +87,29 @@ void S_GeradeAusClass::Think()
 
 	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
 	Serial.println(winkelKorrektur);
+
+	if (winkelKorrektur > 0)
+	{
+		if (Direction == 1)
+		{
+			speedL -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
+		}
+		else
+		{
+			speedR -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
+		}
+	}
+	else if (winkelKorrektur < 0)
+	{
+		if (Direction == 1)
+		{
+			speedR -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
+		}
+		else
+		{
+			speedL -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
+		}
+	}
 }
 
 void S_GeradeAusClass::Act()
