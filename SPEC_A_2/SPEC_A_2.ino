@@ -37,7 +37,7 @@ void setup()
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
-
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////

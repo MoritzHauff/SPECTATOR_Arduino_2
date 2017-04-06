@@ -104,7 +104,7 @@ class SPECTATORClass
 	MLX90614Class MLXVorne = MLX90614Class(0x2A);
 	MLX90614Class MLXRechts = MLX90614Class(0x2B);
 
-	SPECMotorenClass Motoren = SPECMotorenClass(4, 1, 2, 3,
+	SPECMotorenClass Motoren = SPECMotorenClass(3, 1, 4, 2,
 		4, 5, 6, 7,
 		11, 10, 9, 8);
 
