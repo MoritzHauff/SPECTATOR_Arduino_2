@@ -14,7 +14,7 @@
 #include "Constants.h"
 
 #include "SPECTATORClass.h"
-#include "S_Fahren.h"
+#include "S_TeleOp.h"
 #include "S_Drehen.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ class StateMachineClass
  protected:
 	 SPECTATORClass *spectator;
 
-	 S_FahrenClass *s_Fahren;
+	 S_TeleOpClass *s_TeleOp;
 	 S_DrehenClass *s_Drehen;
 
 	 StateClass *currentState;
