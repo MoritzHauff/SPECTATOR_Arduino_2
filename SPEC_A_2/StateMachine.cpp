@@ -131,7 +131,10 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	{
 		StateClass *s = currentState;  // save the current State into the CoffeeBreaker.
 		changeState(s_CoffeeBreak);
-		s_CoffeeBreak->LastState = s;
+		if (s != s_CoffeeBreak)
+		{
+			s_CoffeeBreak->LastState = s;
+		}
 	}
 	if (msg[0] == 'C' && msg[1] == 'O' && msg[2] == 'N' && msg[3] == 'T' && msg[4] == 'I' && msg[5] == 'N' && msg[6] == 'U' && msg[7] == 'E' && currentState == s_CoffeeBreak)  // todo: Achtung CoffeeBreak.LastState kann NULL sein.
 	{
