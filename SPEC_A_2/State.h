@@ -13,6 +13,11 @@
 
 #include "SPECTATORClass.h"
 
+/*Beeinhaltet den momentanen Ausführungszustand eines States an.*/
+enum StateStatus {
+	Running, Finished, Aborted, Error
+};
+
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
 class StateClass  // abstrakte Klasse mit virtuellen Funktionen
@@ -21,6 +26,8 @@ private:
 	 String name;
  protected:
 	 SPECTATORClass *spectator;
+
+	 StateStatus status;
 
  public:
 	 StateClass(SPECTATORClass *Spectator, const char Name[]);
@@ -36,6 +43,7 @@ private:
 	 virtual void ShiftTimers(unsigned long ShiftAmount) = 0;
 
 	 String GetName();
+	 StateStatus GetStatus();
 };
 
 #endif

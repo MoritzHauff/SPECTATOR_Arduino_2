@@ -24,10 +24,15 @@ class OverwatcherClass
  protected:
 	 StateMachineClass *stateMachine;
 
+	 int actions;   // beeinhalt die seit dem ArduinoStart durchgeführte Aktionen.
+
  public:
 	 void Init(StateMachineClass *StateMachine);
 
+	 /*Führt eine Statuskontrolle durch. Dies sollte in jedem (2.) loop Durchlauf geschehen.*/
+	 void Control();
 
+	 int GetActions() { return actions; }
 };
 
 extern OverwatcherClass OW;

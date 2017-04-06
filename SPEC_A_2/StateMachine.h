@@ -17,6 +17,7 @@
 #include "S_TeleOp.h"
 #include "S_Drehen.h"
 #include "S_CoffeeBreak.h"
+#include "S_Calibrate.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -34,8 +35,11 @@ class StateMachineClass
 	 S_TeleOpClass *s_TeleOp;
 	 S_DrehenClass *s_Drehen;
 	 S_CoffeeBreakClass *s_CoffeeBreak;
+	 S_CalibrateClass *s_Calibrate;
 
 	 StateClass *currentState;
+
+	 bool startedNewAction;
 	 
 	 /*Überwacht den seriellen Eingangsstream und teilt diesen in einzelne Befehle auf,
 	 die dann analysiert werden können. Dies sollte stets einmal pro loop-Durchgang geschehen.*/
@@ -62,6 +66,10 @@ class StateMachineClass
 	 /*Ermöglicht dem Overwachter ebenfalls Einfluss auf den aktuellen State zu nehmen.
 	 Empfängt die gleichen Befehle wie über die serielle Schnittstelle nur eben nicht seriell.*/
 	 void SendDirectCommand(char *msg);
+
+	 /*Gibt an ob seit dem letzten Aufruf dieser Funktion eine neue Aktion gestartet wurde.
+	 Dies wird vom Overwatcher dazu verwendet den gesamtFortschritt zu überwachen.*/
+	 bool StartedNewAction();
 };
 
 #endif
