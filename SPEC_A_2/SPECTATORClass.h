@@ -79,7 +79,7 @@ class SPECTATORClass
 
 	void UpdateLaser();
 
-	LEDClass HeartbeatLED = LEDClass(DP32);
+	LEDClass HeartbeatLED = LEDClass(DP13);
 
 	DigitalIOClass switchLinks = DigitalIOClass(DP23, INPUT); // todo: PascalCase
 	DigitalIOClass switchRechts = DigitalIOClass(DP25, INPUT);
@@ -102,7 +102,7 @@ class SPECTATORClass
 	MLX90614Class MLXVorne = MLX90614Class(0x2A);
 	MLX90614Class MLXRechts = MLX90614Class(0x2B);
 
-	SPECMotorenClass Motoren = SPECMotorenClass(3, 2, 1, 4);
+	SPECMotorenClass Motoren = SPECMotorenClass(4, 1, 2, 3);
 
 	SerialBuffer serialBuffer = SerialBuffer();
 	MPUFahrerClass mpuFahrer = MPUFahrerClass();

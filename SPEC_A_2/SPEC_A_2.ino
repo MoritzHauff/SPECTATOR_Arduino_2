@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include <Stepper.h>
 #include "SPECTATORClass.h"
 #include "Constants.h"
 
@@ -29,6 +30,14 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
+// change this to the number of steps on your motor
+#define STEPS 513
+
+// create an instance of the stepper class, specifying
+// the number of steps of the motor and the pins it's
+// attached to
+Stepper stepper(STEPS, 4, 5, 6, 7);
+
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
@@ -38,6 +47,11 @@ void setup()
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
 	
+	SA.Motoren.TurnLEDOn();
+	//SA.Motoren.TurnRescueOn();
+
+	// set the speed of the motor to 30 RPMs
+	stepper.setSpeed(60);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -47,7 +61,7 @@ void loop()
 	eins = micros();
 	
 	// todo: StateMachine zeitlich ausmessen.
-	stateMachine->DoAction();
+	//stateMachine->DoAction();
 
 	zwei = micros();
 
@@ -66,4 +80,14 @@ void loop()
 	Serial.println(" us.");*/        // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
 	//delay(10000);
+
+	for (int i = 0; i < 10; i++)
+	{
+		Serial.println("Forward");
+		stepper.step(STEPS);
+		delay(2000);
+	}
+	Serial.println("Backward");
+	stepper.step(-STEPS);
+	delay(2000);
 }
