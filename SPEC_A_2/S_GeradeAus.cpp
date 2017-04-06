@@ -44,6 +44,7 @@ void S_GeradeAusClass::Init()
 	Serial.println(Direction);
 
 	stoppWahrscheinlichkeit = 0;
+	winkelKorrektur = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -101,6 +102,13 @@ void S_GeradeAusClass::Think()
 
 		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
 	}
+
+	// Winkel korrektur ermitteln
+	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(
+		spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw()), spectator->mpu.GetYaw());
+
+	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
+	Serial.println(winkelKorrektur);
 }
 
 void S_GeradeAusClass::Act()
