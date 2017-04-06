@@ -18,8 +18,11 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_TeleOp = new S_TeleOpClass(spectator, "TeleOp");
 	s_Drehen = new S_DrehenClass(spectator, "Drehen");
 	s_CoffeeBreak = new S_CoffeeBreakClass(spectator, "CoffeeBreak");
+	s_Calibrate = new S_CalibrateClass(spectator, "Calibrate");
 	
 	currentState = 0;
+
+	startedNewAction = false;
 }
 
 void StateMachineClass::Init()
@@ -35,6 +38,8 @@ StateMachineClass::~StateMachineClass()
 	delete currentState;
 	delete s_TeleOp;
 	delete s_Drehen;
+	delete s_CoffeeBreak;
+	delete s_Calibrate;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -126,6 +131,10 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	{
 		resumeState(s_CoffeeBreak->LastState, s_CoffeeBreak->GetTimerShiftAmount());
 	}
+	if (msg[0] == C_TELEOPSTART && msg[1] == 'C' && msg[2] == 'A' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
+	{
+		changeState(s_Calibrate);
+	}
 	if (msg[0] == C_TELEOPSTART)
 	{
 		if (msg[5] == C_TELEOPSTOP)
@@ -159,11 +168,17 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	}
 }
 
+void StateMachineClass::SendDirectCommand(char *msg)
+{
+	handleReceivedMessage(msg);
+}
+
 ///////////////////////////////////////////////////////////////////////////
 ///State-Functions
 void StateMachineClass::changeState(StateClass *NextState)
 {
-	Serial.println(String("Starte Modus: " + currentState->GetName()));  // for debugging on the RaPi
+	Serial.println(String("Starte Modus: " + NextState->GetName()));  // for debugging on the RaPi
+	startedNewAction = true;
 	
 	if (currentState != NextState)
 	{
@@ -183,6 +198,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_CoffeeBreak->Init();
 	}
+	else if (currentState == s_Calibrate)
+	{
+		s_Calibrate->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -198,6 +217,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		else if (currentState == s_Drehen)
 		{
 			s_Drehen->ShiftTimers(TimerShiftAmount);
+		}
+		else if (currentState == s_Calibrate)
+		{
+			s_Calibrate->ShiftTimers(TimerShiftAmount);
 		}
 
 		spectator->Motoren.TurnLEDOn(); // Die KaffeePause könnte die LED ausgeschaltet haben.
@@ -231,5 +254,28 @@ void StateMachineClass::DoAction()
 		s_CoffeeBreak->Think();
 		s_CoffeeBreak->Act();
 	}
-	
+	else if (currentState == s_Calibrate)
+	{
+		if (s_Calibrate->GetStatus() == Finished)
+		{
+			changeState(s_TeleOp); // todo: Should be s_Idle.
+		}
+		else
+		{
+			s_Calibrate->Sense();
+			s_Calibrate->Think();
+			s_Calibrate->Act();
+		}
+	}
+}
+
+bool StateMachineClass::StartedNewAction()
+{
+	if (startedNewAction == true)
+	{
+		startedNewAction = false;
+		return true;
+	}
+
+	return false;
 }

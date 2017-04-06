@@ -86,25 +86,6 @@ void SPECTATORClass::Init()
 	attachInterrupt(digitalPinToInterrupt(2), ISRER, CHANGE);
 
 	//Motoren.TurnLEDOn();
-
-	MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
-}
-
-void SPECTATORClass::MPUCalibration()
-{
-	Serial.println("MPU6050-Kalibrierung...");
-	if (mpu.WaitForCalibration(40000) != CALIBRATION_SUCCESS)  // Rückgabewert kann zum Beispiel an Raspberry gesendet werden.
-	{
-		Serial.println("MPU6050-Kalibrierung gescheitert!");
-	}
-
-	mpu.Update();
-	Serial.print("aktueller Yaw-Wert: ");
-	Serial.println(mpu.GetYaw());
-	
-	mpuFahrer.SetNorden(mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
-	
-	Serial.println("MPU6050 kalibriert.");
 }
 
 ///////////////////////////////////////////////////////////////////////////
