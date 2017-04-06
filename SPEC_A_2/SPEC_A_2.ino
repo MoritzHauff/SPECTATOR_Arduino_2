@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "S_GeradeAus.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
 
@@ -61,8 +62,8 @@ void loop()
 	// todo: Zeitmessung der StateMachine!
 	OW.Control();
 
-	Serial.print("Bisher durchgefuehrte Aktionen: ");
-	Serial.println(OW.GetActions());
+	/*Serial.print("Bisher durchgefuehrte Aktionen: ");
+	Serial.println(OW.GetActions());*/
 
 	zwei = micros();
 

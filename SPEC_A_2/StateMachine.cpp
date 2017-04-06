@@ -10,6 +10,8 @@
 ///Includes
 #include "StateMachine.h"
 
+///////////////////////////////////////////////////////////////////////////
+///Konstruktoren
 StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 {
 	spectator = Spectator;
@@ -19,6 +21,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_Drehen = new S_DrehenClass(spectator, "Drehen");
 	s_CoffeeBreak = new S_CoffeeBreakClass(spectator, "CoffeeBreak");
 	s_Calibrate = new S_CalibrateClass(spectator, "Calibrate");
+	s_GeradeAus = new S_GeradeAusClass(spectator, "GeradeAus");
 	
 	currentState = 0;
 
@@ -40,6 +43,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_Drehen;
 	delete s_CoffeeBreak;
 	delete s_Calibrate;
+	delete s_GeradeAus;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -109,6 +113,8 @@ int StateMachineClass::convertCharToVorzeichen(char c)
 }
 
 //Protokoll für manuelle MotorenSteuerung: C_TELEOPSTART +/- ValueLinks +/- ValueRechts C_TELEOPSTOP
+// Drehung: C_TELEOPSTART d n/o/s/w C_TELEOPSTOP
+// Felddurchquerung: C_TELEOPSTART g +/- C_TELEOPSTOP
 void StateMachineClass::handleReceivedMessage(char *msg)
 {
 	//Debug
@@ -134,6 +140,11 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	if (msg[0] == C_TELEOPSTART && msg[1] == 'C' && msg[2] == 'A' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
 	{
 		changeState(s_Calibrate);
+	}
+	if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
+	{
+		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);
+		changeState(s_GeradeAus);
 	}
 	if (msg[0] == C_TELEOPSTART)
 	{
@@ -202,6 +213,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_Calibrate->Init();
 	}
+	else if (currentState == s_GeradeAus)
+	{
+		s_GeradeAus->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -222,8 +237,12 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		{
 			s_Calibrate->ShiftTimers(TimerShiftAmount);
 		}
+		else if (currentState == s_GeradeAus)
+		{
+			s_GeradeAus->ShiftTimers(TimerShiftAmount);
+		}
 
-		spectator->Motoren.TurnLEDOn(); // Die KaffeePause könnte die LED ausgeschaltet haben.
+		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein.
 
 		Serial.println(String("Modus wieder aufgenommen: " + currentState->GetName()));  // Debugging
 	}
@@ -265,6 +284,19 @@ void StateMachineClass::DoAction()
 			s_Calibrate->Sense();
 			s_Calibrate->Think();
 			s_Calibrate->Act();
+		}
+	}
+	else if (currentState == s_GeradeAus)
+	{
+		if (s_GeradeAus->GetStatus() == Finished)
+		{
+			changeState(s_Drehen); // todo: Should be s_Idle.
+		}
+		else
+		{
+			s_GeradeAus->Sense();
+			s_GeradeAus->Think();
+			s_GeradeAus->Act();
 		}
 	}
 }

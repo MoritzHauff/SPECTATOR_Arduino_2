@@ -89,6 +89,9 @@
     <ClInclude Include="S_Calibrate.h">
       <Filter>Header Files - States</Filter>
     </ClInclude>
+    <ClInclude Include="S_GeradeAus.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MedianFilter.cpp">
@@ -149,6 +152,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="S_Calibrate.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="S_GeradeAus.cpp">
       <Filter>Source Files - States</Filter>
     </ClCompile>
   </ItemGroup>

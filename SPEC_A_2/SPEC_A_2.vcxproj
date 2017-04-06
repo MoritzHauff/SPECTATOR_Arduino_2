@@ -96,6 +96,7 @@
     <ClInclude Include="S_Calibrate.h" />
     <ClInclude Include="S_CoffeeBreak.h" />
     <ClInclude Include="S_Drehen.h" />
+    <ClInclude Include="S_GeradeAus.h" />
     <ClInclude Include="S_TeleOp.h" />
     <ClInclude Include="VL53L0X.h" />
     <ClInclude Include="WheelEncoder.h" />
@@ -119,6 +120,7 @@
     <ClCompile Include="S_Calibrate.cpp" />
     <ClCompile Include="S_CoffeeBreak.cpp" />
     <ClCompile Include="S_Drehen.cpp" />
+    <ClCompile Include="S_GeradeAus.cpp" />
     <ClCompile Include="S_TeleOp.cpp" />
     <ClCompile Include="VL53L0X.cpp" />
     <ClCompile Include="WheelEncoder.cpp" />
