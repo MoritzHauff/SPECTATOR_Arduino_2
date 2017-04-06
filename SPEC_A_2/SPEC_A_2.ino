@@ -25,8 +25,6 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
-int direction = 3;
-
 ///////////////////////////////////////////////////////////////////////////
 ///Instanzen
 StateMachineClass *stateMachine;
@@ -49,7 +47,7 @@ void loop()
 	eins = micros();
 	
 	// todo: StateMachine zeitlich ausmessen.
-	//stateMachine->DoAction();
+	stateMachine->DoAction();
 
 	zwei = micros();
 
@@ -61,17 +59,11 @@ void loop()
 	
 	// todo: Zeitmessung der StateMachine!
 
-	SA.Motoren.UpdateWheelEncoderInfo();
-	SA.Motoren.encoderRechts.PrintEncoderInfo(SA.Motoren.GetEncoderInfoR());
-
-	SA.Motoren.SetMotoren(direction, direction);
-	direction = direction*(-1);
-
 	zwei = micros();
 
 	/*Serial.print("ToF-Zeit: ");    // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
 	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
 	Serial.println(" us.");*/        // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
-	delay(1000);
+	//delay(1000);
 }

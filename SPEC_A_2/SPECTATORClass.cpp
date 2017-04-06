@@ -188,3 +188,18 @@ void SPECTATORClass::UpdateLaser()
 		serialBuffer.AddMsg(C_LaserV, laserVorne.GetDistance());
 	}
 }
+
+void SPECTATORClass::UpdateEncoder()
+{
+	Motoren.UpdateWheelEncoderInfo();
+
+	EncoderInfo encoderInfo = Motoren.GetEncoderInfoL();
+
+	serialBuffer.AddMsg(C_EncoderLC, encoderInfo.CountsSinceLastTick);
+	serialBuffer.AddMsg(C_EncoderLT, encoderInfo.MillisSinceLastTick);
+
+	encoderInfo = Motoren.GetEncoderInfoR();
+
+	serialBuffer.AddMsg(C_EncoderRC, encoderInfo.CountsSinceLastTick);
+	serialBuffer.AddMsg(C_EncoderRT, encoderInfo.MillisSinceLastTick);
+}

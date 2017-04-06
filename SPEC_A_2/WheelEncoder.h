@@ -16,7 +16,7 @@
 struct EncoderInfo
 {
 	int CountsSinceLastTick;
-	long MillisSinceLastTick;
+	unsigned long MillisSinceLastTick;
 };
 
 ///////////////////////////////////////////////////////////////////////////

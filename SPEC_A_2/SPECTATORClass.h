@@ -57,6 +57,8 @@ class SPECTATORClass
 
 	void UpdateLaser();
 
+	void UpdateEncoder();
+
 	LEDClass HeartbeatLED = LEDClass(DP13);
 
 	DigitalIOClass switchLinks = DigitalIOClass(DP51, INPUT); // todo: PascalCase

@@ -105,3 +105,8 @@ void SerialBuffer::AddMsg(uint8_t Code, double d, uint8_t Genauigkeit)
 {
 	AddMsg(Code, String(d, Genauigkeit));
 }
+
+void SerialBuffer::AddMsg(uint8_t Code, unsigned long l)
+{
+	AddMsg(Code, String(l));
+}
