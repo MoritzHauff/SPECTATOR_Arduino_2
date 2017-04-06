@@ -16,12 +16,18 @@
 void S_CoffeeBreakClass::Init()
 {
 	lastToggle = millis();
+	coffeBreakStart = millis();
 
 	Serial.println("Befinde mich in der Kaffeepause! Type CONTINUE to continue.");
 }
 
 ///////////////////////////////////////////////////////////////////////////
 ///Functions
+unsigned long S_CoffeeBreakClass::GetTimerShiftAmount()
+{
+	return millis() - coffeBreakStart;
+}
+
 void S_CoffeeBreakClass::Sense()
 {
 	spectator->UpdateLaser();

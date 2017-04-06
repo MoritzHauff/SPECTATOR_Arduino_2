@@ -31,6 +31,9 @@ private:
 	 virtual void Act() = 0;
 	 /*Wird immer aufgerufen wenn in den Modus gewechselt wird.*/
 	 virtual void Init() = 0;
+	 /*Wird nach der Wiederaufnahme des Modus nach der KaffeePause aufgerufen 
+	 und verschiebt die Timer um die angegebene Zeit [ms].*/
+	 virtual void ShiftTimers(unsigned long ShiftAmount) = 0;
 
 	 String GetName();
 };
