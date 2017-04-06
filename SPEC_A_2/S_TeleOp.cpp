@@ -1,4 +1,4 @@
-/** S_Fahren.cpp
+/** S_TeleOp.cpp
 ***
 *** Beschreibt den StandardFahrmodus.
 ***
@@ -29,18 +29,18 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_Fahren.h"
+#include "S_TeleOp.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren
-void S_FahrenClass::Init()
+void S_TeleOpClass::Init()
 {
 	toggleState = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 ///Functions
-void S_FahrenClass::Sense()
+void S_TeleOpClass::Sense()
 {
 	spectator->UpdateSharp();
 
@@ -66,14 +66,14 @@ void S_FahrenClass::Sense()
 	//spectator->serialBuffer.Clear();
 }
 
-void S_FahrenClass::Think()
+void S_TeleOpClass::Think()
 {
 	toggleState = !toggleState;
 	/*Serial.print("ToggleState: ");
 	Serial.println(toggleState);*/
 }
 
-void S_FahrenClass::Act()
+void S_TeleOpClass::Act()
 {
 	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
 

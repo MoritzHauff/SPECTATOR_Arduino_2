@@ -37,7 +37,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	spectator = Spectator;
 	// todo: curentState = Idle;
 
-	s_Fahren = new S_FahrenClass(spectator, "Fahren");
+	s_TeleOp = new S_TeleOpClass(spectator, "TeleOp");
 	s_Drehen = new S_DrehenClass(spectator, "Drehen");
 	
 	currentState = 0;
@@ -45,16 +45,16 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 
 void StateMachineClass::Init()
 {
-	changeState(s_Fahren);
-	s_Fahren->MotorSpeedL = 0;
-	s_Fahren->MotorSpeedR = 0;
+	changeState(s_TeleOp);
+	s_TeleOp->MotorSpeedL = 0;
+	s_TeleOp->MotorSpeedR = 0;
 }
 
 StateMachineClass::~StateMachineClass()
 {
 	// clean-up
 	delete currentState;
-	delete s_Fahren;
+	delete s_TeleOp;
 	delete s_Drehen;
 }
 
@@ -142,10 +142,10 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		if (msg[5] == C_TELEOPSTOP)
 		{
 			// todo: genauen Modus entscheiden.
-			changeState(s_Fahren);
+			changeState(s_TeleOp);
 			
-			s_Fahren->MotorSpeedL = convertCharToVorzeichen(msg[1]) * (byte)msg[2];
-			s_Fahren->MotorSpeedR = convertCharToVorzeichen(msg[3]) * (byte)msg[4];
+			s_TeleOp->MotorSpeedL = convertCharToVorzeichen(msg[1]) * (byte)msg[2];
+			s_TeleOp->MotorSpeedR = convertCharToVorzeichen(msg[3]) * (byte)msg[4];
 
 			/*Serial.print("Neue Motordaten erhalten: l=");
 			Serial.print(l);
@@ -178,9 +178,9 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		currentState = NextState;
 		
-		if (currentState == s_Fahren)
+		if (currentState == s_TeleOp)
 		{
-			s_Fahren->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
+			s_TeleOp->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
 		}
 		else if (currentState == s_Drehen)
 		{
@@ -195,14 +195,14 @@ void StateMachineClass::DoAction()
 {
 	handleSerial();
 
-	if (currentState == s_Fahren) 
+	if (currentState == s_TeleOp) 
 	{
 		/*currentState->Sense();
 		currentState->Think();
 		currentState->Act();*/
-		s_Fahren->Sense();   // wird über die gecastete Instanz 'currentState' zugegriffen werden Variablen die innerhalb des States definiert und verwendet werden (wie z.B. Toggle) nicht korrekt angesprochen.
-		s_Fahren->Think();
-		s_Fahren->Act();
+		s_TeleOp->Sense();   // wird über die gecastete Instanz 'currentState' zugegriffen werden Variablen die innerhalb des States definiert und verwendet werden (wie z.B. Toggle) nicht korrekt angesprochen.
+		s_TeleOp->Think();
+		s_TeleOp->Act();
 	}
 	else if (currentState == s_Drehen)
 	{

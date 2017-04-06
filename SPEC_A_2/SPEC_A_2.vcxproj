@@ -93,7 +93,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="S_Drehen.h" />
-    <ClInclude Include="S_Fahren.h" />
+    <ClInclude Include="S_TeleOp.h" />
     <ClInclude Include="VL53L0X.h" />
     <ClInclude Include="WheelEncoder.h" />
     <ClInclude Include="__vm\.SPEC_A_2.vsarduino.h" />
@@ -113,7 +113,7 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="S_Drehen.cpp" />
-    <ClCompile Include="S_Fahren.cpp" />
+    <ClCompile Include="S_TeleOp.cpp" />
     <ClCompile Include="VL53L0X.cpp" />
     <ClCompile Include="WheelEncoder.cpp" />
   </ItemGroup>
