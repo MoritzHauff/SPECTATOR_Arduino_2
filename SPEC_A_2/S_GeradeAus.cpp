@@ -12,20 +12,42 @@
 void S_GeradeAusClass::Init()
 {
 	status = Running;
-	
-	startTime = millis();
+
+	stoppWahrscheinlichkeit = 0;
+	winkelKorrektur = 0;
 
 	speedL = S_GeradeAus_NormalSpeed * Direction;
 	speedR = S_GeradeAus_NormalSpeed * Direction;
 
-	Serial.print("Fahre GeradeAus. Richtung: ");
-	Serial.println(Direction);
+	toggleState = false;  // Am anfang soll der Laser befragt werden.
 
+	Sense();
 
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
+	startDistanceLaserV = spectator->laserVorne.GetDistance();
+	startDistanceUSV = spectator->ultraschallVorne.GetDistance();
+	startDistanceUSH = spectator->ultraschallHinten.GetDistance();
 
-	stoppWahrscheinlichkeit = 0;
-	winkelKorrektur = 0;
+	startWandKategorie = ermittleStartWandKategorie(startDistanceLaserV);
+	zielWandKategorie = startWandKategorie - Direction;   // todo: Achtung dass kann hier NULL werden!!!!
+
+	Serial.print("Fahre GeradeAus. Fahrtrichtung: ");
+	Serial.println(Direction);
+
+	Serial.print("LaserDistanz: ");
+	Serial.print(startDistanceLaserV); 
+	Serial.print(" Kategorie: ");
+	Serial.println(startWandKategorie);
+	Serial.print("ZielKategorie: ");
+	Serial.print(zielWandKategorie);
+	Serial.print(" Zielentfernung: ");
+	Serial.print(S_GeradeAus_WandErntfernungen[zielWandKategorie]);
+	Serial.print("Ultraschall Distanz Vorne: ");
+	Serial.println(startDistanceUSV);
+	Serial.print("Ultraschall Distanz Hinten: ");
+	Serial.println(startDistanceUSH);
+
+	startTime = millis();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,8 +62,10 @@ void S_GeradeAusClass::Sense()
 	}
 	else
 	{
-		spectator->UpdateLaser();
+		//spectator->UpdateLaser();
 	}
+
+	spectator->UpdateLaser();
 
 	spectator->UpdateMPU();
 
@@ -65,12 +89,12 @@ void S_GeradeAusClass::Think()
 	// Winkel korrektur ermitteln
 	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
 
-	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
+	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
+
+	/*Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
 	Serial.println(winkelKorrektur);
 	Serial.print("berechnete Korrekturmasnahme: ");
-	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
-	
-	Serial.print(h);
+	Serial.print(h);*/
 
 	adaptedSpeedL = capSpeed(speedL + h * Direction, S_GeradeAus_NormalSpeed, 70);
 	adaptedSpeedR = capSpeed(speedR - h * Direction, S_GeradeAus_NormalSpeed, 70);
@@ -97,11 +121,37 @@ void S_GeradeAusClass::Think()
 
 		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
 	}
+
+	if (Direction == 1)
+	{
+		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandErntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
+		{
+			speedL = 0;
+			speedR = 0;
+			status = Finished;
+
+			Serial.print("S_GeradeAus.Think(): Felddurchquerung aufgrund des Lasers beendet. Entfernung: ");
+			Serial.println(spectator->laserVorne.GetDistance());
+		}
+	}
+	if (Direction == -1)
+	{
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandErntfernungen[zielWandKategorie] - S_GeradeAus_WandEntfernungsKorrektur)
+		{
+			speedL = 0;
+			speedR = 0;
+			status = Finished;
+
+			Serial.print("S_GeradeAus.Think(): Felddurchquerung aufgrund des Lasers beendet. Entfernung: ");
+			Serial.println(spectator->laserVorne.GetDistance());
+		}
+	}
 }
 
 void S_GeradeAusClass::Act()
 {
-	spectator->Motoren.SetMotoren(adaptedSpeedL, adaptedSpeedR);
+	//spectator->Motoren.SetMotoren(adaptedSpeedL, adaptedSpeedR);
+	spectator->Motoren.SetMotoren(speedL, speedR);
 
 	spectator->HeartbeatLED.Toggle();
 }
@@ -125,4 +175,21 @@ int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
 	}
 
 	return Value;
+}
+
+byte S_GeradeAusClass::ermittleStartWandKategorie(int StartDistance)
+{
+	int minAbstand = abs(StartDistance - S_GeradeAus_WandErntfernungen[0]);
+	byte b = 0;
+	for (byte i = 1; i < sizeof(S_GeradeAus_WandErntfernungen); i++)
+	{
+		int h = abs(StartDistance - S_GeradeAus_WandErntfernungen[i]);
+		if (h < minAbstand)
+		{
+			minAbstand = h;
+			b = i;
+		}
+	}
+
+	return b;
 }
