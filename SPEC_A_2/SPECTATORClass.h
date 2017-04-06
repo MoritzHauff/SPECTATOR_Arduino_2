@@ -59,8 +59,7 @@ Funktionen zusammen. Die Klasse ist eine Singleton-Instanz.*/
 class SPECTATORClass
 {
  protected:
-	 void MPUCalibration();
-
+	 
  public:
 	void Init();
 

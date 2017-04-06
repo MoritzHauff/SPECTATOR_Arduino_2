@@ -1,4 +1,4 @@
-// State.h - Moritz Hauff - 17.03.2017
+// Overwatcher.h - Moritz Hauff - 06.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -22,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _STATE_h
-#define _STATE_h
+#ifndef _OVERWATCHER_h
+#define _OVERWATCHER_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -34,38 +34,29 @@
 #endif
 
 #include "SPECTATORClass.h"
-
-/*Beeinhaltet den momentanen Ausführungszustand eines States an.*/
-enum StateStatus {
-	Running, Finished, Aborted, Error
-};
+#include "StateMachine.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///State-Class
-class StateClass  // abstrakte Klasse mit virtuellen Funktionen
+///Overwatcher-Class
+/*Diese Klasse überwacht den globalen Zustand und einzelne Aktionen. Dazu 
+sammelt sie die Fehlermeldungen der einzelnen Komponenten und greift gegebenfalls 
+mit Recover-Funktionen in das Geschehen ein.*/
+class OverwatcherClass
 {
-private:
-	 String name;
  protected:
-	 SPECTATORClass *spectator;
+	 StateMachineClass *stateMachine;
 
-	 StateStatus status;
+	 int actions;   // beeinhalt die seit dem ArduinoStart durchgeführte Aktionen.
 
  public:
-	 StateClass(SPECTATORClass *Spectator, const char Name[]);
-	 // todo: virtueller Destruktor?
+	 void Init(StateMachineClass *StateMachine);
 
-	 virtual void Sense() = 0;  // noch keine Methodenimplemtierung -> siehe vererbte Klassen
-	 virtual void Think() = 0;
-	 virtual void Act() = 0;
-	 /*Wird immer aufgerufen wenn in den Modus gewechselt wird.*/
-	 virtual void Init() = 0;
-	 /*Wird nach der Wiederaufnahme des Modus nach der KaffeePause aufgerufen 
-	 und verschiebt die Timer um die angegebene Zeit [ms].*/
-	 virtual void ShiftTimers(unsigned long ShiftAmount) = 0;
+	 /*Führt eine Statuskontrolle durch. Dies sollte in jedem (2.) loop Durchlauf geschehen.*/
+	 void Control();
 
-	 String GetName();
-	 StateStatus GetStatus();
+	 int GetActions() { return actions; }
 };
+
+extern OverwatcherClass OW;
 
 #endif

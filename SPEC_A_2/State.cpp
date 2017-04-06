@@ -38,6 +38,8 @@ StateClass::StateClass(SPECTATORClass *Spectator, const char Name[])
 	spectator = Spectator;
 	
 	name = String(Name);
+
+	status = Running;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,4 +47,9 @@ StateClass::StateClass(SPECTATORClass *Spectator, const char Name[])
 String StateClass::GetName()
 {
 	return name;
+}
+
+StateStatus StateClass::GetStatus()
+{
+	return status;
 }

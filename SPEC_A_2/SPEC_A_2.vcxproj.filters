@@ -9,9 +9,17 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Source Files - Sensors">
+      <UniqueIdentifier>{cc620498-a8bb-4f16-8855-dc8c8d8938d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files - States">
+      <UniqueIdentifier>{8383101b-74d6-4d19-bcd9-e10be7f8c212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files - States">
+      <UniqueIdentifier>{9d7b54b9-ecbb-4769-b37c-406238432f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files - Sensors">
+      <UniqueIdentifier>{c2c381a4-c863-40ba-9704-15e85fcbdc8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -22,15 +30,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Functions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SharpIR.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MPU.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MLX90614Class.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
@@ -48,45 +47,51 @@
     <ClInclude Include="MPUFahrer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DigitalIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="S_Drehen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HCSr04.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="VL53L0X.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files - Sensors</Filter>
     </ClInclude>
     <ClInclude Include="WheelEncoder.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files - Sensors</Filter>
     </ClInclude>
-    <ClInclude Include="S_TeleOp.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="SharpIR.h">
+      <Filter>Header Files - Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="MPU.h">
+      <Filter>Header Files - Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="MLX90614Class.h">
+      <Filter>Header Files - Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="HCSr04.h">
+      <Filter>Header Files - Sensors</Filter>
     </ClInclude>
     <ClInclude Include="S_CoffeeBreak.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Drehen.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
+    <ClInclude Include="S_TeleOp.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
+    <ClInclude Include="Overwatcher.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Calibrate.h">
+      <Filter>Header Files - States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SharpIR.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MedianFilter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MPU.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MLX90614Class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SerialBuffer.cpp">
@@ -104,32 +109,47 @@
     <ClCompile Include="MPUFahrer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StateMachine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="State.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DigitalIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="S_Drehen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HCSr04.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files - Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="MLX90614Class.cpp">
+      <Filter>Source Files - Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="MPU.cpp">
+      <Filter>Source Files - Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpIR.cpp">
+      <Filter>Source Files - Sensors</Filter>
     </ClCompile>
     <ClCompile Include="VL53L0X.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files - Sensors</Filter>
     </ClCompile>
     <ClCompile Include="WheelEncoder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="S_TeleOp.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files - Sensors</Filter>
     </ClCompile>
     <ClCompile Include="S_CoffeeBreak.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Drehen.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="S_TeleOp.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="StateMachine.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="Overwatcher.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Calibrate.cpp">
+      <Filter>Source Files - States</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

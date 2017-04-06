@@ -12,9 +12,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_CoffeeBreak.h"
 #include "SPECTATORClass.h"
-#include "Constants.h"
+#include "Overwatcher.h"
 
 #include "StateMachine.h"
 
@@ -33,12 +32,13 @@ StateMachineClass *stateMachine;
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
-{	
+{		
 	SA.Init();
 	
 	stateMachine = new StateMachineClass(&SA);
-	stateMachine->Init();
-	
+	stateMachine->Init();	
+
+	OW.Init(stateMachine);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -59,6 +59,10 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
+	OW.Control();
+
+	Serial.print("Bisher durchgefuehrte Aktionen: ");
+	Serial.println(OW.GetActions());
 
 	zwei = micros();
 
