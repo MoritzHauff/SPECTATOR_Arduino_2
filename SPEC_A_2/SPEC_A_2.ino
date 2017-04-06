@@ -12,7 +12,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include <Stepper.h>
 #include "SPECTATORClass.h"
 #include "Constants.h"
 
@@ -30,14 +29,6 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
-// change this to the number of steps on your motor
-#define STEPS 513
-
-// create an instance of the stepper class, specifying
-// the number of steps of the motor and the pins it's
-// attached to
-Stepper stepper(STEPS, 4, 5, 6, 7);
-
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
@@ -46,12 +37,7 @@ void setup()
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();
-	
-	SA.Motoren.TurnLEDOn();
-	//SA.Motoren.TurnRescueOn();
 
-	// set the speed of the motor to 30 RPMs
-	stepper.setSpeed(60);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -81,13 +67,14 @@ void loop()
 
 	//delay(10000);
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		Serial.println("Forward");
-		stepper.step(STEPS);
-		delay(2000);
+		SA.Motoren.AbwurfLinks();
+		SA.Motoren.AbwurfRechts();
 	}
+	delay(2000);
 	Serial.println("Backward");
-	stepper.step(-STEPS);
+	SA.Motoren.StepL(-1);
 	delay(2000);
 }
