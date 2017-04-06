@@ -38,10 +38,13 @@
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
 const byte S_GeradeAus_NormalSpeed = 240;	// Die normale Bewegungsgeschwindigkeit.
-const int S_GeradeAus_FeldTraversTimer = 1000;		// Wie lange ein Feld normalerweise benötigt zu befahren.
-const int S_GeradeAus_MaxTimer = 1300;		// Wie lange maximal geradeaus gefahren werden kann, bevor der Modus erneut gewechselt werden muss.
+const int S_GeradeAus_FeldTraversTimer = 2800;	//1000	// Wie lange ein Feld normalerweise benötigt zu befahren.
+const int S_GeradeAus_MaxTimer = 3000;	//1300	// Wie lange maximal geradeaus gefahren werden kann, bevor der Modus erneut gewechselt werden muss.
 const int S_GeradeAus_MaxStoppWahrscheinlichkeit = 100;
 const int S_GeradeAus_WinkelRatio = 300;		// Wie stark die Winkelabweichung in die Fahrgeschwindigkeit wirkt.  //75
+
+const int S_GeradeAus_WandErntfernungen[] = { 100, 400, 700 };
+const int S_GeradeAus_WandEntfernungsKorrektur = 60;
 
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
@@ -56,10 +59,15 @@ class S_GeradeAusClass : public StateClass
 	 int speedR, adaptedSpeedR;
 	 byte startRichtung;
 
+	 int startDistanceLaserV, startDistanceUSV, startDistanceUSH;
+	 byte startWandKategorie, zielWandKategorie;
+
 	 int stoppWahrscheinlichkeit;  // wie stark die momentanen Informationen dafür sprechen anzuhalten.
 	 float winkelKorrektur;
 
 	 int capSpeed(int Value, int Upper, int Lower);
+
+	 byte ermittleStartWandKategorie(int aktDistance);
 
  public:
 	 S_GeradeAusClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
