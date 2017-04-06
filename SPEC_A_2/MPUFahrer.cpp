@@ -74,7 +74,7 @@ bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorS
 
 	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);
 
-	if (abs(winkelAbstand) <= 0.07)  // stopp-toleranz   // 0.1 = 5,7°
+	if (abs(winkelAbstand) <= 0.01)  // stopp-toleranz   // 0.1 = 5,7°
 	{
 		*motorSpeedL = 0;
 		*motorSpeedR = 0;
@@ -86,12 +86,12 @@ bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorS
 	if(motorspeed > 0)
     {
         motorspeed = min(motorspeed, 180); // cap at 180
-        motorspeed = max(motorspeed, 60);  // below 60 the motors wont turn.
+        motorspeed = max(motorspeed, 70);  // below 60 the motors wont turn.
     }
 	if(motorspeed < 0)
     {
         motorspeed = max(motorspeed, -180); // cap at 180
-        motorspeed = min(motorspeed, -60);  // below 60 the motors wont turn.
+        motorspeed = min(motorspeed, -70);  // below 60 the motors wont turn.
     }
 
 
