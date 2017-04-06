@@ -47,7 +47,7 @@ void loop()
 	eins = micros();
 	
 	// todo: StateMachine zeitlich ausmessen.
-	stateMachine->DoAction();
+	//stateMachine->DoAction();
 
 	zwei = micros();
 
@@ -59,11 +59,14 @@ void loop()
 	
 	// todo: Zeitmessung der StateMachine!
 
+	SA.Motoren.encoderRechts.Update();
+	SA.Motoren.encoderRechts.PrintEncoderInfo(SA.Motoren.encoderRechts.GetEncoderInfo());
+
 	zwei = micros();
 
 	/*Serial.print("ToF-Zeit: ");    // Die Zeit auf serielle Daten zu überprüfen und die Motoren anzusteuern: 
 	Serial.print(zwei - eins);       // ohne neue Daten: 1276 us. Beim Eingang neuer Motordaten: 1316 us
 	Serial.println(" us.");*/        // Das bedeutet die Analyse des seriellen Streams benötigt so sehr wenig Zeit.
 
-	//delay(10000);
+	delay(1000);
 }

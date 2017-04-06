@@ -35,6 +35,7 @@
 
 #include <Adafruit_MotorShield.h>
 #include <Stepper.h>
+#include "WheelEncoder.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
@@ -67,6 +68,9 @@ class SPECMotorenClass
 		uint8_t StepperLPin1, uint8_t StepperLPin2, uint8_t StepperLPin3, uint8_t StepperLPin4,
 		uint8_t StepperRPin1, uint8_t StepperRPin2, uint8_t StepperRPin3, uint8_t StepperRPin4);
 	void Init();
+
+	WheelEncoderClass encoderLinks;
+	WheelEncoderClass encoderRechts;
 
 	bool SetMotoren(int SpeedL, int SpeedR);
 	void Kontrolllauf();

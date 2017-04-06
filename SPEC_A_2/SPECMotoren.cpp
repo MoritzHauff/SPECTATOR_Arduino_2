@@ -56,6 +56,9 @@ void SPECMotorenClass::Init()
 	AFMS.begin();  // create with the default frequency 1.6KHz
 	Serial.println("MotorShield gestartet.");
 
+	encoderLinks.Init();
+	encoderRechts.Init();
+
 	// set the speed of the motor to 60 RPMs
 	stepperL->setSpeed(60);
 	stepperR->setSpeed(60);
