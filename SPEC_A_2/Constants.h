@@ -62,4 +62,9 @@
 
 #define C_LaserV 0x39
 
+#define C_EncoderLC 0x40
+#define C_EncoderLT 0x41
+#define C_EncoderRC 0x40
+#define C_EncoderRT 0x41
+
 #endif

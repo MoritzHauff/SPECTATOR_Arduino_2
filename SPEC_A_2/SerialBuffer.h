@@ -61,6 +61,7 @@ public:
 	void AddMsg(uint8_t Code, unsigned int Value);
 	void AddMsg(uint8_t Code, double Value);
 	void AddMsg(uint8_t Code, double Value, uint8_t Genauigkeit);
+	void AddMsg(uint8_t Code, unsigned long Value);
 
 	/*Leert den Buffer ohne die Daten zu senden.*/
 	void Clear();
