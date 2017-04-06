@@ -34,6 +34,7 @@ class S_GeradeAusClass : public StateClass
 	 int speedR;
 
 	 int stoppWahrscheinlichkeit;  // wie stark die momentanen Informationen dafür sprechen anzuhalten.
+	 float winkelKorrektur;
 
  public:
 	 S_GeradeAusClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)

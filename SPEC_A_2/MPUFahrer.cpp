@@ -113,8 +113,14 @@ bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorS
 }
 
 
-void MPUFahrerClass::BerechneVorwaerts(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR)
+float MPUFahrerClass::BerechneVorwaerts(byte ZielRichtung, float aktYaw)
 {
+	float zielWinkel = orientierungswinkel[ZielRichtung];
+
+	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);
+
+	return winkelAbstand;
+	
 	/*Korrektur aktKor = GetKorrektur(ZielRichtung, aktYaw, 3, 20, 85);   // todo: sinnvolle Geradeausfahr implementation
 
 	if (aktKor == Korrektur.KeineKorrektur)
@@ -257,5 +263,30 @@ byte MPUFahrerClass::CharToRichtung(char c)
 	{
 		// todo: Fehlerausgabe
 		return 5;
+	}
+}
+
+byte MPUFahrerClass::CalculateRichtung(float aktYaw)
+{
+	byte richtung = R_NORDEN;
+	byte minWinkel = abs(minWinkelAbstand(aktYaw, orientierungswinkel[richtung]));
+	for (int i = 2; i <= R_WESTEN; i++)
+	{
+		byte hilfWinkel = abs(minWinkelAbstand(aktYaw, orientierungswinkel[i]));
+		if (hilfWinkel < minWinkel)
+		{
+			minWinkel = hilfWinkel;
+			richtung = i;
+		}
+	}
+
+	if (minWinkel < MPUFahrer_CalculateRichtung_Toleranz)
+	{
+		return richtung;
+	}
+	else
+	{
+		Serial.println("FAILURE: MPUFahrer.CalculateRichtung(): Roboter steht gerade keiner Richtung zugeordnet. Es sollte zunächst ein Drehbefehl ausgeführt werden.");
+		return 0;
 	}
 }

@@ -22,6 +22,8 @@
 #define PI2 1.5707963267945
 #define ZWEIPI 6.283185307178
 
+const float MPUFahrer_CalculateRichtung_Toleranz = 0.5; // Gibt die Toleranz an bis zu welchem Winkel eine Richtung noch als solche erkannt wird.
+
 ///////////////////////////////////////////////////////////////////////////
 ///MPUFahrer-Class
 /*Diese Klasse verwaltet die MPU Werte und berechnet anhand der aktuellen die nötigen
@@ -71,9 +73,13 @@ class MPUFahrerClass
 	 Himmelsrichtungen daran an. Mit dieser Funktion sollte normalerweise kalibriert werden.*/
 	 void SetNorden(float degree);
 
-
-	 void BerechneVorwaerts(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR);
+	 /*Gibt die Winkeldifferenz der aktuellen Fahrt zu gewünschten Richtung zurück.*/
+	 float BerechneVorwaerts(byte ZielRichtung, float aktYaw);
 	 bool BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR);
+
+	 /*Berechnet anhand des übergebenen Winkel die dazugehörige Himmelsrichtung.*/
+	 byte CalculateRichtung(float aktYaw);
+
 
 	 /*Konvertiert 'n', 'o', 's', 'w' in die entsprechende byte-Richtung für die Berechnunsfunktionen.*/
 	 byte CharToRichtung(char c);
