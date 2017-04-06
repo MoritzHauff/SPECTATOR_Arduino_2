@@ -89,7 +89,8 @@ bool SPECMotorenClass::SetMotorR(int Speed)
 	}
 	else
 	{
-		Serial.println("MotorR speed out of bounds");
+		Serial.print("MotorR speed out of bounds: ");
+		Serial.println(Speed);
 		return false;
 	}
 	MotorR->setSpeed(Speed);
@@ -119,7 +120,8 @@ bool SPECMotorenClass::SetMotorL(int Speed)
 	}
 	else
 	{
-		Serial.println("MotorL speed out of bounds");
+		Serial.print("MotorL speed out of bounds: ");
+		Serial.println(Speed);
 		return false;
 	}
 	MotorL->setSpeed(Speed);

@@ -43,6 +43,9 @@ void S_GeradeAusClass::Init()
 	Serial.print("Fahre GeradeAus. Richtung: ");
 	Serial.println(Direction);
 
+
+	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
+
 	stoppWahrscheinlichkeit = 0;
 	winkelKorrektur = 0;
 }
@@ -81,6 +84,20 @@ void S_GeradeAusClass::Think()
 {
 	toggleState = !toggleState;
 
+	// Winkel korrektur ermitteln
+	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
+
+	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
+	Serial.println(winkelKorrektur);
+	Serial.print("berechnete Korrekturmasnahme: ");
+	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
+	
+	Serial.print(h);
+
+	adaptedSpeedL = capSpeed(speedL + h * Direction, S_GeradeAus_NormalSpeed, 70);
+	adaptedSpeedR = capSpeed(speedR - h * Direction, S_GeradeAus_NormalSpeed, 70);
+
+	//Stopp zeitpunkt ermitteln
 	if (status == Running && startTime + S_GeradeAus_MaxTimer < millis())
 	{
 		speedL = 0;
@@ -102,41 +119,11 @@ void S_GeradeAusClass::Think()
 
 		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
 	}
-
-	// Winkel korrektur ermitteln
-	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(
-		spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw()), spectator->mpu.GetYaw());
-
-	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
-	Serial.println(winkelKorrektur);
-
-	if (winkelKorrektur > 0)
-	{
-		if (Direction == 1)
-		{
-			speedL -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
-		}
-		else
-		{
-			speedR -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
-		}
-	}
-	else if (winkelKorrektur < 0)
-	{
-		if (Direction == 1)
-		{
-			speedR -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
-		}
-		else
-		{
-			speedL -= (int)(winkelKorrektur * S_GeradeAus_WinkelRatio);
-		}
-	}
 }
 
 void S_GeradeAusClass::Act()
 {
-	spectator->Motoren.SetMotoren(speedL, speedR);
+	spectator->Motoren.SetMotoren(adaptedSpeedL, adaptedSpeedR);
 
 	spectator->HeartbeatLED.Toggle();
 }
@@ -144,4 +131,20 @@ void S_GeradeAusClass::Act()
 void S_GeradeAusClass::ShiftTimers(unsigned long ShiftAmount)
 {
 	startTime += ShiftAmount;
+}
+
+int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
+{
+	if (Value > 0)
+	{
+		Value = min(Value, Upper);
+		Value = max(Value, Lower);
+	}
+	else
+	{
+		Value = min(Value, -Lower);
+		Value = max(Value, -Upper);
+	}
+
+	return Value;
 }
