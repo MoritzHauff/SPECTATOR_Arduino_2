@@ -25,6 +25,8 @@ unsigned long eins = 0;
 unsigned long zwei = 0;
 unsigned long drei = 0;
 
+int direction = 3;
+
 ///////////////////////////////////////////////////////////////////////////
 ///Instanzen
 StateMachineClass *stateMachine;
@@ -59,8 +61,11 @@ void loop()
 	
 	// todo: Zeitmessung der StateMachine!
 
-	SA.Motoren.encoderRechts.Update();
-	SA.Motoren.encoderRechts.PrintEncoderInfo(SA.Motoren.encoderRechts.GetEncoderInfo());
+	SA.Motoren.UpdateWheelEncoderInfo();
+	SA.Motoren.encoderRechts.PrintEncoderInfo(SA.Motoren.GetEncoderInfoR());
+
+	SA.Motoren.SetMotoren(direction, direction);
+	direction = direction*(-1);
 
 	zwei = micros();
 

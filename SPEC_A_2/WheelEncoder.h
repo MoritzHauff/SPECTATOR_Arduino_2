@@ -28,7 +28,7 @@ class WheelEncoderClass
 	 volatile int count;
 	 unsigned long lastTime;  // contains the last millis() when the counts where reset.
 	 
-	 EncoderInfo LastEncoderInfo;
+	 EncoderInfo lastEncoderInfo;
 
  public:
 	void Init();
@@ -37,11 +37,11 @@ class WheelEncoderClass
 	void HandleInterrupt();
 
 	/*Returns the raw number of counts.*/
-	int GetCount();
+	int GetCount() { return count; }
 	/*Generates new EncoderInfos und resets the values thereafter.*/
 	void Update();
 	/*Returns the number of counts between the last two calls of 'Update()'.*/
-	EncoderInfo GetEncoderInfo();
+	EncoderInfo GetEncoderInfo() { return lastEncoderInfo; }
 
 	/*Gibt Encoder-Informationen in der seriellen Konsole aus.*/
 	void PrintEncoderInfo(EncoderInfo EncoderInfo);

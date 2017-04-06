@@ -38,6 +38,11 @@ class SPECMotorenClass
 	 Stepper *stepperL;
 	 Stepper *stepperR;
 
+	 EncoderInfo lastEncoderInfoL;
+	 uint8_t lastDirectionL;  // contains the last set direction to the left Motor.
+	 EncoderInfo lastEncoderInfoR;
+	 uint8_t lastDirectionR;  // contains the last set direction to the right Motor.
+
 	 bool SetMotorL(int Speed);
 	 bool SetMotorR(int Speed);
 
@@ -49,6 +54,13 @@ class SPECMotorenClass
 
 	WheelEncoderClass encoderLinks;
 	WheelEncoderClass encoderRechts;
+
+	/*Aktualisiert beide WheelEncoderInformationen und versieht diese mit der aktuellen Drehrichtung.*/
+	void UpdateWheelEncoderInfo();
+	/*Gibt die linken EncoderInforamtionen zurück.*/
+	EncoderInfo GetEncoderInfoL() { return lastEncoderInfoL; }
+	/*Gibt die rechten EncoderInforamtionen zurück.*/
+	EncoderInfo GetEncoderInfoR() { return lastEncoderInfoR; }
 
 	bool SetMotoren(int SpeedL, int SpeedR);
 	void Kontrolllauf();

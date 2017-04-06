@@ -49,11 +49,13 @@ bool SPECMotorenClass::SetMotorR(int Speed)
 	if (Speed > 1 && Speed <= 255)
 	{
 		MotorR->run(FORWARD);
+		lastDirectionR = FORWARD;
 	}
 	else if (Speed < 0 && Speed >= -255)
 	{
 		MotorR->run(BACKWARD);
 		Speed = -Speed;
+		lastDirectionR = BACKWARD;
 	}
 	else if (Speed == 1 || Speed == 0)
 	{
@@ -73,11 +75,13 @@ bool SPECMotorenClass::SetMotorL(int Speed)
 	if (Speed > 1 && Speed <= 255)
 	{
 		MotorL->run(FORWARD);
+		lastDirectionL = FORWARD;
 	}
 	else if (Speed < 0 && Speed >= -255)
 	{
 		MotorL->run(BACKWARD);
 		Speed = -Speed;
+		lastDirectionL = BACKWARD;
 	}
 	else if (Speed == 1 || Speed == 0)
 	{
@@ -117,6 +121,24 @@ void SPECMotorenClass::Kontrolllauf(void)
 
 	LED.switchOn();
 	RescueKitAbwerfen();*/
+}
+
+void SPECMotorenClass::UpdateWheelEncoderInfo()
+{
+	encoderLinks.Update();
+	encoderRechts.Update();
+
+	lastEncoderInfoL = encoderLinks.GetEncoderInfo();
+	lastEncoderInfoR = encoderRechts.GetEncoderInfo();
+
+	if (lastDirectionL == BACKWARD)
+	{
+		lastEncoderInfoL.CountsSinceLastTick = -(lastEncoderInfoL.CountsSinceLastTick);
+	}
+	if (lastDirectionR == BACKWARD)
+	{
+		lastEncoderInfoR.CountsSinceLastTick = -(lastEncoderInfoR.CountsSinceLastTick);
+	}
 }
 
 void SPECMotorenClass::TurnLEDOn()

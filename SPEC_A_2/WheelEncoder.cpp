@@ -24,20 +24,10 @@ void WheelEncoderClass::HandleInterrupt()
 	count++;
 }
 
-int WheelEncoderClass::GetCount()
-{
-	return count;
-}
-
-EncoderInfo WheelEncoderClass::GetEncoderInfo()
-{
-	return LastEncoderInfo;
-}
-
 void WheelEncoderClass::Update()
 {
-	LastEncoderInfo.MillisSinceLastTick = millis() - lastTime;
-	LastEncoderInfo.CountsSinceLastTick = count;
+	lastEncoderInfo.MillisSinceLastTick = millis() - lastTime;
+	lastEncoderInfo.CountsSinceLastTick = count;
 
 	count = 0;
 	lastTime = millis();
