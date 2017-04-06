@@ -125,15 +125,15 @@ void SPECMotorenClass::TurnLEDOff()
 
 void SPECMotorenClass::TurnRescueOn()
 {
-	if (PWR_LEDRichtung == FORWARD)
+	if (PWR_MotorenRichtung == FORWARD)
 	{
 		RescueMotoren->run(FORWARD);
-		RescueMotoren->setSpeed(240);
+		RescueMotoren->setSpeed(200);
 	}
-	if (PWR_LEDRichtung == BACKWARD)
+	if (PWR_MotorenRichtung == BACKWARD)
 	{
 		RescueMotoren->run(BACKWARD);
-		RescueMotoren->setSpeed(240);
+		RescueMotoren->setSpeed(200);
 	}
 }
 
