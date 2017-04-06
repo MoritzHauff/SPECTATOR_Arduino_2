@@ -41,7 +41,7 @@ const byte S_GeradeAus_NormalSpeed = 240;	// Die normale Bewegungsgeschwindigkei
 const int S_GeradeAus_FeldTraversTimer = 1000;		// Wie lange ein Feld normalerweise benötigt zu befahren.
 const int S_GeradeAus_MaxTimer = 1300;		// Wie lange maximal geradeaus gefahren werden kann, bevor der Modus erneut gewechselt werden muss.
 const int S_GeradeAus_MaxStoppWahrscheinlichkeit = 100;
-
+const int S_GeradeAus_WinkelRatio = 90;		// Wie stark die Winkelabweichung in die Fahrgeschwindigkeit wirkt.  //75
 
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
