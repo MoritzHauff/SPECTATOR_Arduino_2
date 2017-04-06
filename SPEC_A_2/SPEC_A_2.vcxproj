@@ -92,6 +92,7 @@
     <ClInclude Include="SPECTATORClass.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="S_CoffeeBreak.h" />
     <ClInclude Include="S_Drehen.h" />
     <ClInclude Include="S_TeleOp.h" />
     <ClInclude Include="VL53L0X.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="SPECTATORClass.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="S_CoffeeBreak.cpp" />
     <ClCompile Include="S_Drehen.cpp" />
     <ClCompile Include="S_TeleOp.cpp" />
     <ClCompile Include="VL53L0X.cpp" />

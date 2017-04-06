@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "S_CoffeeBreak.h"
 #include "SPECTATORClass.h"
 #include "Constants.h"
 
