@@ -92,6 +92,8 @@ void SPECTATORClass::Init()
 	Motoren.Init();
 	Motoren.Kontrolllauf();
 
+	Motoren.TurnLEDOn();
+
 	//MPUCalibration();  // todo: sollte durch RaPi ausgelöst werden!
 }
 

@@ -33,12 +33,21 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren
-SPECMotorenClass::SPECMotorenClass(uint8_t MotorPortLinks, uint8_t MotorPortRechts, uint8_t RescueMotorPort, uint8_t UnterflurPort)
+SPECMotorenClass::SPECMotorenClass(uint8_t MotorPortLinks, uint8_t MotorPortRechts, uint8_t RescueMotorPort, uint8_t UnterflurPort,
+	uint8_t StepperLPin1, uint8_t StepperLPin2, uint8_t StepperLPin3, uint8_t StepperLPin4,
+	uint8_t StepperRPin1, uint8_t StepperRPin2, uint8_t StepperRPin3, uint8_t StepperRPin4)
 {
 	MotorL = AFMS.getMotor(MotorPortLinks);		// Select which 'port' M1, M2, M3 or M4.
 	MotorR = AFMS.getMotor(MotorPortRechts);
 	RescueMotoren = AFMS.getMotor(RescueMotorPort);
 	UnterflurBeleuchtung = AFMS.getMotor(UnterflurPort);
+
+
+	// create an instance of the stepper class, specifying
+	// the number of steps of the motor and the pins it's
+	// attached to
+	stepperL = new Stepper(STEPS, StepperLPin1, StepperLPin2, StepperLPin3, StepperLPin4);
+	stepperR = new Stepper(STEPS, StepperRPin1, StepperRPin2, StepperRPin3, StepperRPin4);
 }
 
 void SPECMotorenClass::Init()
@@ -46,6 +55,10 @@ void SPECMotorenClass::Init()
 	Serial.println("Starte MotorShield.");
 	AFMS.begin();  // create with the default frequency 1.6KHz
 	Serial.println("MotorShield gestartet.");
+
+	// set the speed of the motor to 60 RPMs
+	stepperL->setSpeed(60);
+	stepperR->setSpeed(60);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -145,22 +158,22 @@ void SPECMotorenClass::TurnLEDOff()
 	UnterflurBeleuchtung->setSpeed(0);
 }
 
-void SPECMotorenClass::TurnRescueOn()
+void SPECMotorenClass::AbwurfLinks()
 {
-	if (PWR_MotorenRichtung == FORWARD)
-	{
-		RescueMotoren->run(FORWARD);
-		RescueMotoren->setSpeed(200);
-	}
-	if (PWR_MotorenRichtung == BACKWARD)
-	{
-		RescueMotoren->run(BACKWARD);
-		RescueMotoren->setSpeed(200);
-	}
+	stepperL->step(STEPS);
 }
 
-void SPECMotorenClass::TurnRescueOff()
+void SPECMotorenClass::StepL(float Revolutions)
 {
-	RescueMotoren->run(RELEASE);
-	RescueMotoren->setSpeed(0);
+	stepperL->step(STEPS*Revolutions);
+}
+
+void SPECMotorenClass::AbwurfRechts()
+{
+	stepperR->step(STEPS);
+}
+
+void SPECMotorenClass::StepR(float Revolutions)
+{
+	stepperR->step(STEPS*Revolutions);
 }

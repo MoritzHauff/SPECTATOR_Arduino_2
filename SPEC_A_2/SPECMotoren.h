@@ -34,11 +34,14 @@
 #endif
 
 #include <Adafruit_MotorShield.h>
+#include <Stepper.h>
 
 ///////////////////////////////////////////////////////////////////////////
 ///Constants
 const int PWR_LEDRichtung = FORWARD;
-const int PWR_MotorenRichtung = BACKWARD;
+
+// change this to the number of steps on your motor
+#define STEPS 513
 
 ///////////////////////////////////////////////////////////////////////////
 ///SPECMotorenClass
@@ -53,11 +56,16 @@ class SPECMotorenClass
 	 Adafruit_DCMotor *RescueMotoren;
 	 Adafruit_DCMotor *UnterflurBeleuchtung;
 
+	 Stepper *stepperL;
+	 Stepper *stepperR;
+
 	 bool SetMotorL(int Speed);
 	 bool SetMotorR(int Speed);
 
  public:
-	SPECMotorenClass(uint8_t MotorPortLinks, uint8_t MotorPortRechts, uint8_t RescueMotorPort, uint8_t UnterflurPort);
+	SPECMotorenClass(uint8_t MotorPortLinks, uint8_t MotorPortRechts, uint8_t RescueMotorPort, uint8_t UnterflurPort, 
+		uint8_t StepperLPin1, uint8_t StepperLPin2, uint8_t StepperLPin3, uint8_t StepperLPin4,
+		uint8_t StepperRPin1, uint8_t StepperRPin2, uint8_t StepperRPin3, uint8_t StepperRPin4);
 	void Init();
 
 	bool SetMotoren(int SpeedL, int SpeedR);
@@ -68,10 +76,15 @@ class SPECMotorenClass
 	/*Deaktivieert die Unterflurbeleuchtung.*/
 	void TurnLEDOff();
 
-	/*Aktiviert die Rescue-Kit Motoren.*/
-	void TurnRescueOn();
-	/*Deaktiviert die Rescue-Kit Motoren.*/
-	void TurnRescueOff();
+	/*Wirft links ein Kit ab. Diese Funktion blockt.*/
+	void AbwurfLinks();
+	/*Dreht den linken RescueMotor um die Anzahl an Umdrehungen.*/
+	void StepL(float Revolutions);
+	/*Wirft rechts ein Kit ab. Diese Funktion blockt.*/
+	void AbwurfRechts();
+	/*Dreht den rechten RescueMotor um die Anzahl an Umdrehungen.*/
+	void StepR(float Revolutions);
+	
 };
 
 #endif
