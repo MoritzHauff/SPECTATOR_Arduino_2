@@ -59,6 +59,10 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung der StateMachine!
+	OW.Control();
+
+	Serial.print("Bisher durchgefuehrte Aktionen: ");
+	Serial.println(OW.GetActions());
 
 	zwei = micros();
 

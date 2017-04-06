@@ -1,4 +1,9 @@
-// State.h - Moritz Hauff - 17.03.2017
+/** S_Calibrate.cpp
+***
+*** Dieser State kalibriert das MPU6050.
+***
+*** Moritz Hauff, 06.04.2017
+**/
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -22,50 +27,37 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _STATE_h
-#define _STATE_h
-
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
-
-#include "SPECTATORClass.h"
-
-/*Beeinhaltet den momentanen Ausführungszustand eines States an.*/
-enum StateStatus {
-	Running, Finished, Aborted, Error
-};
+#include "S_Calibrate.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///State-Class
-class StateClass  // abstrakte Klasse mit virtuellen Funktionen
+///Konstruktoren
+void S_CalibrateClass::Init()
 {
-private:
-	 String name;
- protected:
-	 SPECTATORClass *spectator;
+	status = Finished;
 
-	 StateStatus status;
+	MPUCalibration();
 
- public:
-	 StateClass(SPECTATORClass *Spectator, const char Name[]);
-	 // todo: virtueller Destruktor?
+	
+}
 
-	 virtual void Sense() = 0;  // noch keine Methodenimplemtierung -> siehe vererbte Klassen
-	 virtual void Think() = 0;
-	 virtual void Act() = 0;
-	 /*Wird immer aufgerufen wenn in den Modus gewechselt wird.*/
-	 virtual void Init() = 0;
-	 /*Wird nach der Wiederaufnahme des Modus nach der KaffeePause aufgerufen 
-	 und verschiebt die Timer um die angegebene Zeit [ms].*/
-	 virtual void ShiftTimers(unsigned long ShiftAmount) = 0;
+///////////////////////////////////////////////////////////////////////////
+///Funktionen
+void S_CalibrateClass::MPUCalibration()
+{
+	Serial.println("MPU6050-Kalibrierung...");
+	if (spectator->mpu.WaitForCalibration(S_Calibrate_MPU_Timer) != CALIBRATION_SUCCESS)  // Rückgabewert kann zum Beispiel an Raspberry gesendet werden.
+	{
+		Serial.println("MPU6050-Kalibrierung gescheitert!");
+		status = Error;
+	}
 
-	 String GetName();
-	 StateStatus GetStatus();
-};
+	spectator->mpu.Update();
+	Serial.print("aktueller Yaw-Wert: ");
+	Serial.println(spectator->mpu.GetYaw());
 
-#endif
+	spectator->mpuFahrer.SetNorden(spectator->mpu.GetYaw());   // hardcode the mpuFahrerCalibration // todo: should normally done be the RaPi.
+
+	Serial.println("MPU6050 kalibriert.");
+}

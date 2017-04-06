@@ -1,4 +1,4 @@
-// State.h - Moritz Hauff - 17.03.2017
+// S_Calibrate.h - Moritz Hauff - 06.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -22,8 +22,9 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _STATE_h
-#define _STATE_h
+#ifndef _S_CALIBRATE_h
+#define _S_CALIBRATE_h
+
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -33,39 +34,30 @@
 	#include "WProgram.h"
 #endif
 
-#include "SPECTATORClass.h"
+#include "State.h"
 
-/*Beeinhaltet den momentanen Ausführungszustand eines States an.*/
-enum StateStatus {
-	Running, Finished, Aborted, Error
-};
+///////////////////////////////////////////////////////////////////////////
+///Konstanten
+const int S_Calibrate_MPU_Timer = 40000;   // Gibt an nach welcher Zeit [ms] eine MPU-Kalibrierung abgebrochen werden soll.
 
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
-class StateClass  // abstrakte Klasse mit virtuellen Funktionen
+/*Dieser State kalibriert das MPU6050.*/
+class S_CalibrateClass : public StateClass
 {
-private:
-	 String name;
  protected:
-	 SPECTATORClass *spectator;
-
-	 StateStatus status;
+	 void MPUCalibration();
 
  public:
-	 StateClass(SPECTATORClass *Spectator, const char Name[]);
-	 // todo: virtueller Destruktor?
+	 S_CalibrateClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
+	 { }
 
-	 virtual void Sense() = 0;  // noch keine Methodenimplemtierung -> siehe vererbte Klassen
-	 virtual void Think() = 0;
-	 virtual void Act() = 0;
-	 /*Wird immer aufgerufen wenn in den Modus gewechselt wird.*/
-	 virtual void Init() = 0;
-	 /*Wird nach der Wiederaufnahme des Modus nach der KaffeePause aufgerufen 
-	 und verschiebt die Timer um die angegebene Zeit [ms].*/
-	 virtual void ShiftTimers(unsigned long ShiftAmount) = 0;
+	 void Init();
+	 void Sense() { }
+	 void Think() { }
+	 void Act() { }
 
-	 String GetName();
-	 StateStatus GetStatus();
+	 void ShiftTimers(unsigned long ShiftAmount) { }
 };
 
 #endif

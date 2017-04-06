@@ -86,6 +86,9 @@
     <ClInclude Include="Overwatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="S_Calibrate.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MedianFilter.cpp">
@@ -144,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="Overwatcher.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Calibrate.cpp">
+      <Filter>Source Files - States</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

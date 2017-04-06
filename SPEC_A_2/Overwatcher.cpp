@@ -41,11 +41,25 @@ OverwatcherClass OW; // Die HauptInstanz des Overwachters
 ///Konstruktoren
 void OverwatcherClass::Init(StateMachineClass *StateMachine)
 {
+	Serial.println("Initialisiere Overwatcher ...");
+	
+	actions = 0;
+	
 	stateMachine = StateMachine;
 
-	stateMachine->SendDirectCommand("bdne");  // Testbefehl an StateMachine senden.
+	stateMachine->SendDirectCommand("bCALe");  // Testbefehl (Kalibrierung) an StateMachine senden.
 }
 
+///////////////////////////////////////////////////////////////////////////
+///Funktionen
+void OverwatcherClass::Control()
+{
+	if (stateMachine->StartedNewAction())
+	{
+		actions++;
+	}
 
+	// todo
+}
 
 
