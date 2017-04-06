@@ -72,6 +72,9 @@
     <ClInclude Include="S_TeleOp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="S_CoffeeBreak.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SharpIR.cpp">
@@ -123,6 +126,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="S_TeleOp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="S_CoffeeBreak.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

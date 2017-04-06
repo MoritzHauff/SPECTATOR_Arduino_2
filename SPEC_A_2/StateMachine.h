@@ -38,6 +38,7 @@
 #include "SPECTATORClass.h"
 #include "S_TeleOp.h"
 #include "S_Drehen.h"
+#include "S_CoffeeBreak.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -54,6 +55,7 @@ class StateMachineClass
 
 	 S_TeleOpClass *s_TeleOp;
 	 S_DrehenClass *s_Drehen;
+	 S_CoffeeBreakClass *s_CoffeeBreak;
 
 	 StateClass *currentState;
 	 
@@ -62,8 +64,11 @@ class StateMachineClass
 	 void handleSerial();
 	 /*Analysiert die seriellen Befehle und wechselt bei Bedarf den aktuellen Modus.*/
 	 void handleReceivedMessage(char *msg);
-	 /*Wechslet in einen anderen Modus und führt die initilaisierunsfunktion des neuen Modus aus.*/
+	 /*Wechselt in einen anderen Modus und führt die initilaisierunsfunktion des neuen Modus aus.*/
 	 void changeState(StateClass *NextState);
+	 /*Führt einen in die KaffeePause gegangenen State fort. Dabei wird dieser nicht initialisiert
+	 und damit die Variablen nicht verändert.*/  // todo: achtung timer!
+	 void resumeState(StateClass *State);
 
 	 //Hilfsfunktionen
 	 /*Gibt bei '+' 1, '-' -1 und sonst 0 zurück.*/

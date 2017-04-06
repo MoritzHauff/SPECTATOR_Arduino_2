@@ -39,6 +39,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 
 	s_TeleOp = new S_TeleOpClass(spectator, "TeleOp");
 	s_Drehen = new S_DrehenClass(spectator, "Drehen");
+	s_CoffeeBreak = new S_CoffeeBreakClass(spectator, "CoffeeBreak");
 	
 	currentState = 0;
 }
@@ -137,7 +138,17 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	}
 	Serial.println(" >>");*/
 
-	if (msg[0] == C_TELEOPSTART)
+	if (msg[0] == 'B' && msg[1] == 'R' && msg[2] == 'E' && msg[3] == 'A' && msg[4] == 'K')
+	{
+		StateClass *s = currentState;  // save the current State into the CoffeeBreaker.
+		changeState(s_CoffeeBreak);
+		s_CoffeeBreak->LastState = s;
+	}
+	if (msg[0] == 'C' && msg[1] == 'O' && msg[2] == 'N' && msg[3] == 'T' && msg[4] == 'I' && msg[5] == 'N' && msg[6] == 'U' && msg[7] == 'E' && currentState == s_CoffeeBreak)  // todo: Achtung CoffeeBreak.LastState kann NULL sein.
+	{
+		resumeState(s_CoffeeBreak->LastState);
+	}
+	if (msg[0] == C_TELEOPSTART && currentState != s_CoffeeBreak)
 	{
 		if (msg[5] == C_TELEOPSTOP)
 		{
@@ -186,8 +197,24 @@ void StateMachineClass::changeState(StateClass *NextState)
 		{
 			s_Drehen->Init();
 		}
+		else if (currentState == s_CoffeeBreak)
+		{
+			s_CoffeeBreak->Init();
+		}
 
 		Serial.println(String("Neuer Modus: " + currentState->GetName()));  // for debugging on the RaPi
+	}
+}
+
+void StateMachineClass::resumeState(StateClass *NextState)
+{
+	if (currentState != NextState)
+	{
+		currentState = NextState;
+
+		spectator->Motoren.TurnLEDOn(); // Die KaffeePause könnte die LED ausgeschaltet haben.
+
+		Serial.println(String("Modus wieder aufgenommen: " + currentState->GetName()));  // Debugging
 	}
 }
 
@@ -210,6 +237,11 @@ void StateMachineClass::DoAction()
 		s_Drehen->Think();
 		s_Drehen->Act();
 	}
-
+	else if (currentState == s_CoffeeBreak)
+	{
+		s_CoffeeBreak->Sense();
+		s_CoffeeBreak->Think();
+		s_CoffeeBreak->Act();
+	}
 	
 }
