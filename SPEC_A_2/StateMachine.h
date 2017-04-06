@@ -59,6 +59,9 @@ class StateMachineClass
 	
 	 /*Führt die im aktuellen Modus benötigten Schritte aus. Dies sollte einmal in jedem loop() geschehen.*/
 	 void DoAction();
+	 /*Ermöglicht dem Overwachter ebenfalls Einfluss auf den aktuellen State zu nehmen.
+	 Empfängt die gleichen Befehle wie über die serielle Schnittstelle nur eben nicht seriell.*/
+	 void SendDirectCommand(char *msg);
 };
 
 #endif

@@ -159,6 +159,11 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	}
 }
 
+void StateMachineClass::SendDirectCommand(char *msg)
+{
+	handleReceivedMessage(msg);
+}
+
 ///////////////////////////////////////////////////////////////////////////
 ///State-Functions
 void StateMachineClass::changeState(StateClass *NextState)
