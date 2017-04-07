@@ -51,6 +51,7 @@ static void ISRUSH()
 
 static void ISREL()  // call-back method for the left-wheel-encoder
 {
+	//Serial.print("EncoderInterrupt. ");   // debug
 	SA.Motoren.encoderLinks.HandleInterrupt();
 }
 
@@ -80,11 +81,11 @@ void SPECTATORClass::Init()
 	attachInterrupt(digitalPinToInterrupt(ultraschallHinten.GetEchoPin()), ISRUSH, CHANGE);
 
 	// Serial communication
-	Serial.begin(250000);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart.
+	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart. // 250000 kann vom RaspberryPi nicht gelesen werden.
 	Serial.println("SPEC_A_2 - Serial Start");
 
 	// init Laser
-	laserVorne.Init();  // start this version of wire before the final one later (see below).
+	laserVorne.Init();  // start this version of 'wire' before the final one later (see below).
 
 	// Join I2C bus (I2Cdev library doesn't do this automatically)
 	#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -104,7 +105,7 @@ void SPECTATORClass::Init()
 	Motoren.Kontrolllauf();
 
 	// attach the interrupts for the encoders. Must be called here because SA is the only global instance which can be refenrenced in the static functions.
-	attachInterrupt(digitalPinToInterrupt(2), ISREL, CHANGE);
+	attachInterrupt(digitalPinToInterrupt(3), ISREL, CHANGE);
 	attachInterrupt(digitalPinToInterrupt(2), ISRER, CHANGE);
 
 	//Motoren.TurnLEDOn();

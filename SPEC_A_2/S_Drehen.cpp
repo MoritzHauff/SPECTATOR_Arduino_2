@@ -68,6 +68,12 @@ void S_DrehenClass::Think()
 		Serial.println("S_Drehen.Think(): Drehen anscheinend beendet.");
 		ZielRichtung = 6;
 	}
+	else if (ZielRichtung != 6)
+	{
+		status = Error;
+		ZielRichtung = 6;
+		Serial.println("ERROR: S_Drehen.Think(): Falsche Drehrichtung angegeben.");
+	}
 }
 
 void S_DrehenClass::Act()

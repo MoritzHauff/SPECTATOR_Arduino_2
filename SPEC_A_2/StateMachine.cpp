@@ -277,7 +277,11 @@ void StateMachineClass::DoAction()
 {
 	handleSerial();
 
-	if (currentState == s_TeleOp) 
+	if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
+	{
+		changeState(s_Drehen); // todo: Should be s_Idle.
+	}
+	else if (currentState == s_TeleOp) 
 	{
 		/*currentState->Sense();
 		currentState->Think();
@@ -313,16 +317,9 @@ void StateMachineClass::DoAction()
 	}
 	else if (currentState == s_GeradeAus)
 	{
-		if (s_GeradeAus->GetStatus() == Finished)
-		{
-			changeState(s_Drehen); // todo: Should be s_Idle.
-		}
-		else
-		{
-			s_GeradeAus->Sense();
-			s_GeradeAus->Think();
-			s_GeradeAus->Act();
-		}
+		s_GeradeAus->Sense();
+		s_GeradeAus->Think();
+		s_GeradeAus->Act();
 	}
 }
 

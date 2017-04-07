@@ -72,6 +72,7 @@ bool SPECMotorenClass::SetMotorR(int Speed)
 	{
 		Speed = -Speed;
 	}
+
 	if (Speed > 1 && Speed <= 255)
 	{
 		MotorR->run(FORWARD);
@@ -103,6 +104,7 @@ bool SPECMotorenClass::SetMotorL(int Speed)
 	{
 		Speed = -Speed;
 	}
+
 	if (Speed > 1 && Speed <= 255)
 	{
 		MotorL->run(FORWARD);
@@ -163,7 +165,16 @@ void SPECMotorenClass::UpdateWheelEncoderInfo()
 	lastEncoderInfoL = encoderLinks.GetEncoderInfo();
 	lastEncoderInfoR = encoderRechts.GetEncoderInfo();
 
-	if (lastDirectionL == BACKWARD)
+	if (PWR_MotorL == BACKWARD)   // EncoderInformationen an die Polung der Motoren anpassen.
+	{
+		lastEncoderInfoL.CountsSinceLastTick = -(lastEncoderInfoL.CountsSinceLastTick);
+	}
+	if (PWR_MotorR == BACKWARD)
+	{
+		lastEncoderInfoR.CountsSinceLastTick = -(lastEncoderInfoR.CountsSinceLastTick);
+	}
+
+	if (lastDirectionL == BACKWARD)   // EncoderInformationen an die Drehrichtung der Motoren anpassen.
 	{
 		lastEncoderInfoL.CountsSinceLastTick = -(lastEncoderInfoL.CountsSinceLastTick);
 	}
