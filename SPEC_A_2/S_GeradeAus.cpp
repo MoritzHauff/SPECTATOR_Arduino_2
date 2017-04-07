@@ -108,18 +108,29 @@ void S_GeradeAusClass::Think()
 {
 	toggleState = !toggleState;
 
-	// Winkel korrektur ermitteln
+	// Winkelkorrektur ermitteln
 	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
 
 	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
 
-	/*Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
+	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
 	Serial.println(winkelKorrektur);
-	Serial.print("berechnete Korrekturmasnahme: ");
+	/*Serial.print("berechnete Korrekturmasnahme: ");
 	Serial.print(h);*/
 
-	adaptedSpeedL = capSpeed(speedL + h * Direction, S_GeradeAus_NormalSpeed, 70);
-	adaptedSpeedR = capSpeed(speedR - h * Direction, S_GeradeAus_NormalSpeed, 70);
+	/*adaptedSpeedL = capSpeed(speedL + h * Direction, S_GeradeAus_NormalSpeed, 70);
+	adaptedSpeedR = capSpeed(speedR - h * Direction, S_GeradeAus_NormalSpeed, 70);*/
+
+	if (winkelKorrektur > 0.01)
+	{
+		adaptedSpeedL = 250 * Direction;
+		adaptedSpeedR = 150 * Direction;
+	}
+	if (winkelKorrektur < -0.01)
+	{
+		adaptedSpeedL = 150 * Direction;
+		adaptedSpeedR = 250 * Direction;
+	}
 
 	//Stopp zeitpunkt ermitteln
 	if (status == Running && startTime + S_GeradeAus_MaxTimer < millis())
@@ -173,7 +184,15 @@ void S_GeradeAusClass::Think()
 void S_GeradeAusClass::Act()
 {
 	//spectator->Motoren.SetMotoren(adaptedSpeedL, adaptedSpeedR);
-	spectator->Motoren.SetMotoren(speedL, speedR);
+	
+	if (Direction == 1)
+	{
+		spectator->Motoren.SetMotoren(adaptedSpeedL, adaptedSpeedR);
+	}
+	if (Direction == -1)
+	{
+		spectator->Motoren.SetMotoren(adaptedSpeedR, adaptedSpeedL);   // Richtung umkehren, somit muss nicht bei jeder Veränderung der Geschwindigkeit einzeln unterschieden werden.
+	}
 
 	spectator->HeartbeatLED.Toggle();
 }
