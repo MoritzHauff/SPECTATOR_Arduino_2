@@ -68,6 +68,9 @@ void S_GeradeAusClass::Init()
 	Serial.println(startDistanceUSV);
 	Serial.print("Ultraschall Distanz Hinten: ");
 	Serial.println(startDistanceUSH);
+	Serial.print("Speed: ");
+	Serial.print(speedL); Serial.print(" ");
+	Serial.println(speedR);
 
 	startTime = millis();
 }
@@ -107,6 +110,10 @@ void S_GeradeAusClass::Sense()
 void S_GeradeAusClass::Think()
 {
 	toggleState = !toggleState;
+	if (stoppWahrscheinlichkeit > 0)
+	{
+		stoppWahrscheinlichkeit -= 10;    // Jeden Tick verringert sich die Stoppwahrscheinlihckeit wieder falls es mal zu einem "Fehlalarm" gekommen ist.
+	}
 
 	// Winkelkorrektur ermitteln
 	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
@@ -124,12 +131,17 @@ void S_GeradeAusClass::Think()
 	if (winkelKorrektur > 0.01)
 	{
 		adaptedSpeedL = 250 * Direction;
-		adaptedSpeedR = 150 * Direction;
+		adaptedSpeedR = 180 * Direction;
 	}
-	if (winkelKorrektur < -0.01)
+	else if (winkelKorrektur < -0.01)
 	{
-		adaptedSpeedL = 150 * Direction;
+		adaptedSpeedL = 180 * Direction;
 		adaptedSpeedR = 250 * Direction;
+	}
+	else
+	{
+		adaptedSpeedL = S_GeradeAus_NormalSpeed * Direction;
+		adaptedSpeedR = S_GeradeAus_NormalSpeed * Direction;
 	}
 
 	//Stopp zeitpunkt ermitteln
@@ -143,18 +155,11 @@ void S_GeradeAusClass::Think()
 	}
 	if (status == Running && startTime + S_GeradeAus_FeldTraversTimer < millis())
 	{
-		stoppWahrscheinlichkeit += 10;
+		stoppWahrscheinlichkeit += 20;
 	}
 
-	if (status == Running && stoppWahrscheinlichkeit >= S_GeradeAus_MaxStoppWahrscheinlichkeit)
-	{
-		speedL = 0;
-		speedR = 0;
-		status = Finished;
-
-		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
-	}
-
+	Serial.print("LaserEntfernung: ");
+	Serial.println(spectator->laserVorne.GetDistance());
 	if (Direction == 1)
 	{
 		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandErntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
@@ -178,6 +183,16 @@ void S_GeradeAusClass::Think()
 			Serial.print("S_GeradeAus.Think(): Felddurchquerung aufgrund des Lasers beendet. Entfernung: ");
 			Serial.println(spectator->laserVorne.GetDistance());
 		}
+	}
+
+
+	if (status == Running && stoppWahrscheinlichkeit >= S_GeradeAus_MaxStoppWahrscheinlichkeit)
+	{
+		speedL = 0;
+		speedR = 0;
+		status = Finished;
+
+		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
 	}
 }
 
