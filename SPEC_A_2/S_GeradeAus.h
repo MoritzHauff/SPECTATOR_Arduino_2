@@ -44,6 +44,7 @@ class S_GeradeAusClass : public StateClass
 	 float winkelKorrektur;
 
 	 int capSpeed(int Value, int Upper, int Lower);
+	 int encoderL, encoderR;
 
 	 byte ermittleStartWandKategorie(int aktDistance);
 

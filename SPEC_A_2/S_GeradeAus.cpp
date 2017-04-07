@@ -15,6 +15,8 @@ void S_GeradeAusClass::Init()
 
 	stoppWahrscheinlichkeit = 0;
 	winkelKorrektur = 0;
+	encoderL = 0;
+	encoderR = 0;
 
 	speedL = S_GeradeAus_NormalSpeed * Direction;
 	speedR = S_GeradeAus_NormalSpeed * Direction;
@@ -22,8 +24,19 @@ void S_GeradeAusClass::Init()
 	toggleState = false;  // Am anfang soll der Laser befragt werden.
 
 	Sense();
+	Sense();
+	Sense();
+
 
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
+	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
+
+	if (abs(winkelKorrektur) > 0.1)
+	{
+		status = Aborted;
+		Serial.println("S_GeradeAus.Init(): Spectator steht zu schief, bitte zuerst eine Drehung ausführen!");
+	}
+
 	startDistanceLaserV = spectator->laserVorne.GetDistance();
 	startDistanceUSV = spectator->ultraschallVorne.GetDistance();
 	startDistanceUSH = spectator->ultraschallHinten.GetDistance();
@@ -88,9 +101,13 @@ void S_GeradeAusClass::Sense()
 void S_GeradeAusClass::Think()
 {
 	toggleState = !toggleState;
-	if (stoppWahrscheinlichkeit > 0)
+	if (stoppWahrscheinlichkeit >= 10)
 	{
 		stoppWahrscheinlichkeit -= 10;    // Jeden Tick verringert sich die Stoppwahrscheinlihckeit wieder falls es mal zu einem "Fehlalarm" gekommen ist.
+	}
+	else if (stoppWahrscheinlichkeit < 0)
+	{
+		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stopnnen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
 	}
 
 	// Winkelkorrektur ermitteln
@@ -136,17 +153,22 @@ void S_GeradeAusClass::Think()
 		stoppWahrscheinlichkeit += 20;
 	}
 
+	encoderL += spectator->Motoren.GetEncoderInfoL().CountsSinceLastTick;
+	encoderR += spectator->Motoren.GetEncoderInfoR().CountsSinceLastTick;
+	Serial.print("EncoderInfoL: ");
+	Serial.print(encoderL);
+	Serial.print(" R: ");
+	Serial.println(encoderR);  // 30 cm = 16 EncoderCounts
+
 	Serial.print("LaserEntfernung: ");
 	Serial.println(spectator->laserVorne.GetDistance());
 	if (Direction == 1)
 	{
 		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandErntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
 		{
-			speedL = 0;
-			speedR = 0;
-			status = Finished;
+			stoppWahrscheinlichkeit += 50;
 
-			Serial.print("S_GeradeAus.Think(): Felddurchquerung aufgrund des Lasers beendet. Entfernung: ");
+			Serial.print("S_GeradeAus.Think(): Laser empfiehlt die Felddurchquerung zu beenden. Entfernung: ");
 			Serial.println(spectator->laserVorne.GetDistance());
 		}
 	}
@@ -154,15 +176,24 @@ void S_GeradeAusClass::Think()
 	{
 		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandErntfernungen[zielWandKategorie] - S_GeradeAus_WandEntfernungsKorrektur)
 		{
-			speedL = 0;
-			speedR = 0;
-			status = Finished;
+			stoppWahrscheinlichkeit += 50;
 
-			Serial.print("S_GeradeAus.Think(): Felddurchquerung aufgrund des Lasers beendet. Entfernung: ");
+			Serial.print("S_GeradeAus.Think(): Laser empfiehlt die Felddurchquerung zu beenden. Entfernung: ");
 			Serial.println(spectator->laserVorne.GetDistance());
 		}
 	}
-
+	if ((abs(encoderL) < 10 || abs(encoderR) < 10) && stoppWahrscheinlichkeit > 0)
+	{
+		stoppWahrscheinlichkeit -= 40;  // Das Feld kann noch gar nicht durchquert sein.
+	}
+	else if ((abs(encoderL) < 16 || abs(encoderR) < 16) && stoppWahrscheinlichkeit > 0)
+	{
+		stoppWahrscheinlichkeit -= 20;
+	}
+	else if ((abs(encoderL) > 17 || abs(encoderR) < 17))
+	{
+		stoppWahrscheinlichkeit += 30;
+	}
 
 	if (status == Running && stoppWahrscheinlichkeit >= S_GeradeAus_MaxStoppWahrscheinlichkeit)
 	{
@@ -213,8 +244,9 @@ int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
 
 byte S_GeradeAusClass::ermittleStartWandKategorie(int StartDistance)
 {
-	int minAbstand = abs(StartDistance - S_GeradeAus_WandErntfernungen[0]);
 	byte b = 0;
+	int minAbstand = abs(StartDistance - S_GeradeAus_WandErntfernungen[b]);
+	
 	for (byte i = 1; i < sizeof(S_GeradeAus_WandErntfernungen); i++)
 	{
 		int h = abs(StartDistance - S_GeradeAus_WandErntfernungen[i]);
