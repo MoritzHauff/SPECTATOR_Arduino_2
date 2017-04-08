@@ -44,7 +44,7 @@ const int S_GeradeAus_MaxStoppWahrscheinlichkeit = 100;
 const int S_GeradeAus_WinkelRatio = 300;		// Wie stark die Winkelabweichung in die Fahrgeschwindigkeit wirkt.  //75
 
 const int S_GeradeAus_WandEntfernungen[] = { 90, 410, 710, 1010 };
-const int S_GeradeAus_WandEntfernungsKorrektur = 60;
+const int S_GeradeAus_WandEntfernungsKorrektur = 70;  // todo vlt einfach mit zwei arraylisten einmal für voräwrts einmal für rückwärts.
 
 const int S_GeradeAus_MinUltraschallEntfernung = 6;   // Ab welcher Entfernung die Ultraschallsensoren eine Weiterfahrt unterbinden sollen.
 
