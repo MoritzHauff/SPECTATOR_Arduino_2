@@ -27,8 +27,12 @@ public:
 	void Init();
 
 	void Update();
+	/*Gibt an ob seit dem letzten Aufruf von Reset neue Daten vorhanden sind.*/
 	bool NewDataAvaiable() { return dataUpdated; }
 	uint16_t GetDistance();
+
+	/*Resettet den Wert, ob die Daten aktualisiert worden sind. Sollten jeden Tick aufgerufen werden.*/
+	void Reset();
 
 };
 

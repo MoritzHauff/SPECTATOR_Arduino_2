@@ -23,10 +23,14 @@ void S_GeradeAusClass::Init()
 
 	toggleState = false;  // Am anfang soll der Laser befragt werden.
 
-	Sense();
-	Sense();
-	Sense();
-
+	for (int i = 0; i < 2; )
+	{
+		Sense();      // todo Laserentfenrung mit Ultraschalldaten abgleichen.
+		if (spectator->laserVorne.NewDataAvaiable() == true)   // Unbedingt eine korrekte Laserentfernung ermitteln damit die richtige Wandkategorie verwendet wird.
+		{
+			i++;
+		}
+	}
 
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
 	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
@@ -43,6 +47,15 @@ void S_GeradeAusClass::Init()
 
 	startWandKategorie = ermittleStartWandKategorie(startDistanceLaserV);
 	zielWandKategorie = startWandKategorie - Direction;   // todo: Achtung dass kann hier NULL werden!!!!
+	
+	if (zielWandKategorie == 255)
+	{
+		zielWandKategorie = 0;
+	}
+	if (zielWandKategorie >= sizeof(S_GeradeAus_WandEntfernungen))
+	{
+		zielWandKategorie = sizeof(S_GeradeAus_WandEntfernungen)-1;
+	}
 
 	Serial.print("Fahre GeradeAus. Fahrtrichtung: ");
 	Serial.println(Direction);
@@ -54,7 +67,7 @@ void S_GeradeAusClass::Init()
 	Serial.print("ZielKategorie: ");
 	Serial.print(zielWandKategorie);
 	Serial.print(" Zielentfernung: ");
-	Serial.print(S_GeradeAus_WandErntfernungen[zielWandKategorie]);
+	Serial.print(S_GeradeAus_WandEntfernungen[zielWandKategorie]);
 	Serial.print("Ultraschall Distanz Vorne: ");
 	Serial.println(startDistanceUSV);
 	Serial.print("Ultraschall Distanz Hinten: ");
@@ -155,16 +168,16 @@ void S_GeradeAusClass::Think()
 
 	encoderL += spectator->Motoren.GetEncoderInfoL().CountsSinceLastTick;
 	encoderR += spectator->Motoren.GetEncoderInfoR().CountsSinceLastTick;
-	Serial.print("EncoderInfoL: ");
+	/*Serial.print("EncoderInfoL: ");
 	Serial.print(encoderL);
 	Serial.print(" R: ");
-	Serial.println(encoderR);  // 30 cm = 16 EncoderCounts
+	Serial.println(encoderR);*/  // 30 cm = 16 EncoderCounts
 
-	Serial.print("LaserEntfernung: ");
-	Serial.println(spectator->laserVorne.GetDistance());
+	/*Serial.print("LaserEntfernung: ");
+	Serial.println(spectator->laserVorne.GetDistance());*/
 	if (Direction == 1)
 	{
-		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandErntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
+		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
 		{
 			stoppWahrscheinlichkeit += 50;
 
@@ -181,7 +194,7 @@ void S_GeradeAusClass::Think()
 	}
 	if (Direction == -1)
 	{
-		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandErntfernungen[zielWandKategorie] - S_GeradeAus_WandEntfernungsKorrektur)
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungen[zielWandKategorie] - S_GeradeAus_WandEntfernungsKorrektur)
 		{
 			stoppWahrscheinlichkeit += 50;
 
@@ -216,6 +229,11 @@ void S_GeradeAusClass::Think()
 		status = Finished;
 
 		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
+
+		Serial.print("EncoderInfoL: ");
+		Serial.print(encoderL);
+		Serial.print(" R: ");
+		Serial.println(encoderR);
 	}
 }
 
@@ -259,11 +277,11 @@ int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
 byte S_GeradeAusClass::ermittleStartWandKategorie(int StartDistance)
 {
 	byte b = 0;
-	int minAbstand = abs(StartDistance - S_GeradeAus_WandErntfernungen[b]);
+	int minAbstand = abs(StartDistance - S_GeradeAus_WandEntfernungen[b]);
 	
-	for (byte i = 1; i < sizeof(S_GeradeAus_WandErntfernungen); i++)
+	for (byte i = 1; i < sizeof(S_GeradeAus_WandEntfernungen); i++)
 	{
-		int h = abs(StartDistance - S_GeradeAus_WandErntfernungen[i]);
+		int h = abs(StartDistance - S_GeradeAus_WandEntfernungen[i]);
 		if (h < minAbstand)
 		{
 			minAbstand = h;

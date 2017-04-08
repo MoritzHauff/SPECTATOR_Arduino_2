@@ -164,6 +164,7 @@ void SPECTATORClass::UpdateHCSr04VorneHinten()
 
 void SPECTATORClass::UpdateLaser()
 {
+	laserVorne.Reset();
 	laserVorne.Update();
 	if (laserVorne.NewDataAvaiable())
 	{
