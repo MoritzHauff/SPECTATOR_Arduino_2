@@ -30,6 +30,11 @@ void S_GeradeAusClass::Init()
 		{
 			i++;
 		}
+		if (abweichungZuGros(spectator->laserVorne.GetDistance(), spectator->ultraschallVorne.GetDistance() * 10, 50))
+		{
+			Serial.println("WARNING zu große abweichung zwischen Ultraschall und Laser.");
+			i--;
+		}
 	}
 
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
@@ -109,6 +114,20 @@ void S_GeradeAusClass::Sense()
 
 	//spectator->serialBuffer.Flush();
 	spectator->serialBuffer.Clear();
+}
+
+bool S_GeradeAusClass::abweichungZuGros(int Value1, int Value2, int MaxAbweichung)
+{
+	if (Value1 + MaxAbweichung < Value2)
+	{
+		return true;
+	}
+	if (Value1 - MaxAbweichung > Value2)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void S_GeradeAusClass::Think()

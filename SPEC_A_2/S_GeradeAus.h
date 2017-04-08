@@ -49,6 +49,7 @@ class S_GeradeAusClass : public StateClass
 	 int encoderL, encoderR;
 
 	 byte ermittleStartWandKategorie(int aktDistance);
+	 bool abweichungZuGros(int Value1, int Value2, int MaxAbweichung);
 
  public:
 	 S_GeradeAusClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
