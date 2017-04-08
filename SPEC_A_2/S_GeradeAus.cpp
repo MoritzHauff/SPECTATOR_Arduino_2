@@ -171,6 +171,13 @@ void S_GeradeAusClass::Think()
 			Serial.print("S_GeradeAus.Think(): Laser empfiehlt die Felddurchquerung zu beenden. Entfernung: ");
 			Serial.println(spectator->laserVorne.GetDistance());
 		}
+		if (spectator->ultraschallVorne.GetDistance() <= S_GeradeAus_MinUltraschallEntfernung)
+		{
+			stoppWahrscheinlichkeit += 60;
+
+			Serial.print("S_GeradeAus.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
+			Serial.println(spectator->ultraschallVorne.GetDistance());
+		}
 	}
 	if (Direction == -1)
 	{
@@ -180,6 +187,13 @@ void S_GeradeAusClass::Think()
 
 			Serial.print("S_GeradeAus.Think(): Laser empfiehlt die Felddurchquerung zu beenden. Entfernung: ");
 			Serial.println(spectator->laserVorne.GetDistance());
+		}
+		if (spectator->ultraschallHinten.GetDistance() <= S_GeradeAus_MinUltraschallEntfernung)
+		{
+			stoppWahrscheinlichkeit += 60;
+
+			Serial.print("S_GeradeAus.Think(): Ultraschall detektiert hinten ein Hindernis. Entfernung: ");
+			Serial.println(spectator->ultraschallVorne.GetDistance());
 		}
 	}
 	if ((abs(encoderL) < 10 || abs(encoderR) < 10) && stoppWahrscheinlichkeit > 0)
