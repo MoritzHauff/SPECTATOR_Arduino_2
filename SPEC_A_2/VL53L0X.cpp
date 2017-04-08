@@ -47,9 +47,14 @@ void VL53L0XClass::Init()
 ///Funktionen
 uint16_t VL53L0XClass::GetDistance()
 {
-	dataUpdated = false;
+	//dataUpdated = false;
 
 	return measure.RangeMilliMeter;
+}
+
+void VL53L0XClass::Reset()
+{
+	dataUpdated = false;
 }
 
 void VL53L0XClass::Update()
