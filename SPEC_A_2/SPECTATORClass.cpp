@@ -81,7 +81,7 @@ void SPECTATORClass::Init()
 	attachInterrupt(digitalPinToInterrupt(ultraschallHinten.GetEchoPin()), ISRUSH, CHANGE);
 
 	// Serial communication
-	Serial.begin(115200);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart. // 250000 kann vom RaspberryPi nicht gelesen werden.
+	Serial.begin(230400);  // Je höher die Baudrate und je mehr Daten im Serial.print stehen desto mehr Zeit wird gespart. // 250000 kann vom RaspberryPi nicht gelesen werden.
 	Serial.println("SPEC_A_2 - Serial Start");
 
 	// init Laser
