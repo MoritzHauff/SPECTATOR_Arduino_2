@@ -150,8 +150,8 @@ void S_GeradeAusClass::Think()
 
 	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
 
-	Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
-	Serial.println(winkelKorrektur);
+	/*Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
+	Serial.println(winkelKorrektur);*/
 	/*Serial.print("berechnete Korrekturmasnahme: ");
 	Serial.print(h);*/
 
@@ -195,8 +195,10 @@ void S_GeradeAusClass::Think()
 	Serial.print(" R: ");
 	Serial.println(encoderR);*/  // 30 cm = 16 EncoderCounts
 
-	/*Serial.print("LaserEntfernung: ");
-	Serial.println(spectator->laserVorne.GetDistance());*/
+	Serial.print("LaserEntfernung: ");
+	Serial.println(spectator->laserVorne.GetDistance());
+	Serial.print("USEntfernung: ");
+	Serial.println(spectator->ultraschallVorne.GetDistance());
 	if (Direction == 1)
 	{
 		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
@@ -231,7 +233,7 @@ void S_GeradeAusClass::Think()
 			Serial.println(spectator->ultraschallVorne.GetDistance());
 		}
 	}
-	if ((abs(encoderL) < 10 || abs(encoderR) < 10) && stoppWahrscheinlichkeit > 0)
+	if ((abs(encoderL) < 8 || abs(encoderR) < 8) && stoppWahrscheinlichkeit > 0)
 	{
 		stoppWahrscheinlichkeit -= 40;  // Das Feld kann noch gar nicht durchquert sein.
 	}
@@ -239,7 +241,7 @@ void S_GeradeAusClass::Think()
 	{
 		stoppWahrscheinlichkeit -= 20;
 	}
-	else if ((abs(encoderL) > 17 || abs(encoderR) < 17))
+	else if ((abs(encoderL) > 17 || abs(encoderR) > 17))
 	{
 		stoppWahrscheinlichkeit += 30;
 	}
