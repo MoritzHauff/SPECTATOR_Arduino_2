@@ -30,11 +30,11 @@ void S_GeradeAusClass::Init()
 		{
 			i++;
 		}
-		if (abweichungZuGros(spectator->laserVorne.GetDistance(), spectator->ultraschallVorne.GetDistance() * 10, 50))
+		/*if (abweichungZuGros(spectator->laserVorne.GetDistance(), spectator->ultraschallVorne.GetDistance() * 10, 50))  // todo bessere Idee da es so zu endlosschleifen kommen kann.
 		{
 			Serial.println("WARNING zu große abweichung zwischen Ultraschall und Laser.");
 			i--;
-		}
+		}*/
 	}
 
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
