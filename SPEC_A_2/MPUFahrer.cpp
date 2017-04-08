@@ -82,7 +82,7 @@ bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorS
 		return true; // true wenn drehen abgeschlossen
 	}
 																																														//int winkelabstand = minWinkelAbstand(aktYaw, zielWinkel);
-	int motorspeed = (int)(winkelAbstand * 450);   // todo: insert a convenient function   // 360
+	int motorspeed = (int)(winkelAbstand * 400);   // todo: insert a convenient function   // 360
 	if(motorspeed > 0)
     {
         motorspeed = min(motorspeed, 180); // cap at 180
@@ -91,7 +91,7 @@ bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorS
 	if(motorspeed < 0)
     {
         motorspeed = max(motorspeed, -180); // cap at 180
-        motorspeed = min(motorspeed, -70);  // below 60 the motors wont turn.
+        motorspeed = min(motorspeed, -70);  // below 60 the motors wont turn.   // todo cap mit der zeit erhöhen wenn er sich nicht mehr dreht.
     }
 
 

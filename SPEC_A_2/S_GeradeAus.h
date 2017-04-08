@@ -21,7 +21,7 @@ const int S_GeradeAus_MaxTimer = 3000;	//1300	// Wie lange maximal geradeaus gef
 const int S_GeradeAus_MaxStoppWahrscheinlichkeit = 100;
 const int S_GeradeAus_WinkelRatio = 300;		// Wie stark die Winkelabweichung in die Fahrgeschwindigkeit wirkt.  //75
 
-const int S_GeradeAus_WandEntfernungen[] = { 90, 400, 700 };
+const int S_GeradeAus_WandEntfernungen[] = { 90, 410, 710, 1010 };
 const int S_GeradeAus_WandEntfernungsKorrektur = 60;
 
 const int S_GeradeAus_MinUltraschallEntfernung = 6;   // Ab welcher Entfernung die Ultraschallsensoren eine Weiterfahrt unterbinden sollen.
