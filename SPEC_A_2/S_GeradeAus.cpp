@@ -229,7 +229,7 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 	Serial.println(spectator->ultraschallVorne.GetDistance());*/
 	if (Direction == 1)
 	{
-		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
+		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie])
 		{
 			stoppWahrscheinlichkeit += 50;
 
@@ -246,7 +246,7 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 	}
 	if (Direction == -1)
 	{
-		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungen[zielWandKategorie] - S_GeradeAus_WandEntfernungsKorrektur)
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenRueck[zielWandKategorie])
 		{
 			stoppWahrscheinlichkeit += 50;
 
