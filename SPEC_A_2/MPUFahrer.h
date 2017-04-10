@@ -74,7 +74,7 @@ class MPUFahrerClass
 	 void SetNorden(float degree);
 
 	 /*Gibt die Winkeldifferenz der aktuellen Fahrt zu gewünschten Richtung zurück.*/
-	 float BerechneVorwaerts(byte ZielRichtung, float aktYaw);
+	 float GetWinkelAbstand(byte ZielRichtung, float aktYaw);
 	 bool BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR);
 
 	 /*Berechnet anhand des übergebenen Winkel die dazugehörige Himmelsrichtung.*/
