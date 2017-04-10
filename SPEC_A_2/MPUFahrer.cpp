@@ -135,28 +135,11 @@ bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorS
 }
 
 
-float MPUFahrerClass::BerechneVorwaerts(byte ZielRichtung, float aktYaw)
+float MPUFahrerClass::GetWinkelAbstand(byte ZielRichtung, float aktYaw)
 {
 	float zielWinkel = orientierungswinkel[ZielRichtung];
 
-	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);
-
-	return winkelAbstand;
-	
-	/*Korrektur aktKor = GetKorrektur(ZielRichtung, aktYaw, 3, 20, 85);   // todo: sinnvolle Geradeausfahr implementation
-
-	if (aktKor == Korrektur.KeineKorrektur)
-	{
-		return new MotorDaten(250, 250);
-	}
-	if (aktKor == Korrektur.WeitNachRechts || aktKor == Korrektur.WenigNachRechts)
-	{
-		return new MotorDaten(250, 150);
-	}
-	if (aktKor == Korrektur.WeitNachLinks || aktKor == Korrektur.WenigNachLinks)
-	{
-		return new MotorDaten(150, 250);
-	}*/
+	return minWinkelAbstand(aktYaw, zielWinkel);
 }
 
 void MPUFahrerClass::SetRichtungsWinkel(byte Richtung, float degree)

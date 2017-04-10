@@ -46,7 +46,7 @@ void S_GeradeAusClass::Init()
 
 	// Himmelsrichtung ermitteln.
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
-	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
+	winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
 
 	if (abs(winkelKorrektur) > 0.1)
 	{
@@ -123,7 +123,7 @@ void S_GeradeAusClass::Think()
 	toggleState = !toggleState;
 
 	// Winkelkorrektur ermitteln
-	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
+	winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
 
 	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
 

@@ -85,10 +85,10 @@ class SPECTATORClass
 	DigitalIOClass switchLinks = DigitalIOClass(DP51, INPUT); // todo: PascalCase
 	DigitalIOClass switchRechts = DigitalIOClass(DP53, INPUT);
 
-	SharpIR sharplinksvorne = SharpIR(A12, SHARPMEASUREMTS);
+	SharpIR sharplinksvorne = SharpIR(A14, SHARPMEASUREMTS);
 	SharpIR sharprechtsvorne = SharpIR(A13, SHARPMEASUREMTS);
-	SharpIR sharplinkshinten = SharpIR(A14, SHARPMEASUREMTS);
-	SharpIR sharprechtshinten = SharpIR(A15, SHARPMEASUREMTS);
+	SharpIR sharplinkshinten = SharpIR(A15, SHARPMEASUREMTS);
+	SharpIR sharprechtshinten = SharpIR(A12, SHARPMEASUREMTS);
 
 	HCSr04Class ultraschallLinks = HCSr04Class(43, DP41);
 	HCSr04_InterruptClass ultraschallVorne = HCSr04_InterruptClass(19, DP22);

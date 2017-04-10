@@ -36,8 +36,8 @@ void S_DrehenClass::Sense()
 		counter = 1;
 	}
 
-	//spectator->serialBuffer.Flush();
-	spectator->serialBuffer.Clear();
+	spectator->serialBuffer.Flush();
+	//spectator->serialBuffer.Clear();
 }
 
 void S_DrehenClass::Think()
@@ -50,7 +50,7 @@ void S_DrehenClass::Think()
 		MotorSpeedL = 0;
 		MotorSpeedR = 0;
 
-		Serial.println("FAILURE: Drehen konnte nicht beendet werden.");
+		Serial.println("FAILURE: Drehen konnte nicht beendet werden. MaxTimer erreicht.");
 	}
 	
 	if (ZielRichtung < 5 && ZielRichtung > 0)
