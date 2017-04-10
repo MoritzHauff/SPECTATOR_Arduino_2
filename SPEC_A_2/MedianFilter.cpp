@@ -72,6 +72,8 @@ int MedianFilterClass::GetValue()
 		// geordnet und sie sollten komplett neu aufgefüllt werden, damit es nicht zu Auswertungsfehlern kommt.
 		currentpos = 0;
 		
+		/*Serial.print("MedianFilter: Verwendete ArrayPosition:");
+		Serial.println(TotalNumberOfValues / 2);*/
 		return measurements[TotalNumberOfValues / 2];
 	}
 	return 0;

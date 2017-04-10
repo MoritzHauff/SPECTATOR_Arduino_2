@@ -283,7 +283,7 @@ int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
 byte S_GeradeAusClass::ermittleStartWandKategorie()
 {
 	int laserDistance;
-	for (int i = 0; i < 4; )
+	for (int i = 0; i < 5; )
 	{
 		Sense();
 		if (spectator->laserVorne.NewDataAvaiable() == true)   // Unbedingt eine korrekte Laserentfernung ermitteln damit die richtige Wandkategorie verwendet wird.
