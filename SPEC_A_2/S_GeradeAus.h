@@ -12,6 +12,7 @@
 #endif
 
 #include "State.h"
+#include "MedianFilter.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -48,8 +49,15 @@ class S_GeradeAusClass : public StateClass
 	 int capSpeed(int Value, int Upper, int Lower);
 	 int encoderL, encoderR;
 
-	 byte ermittleStartWandKategorie(int aktDistance);
+	 byte ermittleStartWandKategorie();
+	 byte errechneZielWandKategorie(byte StartWandKategorie, int Direction);
+
+	 byte entfernungZuWandKategorie(int aktDistance, int Direction);
 	 bool abweichungZuGros(int Value1, int Value2, int MaxAbweichung);
+
+	 void kontrolliereFortschritt();
+
+	 MedianFilterClass laserFilter;
 
  public:
 	 S_GeradeAusClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)

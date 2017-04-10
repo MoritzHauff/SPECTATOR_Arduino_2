@@ -83,6 +83,7 @@
     <ClInclude Include="DigitalIO.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="HCSr04.h" />
+    <ClInclude Include="MedianFilter.h" />
     <ClInclude Include="MLX90614Class.h" />
     <ClInclude Include="MPU.h" />
     <ClInclude Include="MPUFahrer.h" />

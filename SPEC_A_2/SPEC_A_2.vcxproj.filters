@@ -92,6 +92,9 @@
     <ClInclude Include="S_GeradeAus.h">
       <Filter>Header Files - States</Filter>
     </ClInclude>
+    <ClInclude Include="MedianFilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MedianFilter.cpp">

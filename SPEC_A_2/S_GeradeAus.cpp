@@ -11,6 +11,7 @@
 
 void S_GeradeAusClass::Init()
 {
+	// Variablen zurücksetzen.
 	status = Running;
 
 	stoppWahrscheinlichkeit = 0;
@@ -21,66 +22,35 @@ void S_GeradeAusClass::Init()
 	speedL = S_GeradeAus_NormalSpeed * Direction;
 	speedR = S_GeradeAus_NormalSpeed * Direction;
 
-	toggleState = false;  // Am anfang soll der Laser befragt werden.
-
-	for (int i = 0; i < 2; )
-	{
-		Sense();      // todo Laserentfenrung mit Ultraschalldaten abgleichen.
-		if (spectator->laserVorne.NewDataAvaiable() == true)   // Unbedingt eine korrekte Laserentfernung ermitteln damit die richtige Wandkategorie verwendet wird.
-		{
-			i++;
-		}
-		/*if (abweichungZuGros(spectator->laserVorne.GetDistance(), spectator->ultraschallVorne.GetDistance() * 10, 50))  // todo bessere Idee da es so zu endlosschleifen kommen kann.
-		{
-			Serial.println("WARNING zu große abweichung zwischen Ultraschall und Laser.");
-			i--;
-		}*/
-	}
-
+	// Himmelsrichtung ermitteln.
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
 	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
 
 	if (abs(winkelKorrektur) > 0.1)
 	{
 		status = Aborted;
-		Serial.println("S_GeradeAus.Init(): Spectator steht zu schief, bitte zuerst eine Drehung ausführen!");
+		Serial.println("ABORTED S_GeradeAus.Init(): Spectator steht zu schief, bitte zuerst eine Drehung ausführen!");
 	}
 
-	startDistanceLaserV = spectator->laserVorne.GetDistance();
-	startDistanceUSV = spectator->ultraschallVorne.GetDistance();
-	startDistanceUSH = spectator->ultraschallHinten.GetDistance();
+	// Wandkategorie ermitteln.
+	laserFilter.Init(5);
+	startWandKategorie = ermittleStartWandKategorie();
+	zielWandKategorie = errechneZielWandKategorie(startWandKategorie, Direction);
 
-	startWandKategorie = ermittleStartWandKategorie(startDistanceLaserV);
-	zielWandKategorie = startWandKategorie - Direction;   // todo: Achtung dass kann hier NULL werden!!!!
-	
-	if (zielWandKategorie == 255)
-	{
-		zielWandKategorie = 0;
-	}
-	if (zielWandKategorie >= sizeof(S_GeradeAus_WandEntfernungen))
-	{
-		zielWandKategorie = sizeof(S_GeradeAus_WandEntfernungen)-1;
-	}
+	// todo bei langen strekcen wandeinlass mit sharp sensoren erkennen!
 
+	// Debugausgaben.
 	Serial.print("Fahre GeradeAus. Fahrtrichtung: ");
 	Serial.println(Direction);
-
-	Serial.print("LaserDistanz: ");
-	Serial.print(startDistanceLaserV); 
-	Serial.print(" Kategorie: ");
+ 
+	Serial.print("WandKategorie: ");
 	Serial.println(startWandKategorie);
-	Serial.print("ZielKategorie: ");
+	Serial.print(" ZielKategorie: ");
 	Serial.print(zielWandKategorie);
 	Serial.print(" Zielentfernung: ");
-	Serial.print(S_GeradeAus_WandEntfernungen[zielWandKategorie]);
-	Serial.print("Ultraschall Distanz Vorne: ");
-	Serial.println(startDistanceUSV);
-	Serial.print("Ultraschall Distanz Hinten: ");
-	Serial.println(startDistanceUSH);
-	Serial.print("Speed: ");
-	Serial.print(speedL); Serial.print(" ");
-	Serial.println(speedR);
+	Serial.println(S_GeradeAus_WandEntfernungen[zielWandKategorie]);
 
+	// Timer starten.
 	startTime = millis();
 }
 
@@ -94,10 +64,6 @@ void S_GeradeAusClass::Sense()
 	{
 		spectator->UpdateMLX();
 	}
-	else
-	{
-		//spectator->UpdateLaser();
-	}
 
 	spectator->UpdateLaser();
 
@@ -105,15 +71,15 @@ void S_GeradeAusClass::Sense()
 
 	spectator->UpdateSwitches();
 
-	//spectator->serialBuffer.Flush();
-	spectator->serialBuffer.Clear();    // Alle Sensornachrichten auf einmal sind zu lang für den SerialBuffer.
+	spectator->serialBuffer.Flush();
+	//spectator->serialBuffer.Clear();    // Alle Sensornachrichten auf einmal sind zu lang für den SerialBuffer.
 
 	spectator->UpdateHCSr04VorneHinten();
 
 	spectator->UpdateEncoder();
 
-	//spectator->serialBuffer.Flush();
-	spectator->serialBuffer.Clear();
+	spectator->serialBuffer.Flush();
+	//spectator->serialBuffer.Clear();
 }
 
 bool S_GeradeAusClass::abweichungZuGros(int Value1, int Value2, int MaxAbweichung)
@@ -133,14 +99,6 @@ bool S_GeradeAusClass::abweichungZuGros(int Value1, int Value2, int MaxAbweichun
 void S_GeradeAusClass::Think()
 {
 	toggleState = !toggleState;
-	if (stoppWahrscheinlichkeit >= 10)
-	{
-		stoppWahrscheinlichkeit -= 10;    // Jeden Tick verringert sich die Stoppwahrscheinlihckeit wieder falls es mal zu einem "Fehlalarm" gekommen ist.
-	}
-	else if (stoppWahrscheinlichkeit < 0)
-	{
-		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stopnnen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
-	}
 
 	// Winkelkorrektur ermitteln
 	winkelKorrektur = spectator->mpuFahrer.BerechneVorwaerts(startRichtung, spectator->mpu.GetYaw());
@@ -172,30 +130,69 @@ void S_GeradeAusClass::Think()
 	}
 
 	//Stopp zeitpunkt ermitteln
+	kontrolliereFortschritt();
+
 	if (status == Running && startTime + S_GeradeAus_MaxTimer < millis())
 	{
 		speedL = 0;
 		speedR = 0;
 		status = Error;
 
-		Serial.println("S_GeradeAus.Think(): Felddurchquerung hat zu lange gedauert! MaxTimer abgelaufen.");
+		Serial.println("ERROR S_GeradeAus.Think(): Felddurchquerung hat zu lange gedauert! MaxTimer abgelaufen.");
 	}
+	
+	if (status == Running && stoppWahrscheinlichkeit >= S_GeradeAus_MaxStoppWahrscheinlichkeit)
+	{
+		speedL = 0;
+		speedR = 0;
+		status = Finished;
+
+		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
+	}
+}
+
+/*Kontrolliert den Fortschritt der Felddurchquerung und passt gegebenfalls die StoppWahrscheinlichkeit an.*/
+void S_GeradeAusClass::kontrolliereFortschritt()
+{
+	if (stoppWahrscheinlichkeit >= 10)
+	{
+		stoppWahrscheinlichkeit -= 10;    // Jeden Tick verringert sich die Stoppwahrscheinlihckeit wieder falls es mal zu einem "Fehlalarm" gekommen ist.
+	}
+	else if (stoppWahrscheinlichkeit < 0)
+	{
+		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stopnnen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
+	}
+
+	// Timer kontrollieren
 	if (status == Running && startTime + S_GeradeAus_FeldTraversTimer < millis())
 	{
 		stoppWahrscheinlichkeit += 20;
 	}
 
+	// Encoder kontrollieren
 	encoderL += spectator->Motoren.GetEncoderInfoL().CountsSinceLastTick;
 	encoderR += spectator->Motoren.GetEncoderInfoR().CountsSinceLastTick;
 	/*Serial.print("EncoderInfoL: ");
 	Serial.print(encoderL);
 	Serial.print(" R: ");
 	Serial.println(encoderR);*/  // 30 cm = 16 EncoderCounts
+	if ((abs(encoderL) < 8 || abs(encoderR) < 8) && stoppWahrscheinlichkeit > 0)
+	{
+		stoppWahrscheinlichkeit -= 40;  // Das Feld kann noch gar nicht durchquert sein.
+	}
+	else if ((abs(encoderL) < 16 || abs(encoderR) < 16) && stoppWahrscheinlichkeit > 0)
+	{
+		stoppWahrscheinlichkeit -= 20;
+	}
+	else if ((abs(encoderL) > 17 || abs(encoderR) > 17))
+	{
+		stoppWahrscheinlichkeit += 30;
+	}
 
-	Serial.print("LaserEntfernung: ");
+	/*Serial.print("LaserEntfernung: ");
 	Serial.println(spectator->laserVorne.GetDistance());
 	Serial.print("USEntfernung: ");
-	Serial.println(spectator->ultraschallVorne.GetDistance());
+	Serial.println(spectator->ultraschallVorne.GetDistance());*/
 	if (Direction == 1)
 	{
 		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungen[zielWandKategorie] + S_GeradeAus_WandEntfernungsKorrektur)
@@ -230,32 +227,7 @@ void S_GeradeAusClass::Think()
 			Serial.println(spectator->ultraschallVorne.GetDistance());
 		}
 	}
-	if ((abs(encoderL) < 8 || abs(encoderR) < 8) && stoppWahrscheinlichkeit > 0)
-	{
-		stoppWahrscheinlichkeit -= 40;  // Das Feld kann noch gar nicht durchquert sein.
-	}
-	else if ((abs(encoderL) < 16 || abs(encoderR) < 16) && stoppWahrscheinlichkeit > 0)
-	{
-		stoppWahrscheinlichkeit -= 20;
-	}
-	else if ((abs(encoderL) > 17 || abs(encoderR) > 17))
-	{
-		stoppWahrscheinlichkeit += 30;
-	}
-
-	if (status == Running && stoppWahrscheinlichkeit >= S_GeradeAus_MaxStoppWahrscheinlichkeit)
-	{
-		speedL = 0;
-		speedR = 0;
-		status = Finished;
-
-		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
-
-		Serial.print("EncoderInfoL: ");
-		Serial.print(encoderL);
-		Serial.print(" R: ");
-		Serial.println(encoderR);
-	}
+	
 }
 
 void S_GeradeAusClass::Act()
@@ -295,14 +267,67 @@ int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
 	return Value;
 }
 
-byte S_GeradeAusClass::ermittleStartWandKategorie(int StartDistance)
+/*Führt die nötigen Messungen durch um die aktuelle Wandkategorie zu ermitteln und gibt diese zurück.*/
+byte S_GeradeAusClass::ermittleStartWandKategorie()
+{
+	int laserDistance;
+	for (int i = 0; i < 4; )
+	{
+		Sense();
+		if (spectator->laserVorne.NewDataAvaiable() == true)   // Unbedingt eine korrekte Laserentfernung ermitteln damit die richtige Wandkategorie verwendet wird.
+		{
+			i++;
+			laserFilter.Update(spectator->laserVorne.GetDistance());
+		}
+	}
+	laserDistance = laserFilter.GetValue();
+
+	int usDistance = spectator->ultraschallVorne.GetDistance() * 10;  // die ultraschallentfernung angepasst an die einheit des lasers.
+	if (abweichungZuGros(laserDistance, usDistance, 50))
+	{
+		Serial.println("WARNING: zu große Abweichung zwischen Ultraschall und Laser, korrekte Zielwandkategorie?");
+		if (usDistance > laserDistance)
+		{
+			laserDistance += 50;
+		}
+		else if (usDistance < laserDistance)
+		{
+			laserDistance -= 50;
+		}
+	}
+
+	Serial.print("S_GeradeAus.ermittleStartWandKategorie(): verwendete Laserentfernung: ");
+	Serial.println(laserDistance);
+
+	return entfernungZuWandKategorie(laserDistance, Direction);
+}
+
+/*Errechnet anhand der übergebenen StartWandKategorie die richtige ZielWandKategorie in der jeweiligen Fahrtrichtung.*/
+byte S_GeradeAusClass::errechneZielWandKategorie(byte StartWandKategorie, int Direction)
+{
+	byte zielWandKategorie = startWandKategorie - Direction;   // todo: Achtung dass kann hier NULL werden!!!!
+
+	if (zielWandKategorie == 255)
+	{
+		zielWandKategorie = 0;
+	}
+	if (zielWandKategorie >= sizeof(S_GeradeAus_WandEntfernungen))
+	{
+		zielWandKategorie = sizeof(S_GeradeAus_WandEntfernungen) - 1;  // todo wenn er beim vorherigen schritt zu kurz gefahrne ist sollte die richtige kategorie verwendet werden.
+	}
+
+	return zielWandKategorie;
+}
+
+/*Wandelt eine Entfernung in die enntsprechende Wandkategorie in der jeweiligen Entfenrung um.*/
+byte S_GeradeAusClass::entfernungZuWandKategorie(int Distance, int Direction)
 {
 	byte b = 0;
-	int minAbstand = abs(StartDistance - S_GeradeAus_WandEntfernungen[b]);
+	int minAbstand = abs(Distance - S_GeradeAus_WandEntfernungen[b]);
 	
 	for (byte i = 1; i < sizeof(S_GeradeAus_WandEntfernungen); i++)
 	{
-		int h = abs(StartDistance - S_GeradeAus_WandEntfernungen[i]);
+		int h = abs(Distance - S_GeradeAus_WandEntfernungen[i]);
 		if (h < minAbstand)
 		{
 			minAbstand = h;
