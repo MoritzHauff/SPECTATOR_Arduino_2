@@ -169,6 +169,18 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 		stoppWahrscheinlichkeit += 20;
 	}
 
+	// Bumper kontrollieren
+	if (spectator->switchLinks.GetLastState() == true)
+	{
+		stoppWahrscheinlichkeit += 80;
+		Serial.println("WARNING S_GeradeAus: linker Bumper hat Kontakt.");
+	}
+	if (spectator->switchRechts.GetLastState() == true)
+	{
+		stoppWahrscheinlichkeit += 80;
+		Serial.println("WARNING S_GeradeAus: rechter Bumper hat Kontakt.");
+	}
+
 	// Encoder kontrollieren
 	encoderL += spectator->Motoren.GetEncoderInfoL().CountsSinceLastTick;
 	encoderR += spectator->Motoren.GetEncoderInfoR().CountsSinceLastTick;
@@ -278,6 +290,8 @@ byte S_GeradeAusClass::ermittleStartWandKategorie()
 		{
 			i++;
 			laserFilter.Update(spectator->laserVorne.GetDistance());
+			Serial.print("neue Laserentfernung: ");
+			Serial.println(spectator->laserVorne.GetDistance());
 		}
 	}
 	laserDistance = laserFilter.GetValue();
