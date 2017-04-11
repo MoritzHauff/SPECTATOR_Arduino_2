@@ -36,13 +36,16 @@ void S_DrehenClass::Sense()
 		counter = 1;
 	}
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
 }
 
 void S_DrehenClass::Think()
 {
 	counter++;
+
+	/*Serial.print("Status: ");
+	Serial.println(status);*/
 
 	switch (status)
 	{
@@ -80,18 +83,31 @@ void S_DrehenClass::running()
 		
 		if (abs(winkelAbstand) <= 0.01)  // stopp-toleranz   // 0.1 = 5,7°
 		{
-			status = Finished;
+			this->status = Finished;
 
 			Serial.println("S_Drehen.Think(): Drehen anscheinend beendet.");
 		}
 		else
 		{
-			int motorspeed = (int)(winkelAbstand * S_Drehen_MotorSteigung) + S_Drehen_MinSpeed;   // todo: insert a convenient function   // 360
+			int	motorspeed = (int)(winkelAbstand * S_Drehen_MotorSteigung);  // kein y-Offset da er sonst anfängt zu "schwingen"   // todo: insert a convenient function
 
-			motorspeed = spectator->Motoren.CapSpeed(motorspeed, S_Drehen_MaxSpeed, S_Drehen_MinSpeed);
-
+			// Motordrehrichtungen zuweisen.
 			MotorSpeedL = motorspeed;
 			MotorSpeedR = -motorspeed;
+
+			// Die jeweils vorwärtsfahrende Kette muss ein bisschen beschluenigt werden damit sie sich gleichmäßig dreht.
+			if (MotorSpeedL > 0)
+			{
+				MotorSpeedL += 5;
+			}
+			if (MotorSpeedR > 0)
+			{
+				MotorSpeedR += 5;
+			}
+
+			// Control MotorLimits.
+			MotorSpeedL = spectator->Motoren.CapSpeed(MotorSpeedL, S_Drehen_MaxSpeed, S_Drehen_MinSpeed);
+			MotorSpeedR = spectator->Motoren.CapSpeed(MotorSpeedR, S_Drehen_MaxSpeed, S_Drehen_MinSpeed);
 		}
 	}
 	else

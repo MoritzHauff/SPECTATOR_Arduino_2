@@ -257,7 +257,9 @@ void StateMachineClass::DoAction()
 
 	if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
 	{
-		changeState(s_Drehen); // todo: Should be s_Idle.
+		changeState(s_TeleOp); // todo: Should be s_Idle.
+		s_TeleOp->MotorSpeedL = 0;
+		s_TeleOp->MotorSpeedL = 0;
 	}
 	else if (currentState == s_TeleOp) 
 	{
