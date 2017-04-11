@@ -51,6 +51,9 @@ const int S_GeradeAus_WandEntfernungenRueck[] = { 30, 340, 640, 940 };  // Die W
 
 const int S_GeradeAus_MinUltraschallEntfernung = 6;   // Ab welcher Entfernung die Ultraschallsensoren eine Weiterfahrt unterbinden sollen.
 
+
+const int S_Drehen_SharpMin = 150;  // Sobald die Wänder weiter weg sind, also unter diesem Wert liegen, nicht mehr zur Feldkorrektur verwenden.
+
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
 /*Dieser State überwacht das GeradeAusfahren. (Sowohl vorwärts als auch rückwärts).*/
@@ -72,6 +75,9 @@ class S_GeradeAusClass : public StateClass
 
 	 int encoderL, encoderR;
 
+	 int straightCounter;  // Gibt an wie viele Ticks ganz gerade aus gefahren werden soll, z.B. beim Ausgleich der Wandentfernung.
+	 int turnCounter; // Gibt an wie viele Ticks mit einer bestimmten geschwindigkiet gedereht werdn soll bevor der straight COunter zum Einsazt kommt.
+
 	 byte ermittleStartWandKategorie();
 	 byte errechneZielWandKategorie(byte StartWandKategorie, int Direction);
 
@@ -79,6 +85,7 @@ class S_GeradeAusClass : public StateClass
 	 bool abweichungZuGros(int Value1, int Value2, int MaxAbweichung);
 
 	 void kontrolliereFortschritt();
+	 float verwerteSharp(int Vorne, int Hinten);
 
 	 MedianFilterClass laserFilter;
 
