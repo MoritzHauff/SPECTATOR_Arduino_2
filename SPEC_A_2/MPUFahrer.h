@@ -52,7 +52,7 @@ const float MPUFahrer_CalculateRichtung_Toleranz = 0.5; // Gibt die Toleranz an 
 Korrekturen um in eine bestimmte Richtung zu fahren oder zu drehen.*/
 class MPUFahrerClass
 {
- public:
+ protected:
 	 /// <summary>
 	 /// Gibt den kleinst möglichen Winkel an. (Zur Berechnung, wann ein gesamter Kreis überstrichen wurde.)
 	 /// </summary>
@@ -97,7 +97,6 @@ class MPUFahrerClass
 
 	 /*Gibt die Winkeldifferenz der aktuellen Fahrt zu gewünschten Richtung zurück.*/
 	 float GetWinkelAbstand(byte ZielRichtung, float aktYaw);
-	 bool BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR);
 
 	 /*Berechnet anhand des übergebenen Winkel die dazugehörige Himmelsrichtung.*/
 	 byte CalculateRichtung(float aktYaw);
