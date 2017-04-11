@@ -44,34 +44,48 @@ void S_DrehenClass::Think()
 {
 	counter++;
 
-	if (startTime + S_Drehen_Timer < millis() && ZielRichtung != 5 && ZielRichtung != 6)
+	switch (status)
 	{
-		ZielRichtung = 6;
+	case Running:
+		running();
+		break;
+	case Aborted:
+	case Error:
+	case Finished:
+		MotorSpeedL = 0;
+		MotorSpeedR = 0;
+		break;
+	default:
+		MotorSpeedL = 0;
+		MotorSpeedR = 0; 
+		Serial.println("ERROR: S_Drehen.Think(): Fehler in der StateMachine.");
+		break;
+	}	
+}
+
+void S_DrehenClass::running()
+{
+	if (startTime + S_Drehen_Timer < millis() && status == Running)
+	{
+		status = Error;
 		MotorSpeedL = 0;
 		MotorSpeedR = 0;
 
 		Serial.println("FAILURE: Drehen konnte nicht beendet werden. MaxTimer erreicht.");
 	}
-	
+
 	if (ZielRichtung < 5 && ZielRichtung > 0)
 	{
 		if (spectator->mpuFahrer.BerechneDrehen(ZielRichtung, spectator->mpu.GetYaw(), &MotorSpeedL, &MotorSpeedR))  // Drehen beendet
 		{
-			ZielRichtung = 5;
+			status = Finished;
+
+			Serial.println("S_Drehen.Think(): Drehen anscheinend beendet.");
 		}
 	}
-	else if(ZielRichtung == 5)
-	{
-		MotorSpeedL = 0;
-		MotorSpeedR = 0;
-		
-		Serial.println("S_Drehen.Think(): Drehen anscheinend beendet.");
-		ZielRichtung = 6;
-	}
-	else if (ZielRichtung != 6)
+	else
 	{
 		status = Error;
-		ZielRichtung = 6;
 		Serial.println("ERROR: S_Drehen.Think(): Falsche Drehrichtung angegeben.");
 	}
 }
