@@ -18,6 +18,8 @@ void S_GeradeAusClass::Init()
 	winkelKorrektur = 0;
 	encoderL = 0;
 	encoderR = 0;
+	straightCounter = 0;
+	turnCounter = 0;
 
 	speedL = S_GeradeAus_NormalSpeed * Direction;
 	speedR = S_GeradeAus_NormalSpeed * Direction;
@@ -100,33 +102,49 @@ void S_GeradeAusClass::Think()
 {
 	toggleState = !toggleState;
 
-	// Winkelkorrektur ermitteln
-	winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
-
-	int h = winkelKorrektur * S_GeradeAus_WinkelRatio;
-
-	/*Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
-	Serial.println(winkelKorrektur);*/
-	/*Serial.print("berechnete Korrekturmasnahme: ");
-	Serial.print(h);*/
-
-	/*adaptedSpeedL = capSpeed(speedL + h * Direction, S_GeradeAus_NormalSpeed, 70);
-	adaptedSpeedR = capSpeed(speedR - h * Direction, S_GeradeAus_NormalSpeed, 70);*/
-
-	if (winkelKorrektur > 0.01)
+	if (turnCounter > 0)
 	{
-		adaptedSpeedL = 250 * Direction;
-		adaptedSpeedR = 180 * Direction;
+		turnCounter--;
+		// The Motorspeed was set before.
+		Serial.println("S_GeradeAus.Think(): Verringere turnCounter.");
 	}
-	else if (winkelKorrektur < -0.01)
+	else if (straightCounter > 0)
 	{
-		adaptedSpeedL = 180 * Direction;
-		adaptedSpeedR = 250 * Direction;
+		straightCounter--;
+		adaptedSpeedL = S_GeradeAus_NormalSpeed * Direction;
+		adaptedSpeedR = S_GeradeAus_NormalSpeed * Direction;
+		Serial.println("S_GeradeAus.Think(): Verringere straightCounter.");
 	}
 	else
 	{
-		adaptedSpeedL = S_GeradeAus_NormalSpeed * Direction;
-		adaptedSpeedR = S_GeradeAus_NormalSpeed * Direction;
+
+		// Winkelkorrektur ermitteln
+		winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
+
+		winkelKorrektur += -verwerteSharp(spectator->sharplinksvorne.GetValue(), spectator->sharplinkshinten.GetValue());
+		winkelKorrektur += verwerteSharp(spectator->sharprechtsvorne.GetValue(), spectator->sharprechtshinten.GetValue());
+
+		/*Serial.print("momentan berechnete (MPU) Winkelkorrektur: ");
+		Serial.println(winkelKorrektur);*/
+
+		/*adaptedSpeedL = capSpeed(speedL + h * Direction, S_GeradeAus_NormalSpeed, 70);
+		adaptedSpeedR = capSpeed(speedR - h * Direction, S_GeradeAus_NormalSpeed, 70);*/
+
+		if (winkelKorrektur > 0.01)
+		{
+			adaptedSpeedL = 250 * Direction;
+			adaptedSpeedR = 180 * Direction;
+		}
+		else if (winkelKorrektur < -0.01)
+		{
+			adaptedSpeedL = 180 * Direction;
+			adaptedSpeedR = 250 * Direction;
+		}
+		else
+		{
+			adaptedSpeedL = S_GeradeAus_NormalSpeed * Direction;
+			adaptedSpeedR = S_GeradeAus_NormalSpeed * Direction;
+		}
 	}
 
 	//Stopp zeitpunkt ermitteln
@@ -148,6 +166,52 @@ void S_GeradeAusClass::Think()
 		status = Finished;
 
 		Serial.println("S_GeradeAus.Think(): Felddurchquerung beendet.");
+	}
+}
+
+/*Gibt eine Winkelkorrektur an. Pos: zur Wand hin, neg von der jeweiligen Wand weg.*/
+float S_GeradeAusClass::verwerteSharp(int Vorne, int Hinten)
+{
+	if (Vorne < 150 || Hinten < 150)  // zu weit weg von den Wänden, keine Korrektur möglich
+	{
+		return 0;
+	}
+	else if (Vorne < 280 || Hinten < 280)  // zu weit aber in korrigierabstand.
+	{
+		return 0.1;
+	}
+	else if (Vorne > 640|| Hinten > 640)  // zu nah an der Wand drehe davon weg.
+	{
+		turnCounter = 5;
+		straightCounter = 5;
+		Serial.println("S_GeradeAus.Think(): Sharp melden deutliche Nähe zur Wand, korrigiere...");
+		return -0.15;
+	}
+	else if (Vorne > 420 || Hinten > 420)   // zu nah aber noch nicht so nah das gerade aus gefahren werden muss.
+	{
+		Serial.println("S_GeradeAus.Think(): Sharp melden etwas Nähe zur Wand, korrigiere...");
+		return -0.07;
+	}
+	else
+	{
+		int differenz = Hinten - Vorne;  // positiv wenn hinten näher an wand als vorne.
+		
+		if (abs(differenz) < 25)
+		{
+			return 0;
+		}
+		else if (differenz > 0)
+		{
+			Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
+			return 0.05;
+		}
+		else if (differenz < 0)
+		{
+			Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
+			return -0.05;
+		}
+
+		return 0;
 	}
 }
 
