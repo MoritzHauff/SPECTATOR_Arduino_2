@@ -81,6 +81,10 @@ class SPECMotorenClass
 	/*Dreht den rechten RescueMotor um die Anzahl an Umdrehungen.*/
 	void StepR(float Revolutions);
 	
+	/*Begrenzt das absolut Wert Value auf maximal Upper and minimal 
+	Lower sowohl im positiven als auch negativen Bereich.*/
+	int CapSpeed(int Value, int Upper, int Lower);
+
 };
 
 #endif

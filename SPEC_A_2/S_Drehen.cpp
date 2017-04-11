@@ -88,16 +88,7 @@ void S_DrehenClass::running()
 		{
 			int motorspeed = (int)(winkelAbstand * S_Drehen_MotorSteigung) + S_Drehen_MinSpeed;   // todo: insert a convenient function   // 360
 
-			if (motorspeed > 0)
-			{
-				motorspeed = min(motorspeed, S_Drehen_MaxSpeed); // cap at 180
-				motorspeed = max(motorspeed, S_Drehen_MinSpeed);  // below 60 the motors wont turn.
-			}
-			if (motorspeed < 0)
-			{
-				motorspeed = max(motorspeed, -S_Drehen_MaxSpeed); // cap at 180
-				motorspeed = min(motorspeed, -S_Drehen_MinSpeed);  // below 60 the motors wont turn.   // todo cap mit der zeit erhöhen wenn er sich nicht mehr dreht.
-			}
+			motorspeed = spectator->Motoren.CapSpeed(motorspeed, S_Drehen_MaxSpeed, S_Drehen_MinSpeed);
 
 			MotorSpeedL = motorspeed;
 			MotorSpeedR = -motorspeed;

@@ -263,22 +263,6 @@ void S_GeradeAusClass::ShiftTimers(unsigned long ShiftAmount)
 	startTime += ShiftAmount;
 }
 
-int S_GeradeAusClass::capSpeed(int Value, int Upper, int Lower)
-{
-	if (Value > 0)
-	{
-		Value = min(Value, Upper);
-		Value = max(Value, Lower);
-	}
-	else
-	{
-		Value = min(Value, -Lower);
-		Value = max(Value, -Upper);
-	}
-
-	return Value;
-}
-
 /*Führt die nötigen Messungen durch um die aktuelle Wandkategorie zu ermitteln und gibt diese zurück.*/
 byte S_GeradeAusClass::ermittleStartWandKategorie()
 {
