@@ -70,7 +70,6 @@ class S_GeradeAusClass : public StateClass
 	 int stoppWahrscheinlichkeit;  // wie stark die momentanen Informationen dafür sprechen anzuhalten.
 	 float winkelKorrektur;
 
-	 int capSpeed(int Value, int Upper, int Lower);
 	 int encoderL, encoderR;
 
 	 byte ermittleStartWandKategorie();

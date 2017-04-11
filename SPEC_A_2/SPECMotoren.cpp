@@ -223,3 +223,19 @@ void SPECMotorenClass::StepR(float Revolutions)
 {
 	stepperR->step(STEPS*Revolutions);
 }
+
+int SPECMotorenClass::CapSpeed(int Value, int Upper, int Lower)
+{
+	if (Value > 0)
+	{
+		Value = min(Value, Upper);
+		Value = max(Value, Lower);
+	}
+	else
+	{
+		Value = min(Value, -Lower);
+		Value = max(Value, -Upper);
+	}
+
+	return Value;
+}
