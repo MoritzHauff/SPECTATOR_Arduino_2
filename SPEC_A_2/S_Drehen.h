@@ -51,6 +51,9 @@ class S_DrehenClass : public StateClass
 	 int MotorSpeedL;
 	 int MotorSpeedR;
 
+	 /*Führt alle Aktionen während dem normalen Drehen durch.*/
+	 void running();
+
  public:
 	 S_DrehenClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
 	 { }
