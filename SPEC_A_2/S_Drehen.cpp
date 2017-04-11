@@ -76,11 +76,31 @@ void S_DrehenClass::running()
 
 	if (ZielRichtung < 5 && ZielRichtung > 0)
 	{
-		if (spectator->mpuFahrer.BerechneDrehen(ZielRichtung, spectator->mpu.GetYaw(), &MotorSpeedL, &MotorSpeedR))  // Drehen beendet
+		float winkelAbstand = spectator->mpuFahrer.GetWinkelAbstand(ZielRichtung, spectator->mpu.GetYaw());
+		
+		if (abs(winkelAbstand) <= 0.01)  // stopp-toleranz   // 0.1 = 5,7°
 		{
 			status = Finished;
 
 			Serial.println("S_Drehen.Think(): Drehen anscheinend beendet.");
+		}
+		else
+		{
+			int motorspeed = (int)(winkelAbstand * S_Drehen_MotorSteigung) + S_Drehen_MinSpeed;   // todo: insert a convenient function   // 360
+
+			if (motorspeed > 0)
+			{
+				motorspeed = min(motorspeed, S_Drehen_MaxSpeed); // cap at 180
+				motorspeed = max(motorspeed, S_Drehen_MinSpeed);  // below 60 the motors wont turn.
+			}
+			if (motorspeed < 0)
+			{
+				motorspeed = max(motorspeed, -S_Drehen_MaxSpeed); // cap at 180
+				motorspeed = min(motorspeed, -S_Drehen_MinSpeed);  // below 60 the motors wont turn.   // todo cap mit der zeit erhöhen wenn er sich nicht mehr dreht.
+			}
+
+			MotorSpeedL = motorspeed;
+			MotorSpeedR = -motorspeed;
 		}
 	}
 	else

@@ -68,51 +68,6 @@ MPUFahrerClass::MPUFahrerClass()
 
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
-bool MPUFahrerClass::BerechneDrehen(byte ZielRichtung, float aktYaw, int *motorSpeedL, int *motorSpeedR)  // todo: notfall timer wenn er festhängt.   // todo: nur korrektur anweisungen zurückgeben (+/- Geschwindigkeit -> rechts/lnks drehen) einheitlich zu berechne vorwärts
-{
-	float zielWinkel = orientierungswinkel[ZielRichtung];
-
-	float winkelAbstand = minWinkelAbstand(aktYaw, zielWinkel);
-
-	if (abs(winkelAbstand) <= 0.01)  // stopp-toleranz   // 0.1 = 5,7°
-	{
-		*motorSpeedL = 0;
-		*motorSpeedR = 0;
-
-		return true; // true wenn drehen abgeschlossen
-	}
-																																														//int winkelabstand = minWinkelAbstand(aktYaw, zielWinkel);
-	int motorspeed = (int)(winkelAbstand * 400);   // todo: insert a convenient function   // 360
-	if(motorspeed > 0)
-    {
-        motorspeed = min(motorspeed, 180); // cap at 180
-        motorspeed = max(motorspeed, 70);  // below 60 the motors wont turn.
-    }
-	if(motorspeed < 0)
-    {
-        motorspeed = max(motorspeed, -180); // cap at 180
-        motorspeed = min(motorspeed, -70);  // below 60 the motors wont turn.   // todo cap mit der zeit erhöhen wenn er sich nicht mehr dreht.
-    }
-
-
-	/*else if (winkelabstand < 0)
-	{
-		*motorSpeedL = -motorspeed;
-		*motorSpeedR = motorspeed;
-	}
-	else if (winkelabstand > 0)
-	{
-		*motorSpeedL = motorspeed;
-		*motorSpeedR = -motorspeed;   // should be done automaticall in minWinkelAbstand
-	}*/
-
-    *motorSpeedL = motorspeed;
-    *motorSpeedR = -motorspeed;
-
-	return false;
-}
-
-
 float MPUFahrerClass::GetWinkelAbstand(byte ZielRichtung, float aktYaw)
 {
 	float zielWinkel = orientierungswinkel[ZielRichtung];
