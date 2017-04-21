@@ -33,6 +33,10 @@ void S_TeleOpClass::Sense()
 
 	spectator->UpdateMPU();
 
+	spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
+
+	spectator->UpdateLDR();
+
 	spectator->UpdateSwitches();
 
 	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.

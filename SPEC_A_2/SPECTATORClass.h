@@ -12,6 +12,7 @@
 #endif
 
 #include "DigitalIO.h"
+#include "LDR.h"
 #include "SharpIR.h"
 #include "HCSr04.h"
 #include "MPU.h"
@@ -58,10 +59,14 @@ class SPECTATORClass
 
 	void UpdateEncoder();
 
+	void UpdateLDR();
+
 	LEDClass HeartbeatLED = LEDClass(DP13);
 
-	DigitalIOClass switchLinks = DigitalIOClass(DP51, INPUT); // todo: PascalCase
-	DigitalIOClass switchRechts = DigitalIOClass(DP53, INPUT);
+	DigitalIOClass switchLinks = DigitalIOClass(DP53, INPUT); // todo: PascalCase
+	DigitalIOClass switchRechts = DigitalIOClass(DP51, INPUT);
+
+	LDR ldr = LDR(A11);
 
 	SharpIR sharplinksvorne = SharpIR(A12, SHARPMEASUREMTS);
 	SharpIR sharplinkshinten = SharpIR(A13, SHARPMEASUREMTS);
