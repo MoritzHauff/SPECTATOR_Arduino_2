@@ -1,7 +1,7 @@
-// S_Sense.h - Moritz Hauff - 21.04.2017
+// S_Idle.h - Moritz Hauff - 21.04.2017
 
-#ifndef _S_SENSE_h
-#define _S_SENSE_h
+#ifndef _S_IDLE_h
+#define _S_IDLE_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -14,19 +14,19 @@
 #include "State.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Konstanten
-const int S_Sense_NumberOfTicks = 5;
+///State-Class
+const int S_Idle_NumberOfTicks = 20;
 
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
-/*Dieser State erfasst nach jeder Aktion das aktuelle Feld.*/
-class S_SenseClass : public StateClass
+/*Dieser State aktualisiert nur das MPU damit es zu keinem BufferOverflow kommt.*/
+class S_IdleClass : public StateClass
 {
 protected:
 	int counter;
 
 public:
-	S_SenseClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
+	S_IdleClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
 	{ }
 
 	void Init();

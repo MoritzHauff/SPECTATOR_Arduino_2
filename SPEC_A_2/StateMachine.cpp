@@ -15,15 +15,14 @@
 StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 {
 	spectator = Spectator;
-	// todo: curentState = Idle;
 
+	s_Idle = new S_IdleClass(spectator, "Idle");
 	s_TeleOp = new S_TeleOpClass(spectator, "TeleOp");
 	s_Drehen = new S_DrehenClass(spectator, "Drehen");
 	s_CoffeeBreak = new S_CoffeeBreakClass(spectator, "CoffeeBreak");
 	s_Calibrate = new S_CalibrateClass(spectator, "Calibrate");
 	s_GeradeAus = new S_GeradeAusClass(spectator, "GeradeAus");
 	s_Sense = new S_SenseClass(spectator, "Sense");
-
 	
 	currentState = 0;
 
@@ -32,7 +31,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 
 void StateMachineClass::Init()
 {
-	changeState(s_TeleOp);
+	changeState(s_Idle);
 	s_TeleOp->MotorSpeedL = 0;
 	s_TeleOp->MotorSpeedR = 0;
 }
@@ -47,6 +46,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_Calibrate;
 	delete s_GeradeAus;
 	delete s_Sense;
+	delete s_Idle;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -143,6 +143,10 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	{
 		resumeState(s_CoffeeBreak->LastState, s_CoffeeBreak->GetTimerShiftAmount());
 	}
+	if (msg[0] == C_TELEOPSTART && msg[1] == 'I' && msg[2] == 'D' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
+	{
+		changeState(s_Idle);
+	}
 	if (msg[0] == C_TELEOPSTART && msg[1] == 'C' && msg[2] == 'A' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
 	{
 		changeState(s_Calibrate);
@@ -207,9 +211,13 @@ void StateMachineClass::changeState(StateClass *NextState)
 	}
 
 	// Zurücksetzen aller Timer und Umgebungsvariablen beim neustarten eines Modus.
-	if (currentState == s_TeleOp)
+	if (currentState == s_Idle)
 	{
-		s_TeleOp->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
+		s_Idle->Init();  // mit currentState werden die Variablen nicht korrekt initialisiert.
+	}
+	else if (currentState == s_TeleOp)
+	{
+		s_TeleOp->Init();
 	}
 	else if (currentState == s_Drehen)
 	{
@@ -239,7 +247,11 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 	{
 		currentState = NextState;
 
-		if (currentState == s_TeleOp)
+		if (currentState == s_Idle)
+		{
+			s_Idle->ShiftTimers(TimerShiftAmount);
+		}
+		else if (currentState == s_TeleOp)
 		{
 			s_TeleOp->ShiftTimers(TimerShiftAmount);
 		}
@@ -275,9 +287,13 @@ void StateMachineClass::DoAction()
 		Serial.print("Finished Last State: ");
 		Serial.println(currentState->GetName());
 
-		changeState(s_TeleOp); // todo: Should be s_Idle.
-		s_TeleOp->MotorSpeedL = 0;
-		s_TeleOp->MotorSpeedL = 0;
+		changeState(s_Idle);
+	}
+	else if (currentState == s_Idle)
+	{
+		s_Idle->Sense();   
+		s_Idle->Think();
+		s_Idle->Act();
 	}
 	else if (currentState == s_TeleOp) 
 	{

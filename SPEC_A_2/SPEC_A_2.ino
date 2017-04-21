@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "S_Idle.h"
 #include "S_Sense.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"

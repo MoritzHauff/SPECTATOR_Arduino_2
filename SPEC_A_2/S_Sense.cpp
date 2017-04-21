@@ -1,7 +1,7 @@
 /** S_Sense.cpp
 ***
 *** Dieser State erfasst nach jeder Aktion das aktuelle Feld und 
-*** beendet sich nach 10 Ticks wieder.
+*** beendet sich nach 5 Ticks wieder.
 ***
 *** Moritz Hauff, 21.04.2017
 **/
