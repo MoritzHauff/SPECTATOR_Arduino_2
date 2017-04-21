@@ -12,7 +12,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_GeradeAus.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
 

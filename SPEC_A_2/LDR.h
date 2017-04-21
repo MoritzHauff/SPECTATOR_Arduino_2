@@ -1,9 +1,4 @@
-/** S_TeleOp.cpp
-***
-*** Beschreibt den StandardFahrmodus.
-***
-*** Moritz Hauff, 18.03.2017
-**/
+// LDR.h - Moritz Hauff - 21.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -27,61 +22,40 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
+#ifndef LDR_h
+#define LDR_h
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_TeleOp.h"
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
 ///////////////////////////////////////////////////////////////////////////
-///Konstruktoren
-void S_TeleOpClass::Init()
+///SPECMotorenClass
+/*Verwaltet einen Helligkeitssensor.*/
+class LDR
 {
-	toggleState = false;
-}
+private:
+	uint8_t _LDR_Pin;
+	int _lastValue;
 
-///////////////////////////////////////////////////////////////////////////
-///Functions
-void S_TeleOpClass::Sense()
-{
-	spectator->UpdateSharp();
+public:
 
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		spectator->UpdateMLX();
-	}
-	else
-	{
-		spectator->UpdateLaser();
-	}
+	LDR(uint8_t LDR_Pin);
+	
+	/*Setzt die richtigen PinModes und ermöglicht somit eine Messung.*/
+	void Init();
 
-	spectator->UpdateMPU();
+	/*Gibt den aktuellen Wert des LDR zurück.*/
+	int GetValue();
 
-	spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
+	/*Führt eine einzelne Messung durch.*/
+	void Update();
 
-	spectator->UpdateLDR();
 
-	spectator->UpdateSwitches();
+};
 
-	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.
-	spectator->UpdateHCSr04VorneHinten();
-
-	spectator->UpdateEncoder();
-
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
-}
-
-void S_TeleOpClass::Think()
-{
-	toggleState = !toggleState;
-	/*Serial.print("ToggleState: ");
-	Serial.println(toggleState);*/
-}
-
-void S_TeleOpClass::Act()
-{
-	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-
-	//Serial.println("Motorspeed gesetzt");
-
-	spectator->HeartbeatLED.Toggle();
-}
+#endif

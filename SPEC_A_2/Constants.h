@@ -39,6 +39,8 @@
 #define C_MSGEND 0x04
 #define C_MSGSEPARATOR 0x05
 
+#define C_LDR 0x20
+
 #define C_MLXLinks 0x21
 #define C_MLXVorne 0x22
 #define C_MLXRechts 0x23

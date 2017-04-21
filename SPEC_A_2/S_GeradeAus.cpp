@@ -98,6 +98,8 @@ void S_GeradeAusClass::Sense()
 	spectator->serialBuffer.Flush();
 	//spectator->serialBuffer.Clear();    // Alle Sensornachrichten auf einmal sind zu lang für den SerialBuffer.
 
+	spectator->UpdateLDR();
+
 	spectator->UpdateHCSr04VorneHinten();
 
 	spectator->UpdateEncoder();

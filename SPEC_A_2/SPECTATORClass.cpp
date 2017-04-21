@@ -70,6 +70,8 @@ void SPECTATORClass::Init()
 	switchLinks.Init();
 	switchRechts.Init();
 
+	ldr.Init();
+
 	// ultrasonic-distance-sensors
 	ultraschallLinks.Init();
 	ultraschallVorne.Init();
@@ -120,6 +122,13 @@ void SPECTATORClass::UpdateSwitches()  // 128 us
 
 	serialBuffer.AddMsg(C_SwitchLinks, switchLinks.GetLastState());
 	serialBuffer.AddMsg(C_SwitchRechts, switchRechts.GetLastState());
+}
+
+void SPECTATORClass::UpdateLDR()
+{
+	ldr.Update();
+
+	serialBuffer.AddMsg(C_LDR, ldr.GetValue());
 }
 
 void SPECTATORClass::UpdateSharp()

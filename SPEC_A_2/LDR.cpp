@@ -1,8 +1,8 @@
-/** S_TeleOp.cpp
+/** LDR.cpp
 ***
-*** Beschreibt den StandardFahrmodus.
+*** Verwaltet einen Helligkeitssensor.
 ***
-*** Moritz Hauff, 18.03.2017
+*** Moritz Hauff - 21.04.2017
 **/
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,59 +29,28 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "S_TeleOp.h"
+#include "LDR.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstruktoren
-void S_TeleOpClass::Init()
+LDR::LDR(uint8_t LDR_Pin)
 {
-	toggleState = false;
+	_LDR_Pin = LDR_Pin;
+}
+
+void LDR::Init()
+{
+	pinMode(_LDR_Pin, INPUT);
 }
 
 ///////////////////////////////////////////////////////////////////////////
-///Functions
-void S_TeleOpClass::Sense()
+///Funktionen
+int LDR::GetValue()
 {
-	spectator->UpdateSharp();
-
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
-	{
-		spectator->UpdateMLX();
-	}
-	else
-	{
-		spectator->UpdateLaser();
-	}
-
-	spectator->UpdateMPU();
-
-	spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
-
-	spectator->UpdateLDR();
-
-	spectator->UpdateSwitches();
-
-	//spectator->UpdateHCSr04Seitlich(); // this should not be done always becaue the method is blocking.
-	spectator->UpdateHCSr04VorneHinten();
-
-	spectator->UpdateEncoder();
-
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	return _lastValue;
 }
 
-void S_TeleOpClass::Think()
+void LDR::Update()
 {
-	toggleState = !toggleState;
-	/*Serial.print("ToggleState: ");
-	Serial.println(toggleState);*/
-}
-
-void S_TeleOpClass::Act()
-{
-	spectator->Motoren.SetMotoren(MotorSpeedL, MotorSpeedR);
-
-	//Serial.println("Motorspeed gesetzt");
-
-	spectator->HeartbeatLED.Toggle();
+	_lastValue = analogRead(_LDR_Pin);  // todo use a faster function ?
 }
