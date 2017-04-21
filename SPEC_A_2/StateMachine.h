@@ -42,6 +42,7 @@
 #include "S_Calibrate.h"
 #include "S_GeradeAus.h"
 #include "S_Sense.h"
+#include "S_Idle.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -56,6 +57,7 @@ class StateMachineClass
  protected:
 	 SPECTATORClass *spectator;
 
+	 S_IdleClass *s_Idle;
 	 S_TeleOpClass *s_TeleOp;
 	 S_DrehenClass *s_Drehen;
 	 S_CoffeeBreakClass *s_CoffeeBreak;

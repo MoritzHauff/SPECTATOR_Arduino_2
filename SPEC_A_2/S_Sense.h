@@ -1,4 +1,4 @@
-// S_GeradeAus.h - Moritz Hauff - 06.04.2017
+// S_Sense.h - Moritz Hauff - 21.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
