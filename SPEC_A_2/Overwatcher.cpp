@@ -25,7 +25,7 @@ void OverwatcherClass::Init(StateMachineClass *StateMachine)
 	
 	stateMachine = StateMachine;
 
-	stateMachine->SendDirectCommand("bCALe");  // Testbefehl (Kalibrierung) an StateMachine senden.
+	//stateMachine->SendDirectCommand("bCALe");  // Testbefehl (Kalibrierung) an StateMachine senden.
 }
 
 ///////////////////////////////////////////////////////////////////////////
