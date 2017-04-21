@@ -44,6 +44,8 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_CoffeeBreak = new S_CoffeeBreakClass(spectator, "CoffeeBreak");
 	s_Calibrate = new S_CalibrateClass(spectator, "Calibrate");
 	s_GeradeAus = new S_GeradeAusClass(spectator, "GeradeAus");
+	s_Sense = new S_SenseClass(spectator, "Sense");
+
 	
 	currentState = 0;
 
@@ -66,6 +68,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_CoffeeBreak;
 	delete s_Calibrate;
 	delete s_GeradeAus;
+	delete s_Sense;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -166,6 +169,10 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	{
 		changeState(s_Calibrate);
 	}
+	if (msg[0] == C_TELEOPSTART && msg[1] == 'S' && msg[2] == 'E' && msg[3] == 'N' && msg[4] == C_TELEOPSTOP)
+	{
+		changeState(s_Sense);
+	}
 	if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{
 		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);
@@ -242,6 +249,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_GeradeAus->Init();
 	}
+	else if (currentState == s_Sense)
+	{
+		s_Sense->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -266,6 +277,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		{
 			s_GeradeAus->ShiftTimers(TimerShiftAmount);
 		}
+		else if (currentState == s_Sense)
+		{
+			s_Sense->ShiftTimers(TimerShiftAmount);
+		}
 
 		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein.
 
@@ -279,6 +294,9 @@ void StateMachineClass::DoAction()
 
 	if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
 	{
+		Serial.print("Finished Last State: ");
+		Serial.println(currentState->GetName());
+
 		changeState(s_TeleOp); // todo: Should be s_Idle.
 		s_TeleOp->MotorSpeedL = 0;
 		s_TeleOp->MotorSpeedL = 0;
@@ -322,6 +340,12 @@ void StateMachineClass::DoAction()
 		s_GeradeAus->Sense();
 		s_GeradeAus->Think();
 		s_GeradeAus->Act();
+	}
+	else if (currentState == s_Sense)
+	{
+		s_Sense->Sense();
+		s_Sense->Think();
+		s_Sense->Act();
 	}
 }
 

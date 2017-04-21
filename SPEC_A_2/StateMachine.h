@@ -41,6 +41,7 @@
 #include "S_CoffeeBreak.h"
 #include "S_Calibrate.h"
 #include "S_GeradeAus.h"
+#include "S_Sense.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -60,6 +61,7 @@ class StateMachineClass
 	 S_CoffeeBreakClass *s_CoffeeBreak;
 	 S_CalibrateClass *s_Calibrate;
 	 S_GeradeAusClass *s_GeradeAus;
+	 S_SenseClass *s_Sense;
 
 	 StateClass *currentState;
 
