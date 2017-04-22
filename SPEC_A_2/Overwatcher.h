@@ -41,12 +41,14 @@
 /*Diese Klasse überwacht den globalen Zustand und einzelne Aktionen. Dazu 
 sammelt sie die Fehlermeldungen der einzelnen Komponenten und greift gegebenfalls 
 mit Recover-Funktionen in das Geschehen ein.*/
-class OverwatcherClass
+class OverwatcherClass  
 {
  protected:
 	 StateMachineClass *stateMachine;
 
 	 int actions;   // beeinhalt die seit dem ArduinoStart durchgeführte Aktionen.
+
+	 static void ErrorHandler(String Msg);   // you need static for the function pointer
 
  public:
 	 void Init(StateMachineClass *StateMachine);

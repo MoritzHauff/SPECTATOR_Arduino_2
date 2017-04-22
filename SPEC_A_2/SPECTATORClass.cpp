@@ -227,28 +227,28 @@ bool SPECTATORClass::GetWand(byte Direction)
 {
 	if (Direction == R_VORNE)
 	{
-		if (ultraschallVorne.GetDistance() < 8)
+		if (ultraschallVorne.GetDistance() < 26)
 		{
 			return true;
 		}
 	}
 	if (Direction == R_RECHTS)
 	{
-		if (ultraschallRechts.GetDistance() < 8)
+		if (ultraschallRechts.GetDistance() < 26)
 		{
 			return true;
 		}
 	}
 	if (Direction == R_HINTEN)
 	{
-		if (ultraschallHinten.GetDistance() < 8)
+		if (ultraschallHinten.GetDistance() < 26)
 		{
 			return true;
 		}
 	}
 	if (Direction == R_LINKS)
 	{
-		if (ultraschallLinks.GetDistance() < 8)
+		if (ultraschallLinks.GetDistance() < 26)
 		{
 			return true;
 		}
