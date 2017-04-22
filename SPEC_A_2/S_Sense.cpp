@@ -27,7 +27,7 @@ void S_SenseClass::Sense()
 
 	spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
 
-	spectator->UpdateLaser();
+	//spectator->UpdateLaser();
 
 	spectator->UpdateMPU();
 

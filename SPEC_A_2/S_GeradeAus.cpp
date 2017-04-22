@@ -186,12 +186,12 @@ float S_GeradeAusClass::verwerteSharp(int Vorne, int Hinten)
 	{
 		turnCounter = 5;
 		straightCounter = 5;
-		Serial.println("S_GeradeAus.Think(): Sharp melden deutliche Nähe zur Wand, korrigiere...");
+		//Serial.println("S_GeradeAus.Think(): Sharp melden deutliche Naehe zur Wand, korrigiere...");
 		return -0.15;
 	}
 	else if (Vorne > 420 || Hinten > 420)   // zu nah aber noch nicht so nah das gerade aus gefahren werden muss.
 	{
-		Serial.println("S_GeradeAus.Think(): Sharp melden etwas Nähe zur Wand, korrigiere...");
+		//Serial.println("S_GeradeAus.Think(): Sharp melden etwas Naehe zur Wand, korrigiere...");
 		return -0.07;
 	}
 	else
@@ -204,12 +204,12 @@ float S_GeradeAusClass::verwerteSharp(int Vorne, int Hinten)
 		}
 		else if (differenz > 0)
 		{
-			Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
+			//Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
 			return 0.05;
 		}
 		else if (differenz < 0)
 		{
-			Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
+			//Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
 			return -0.05;
 		}
 
