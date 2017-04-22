@@ -38,6 +38,20 @@ void S_IdleClass::Init()
 	status = Running;
 	counter = 0;
 
+	spectator->serialBuffer.AddMsg(C_WandVorne, spectator->GetWand(R_VORNE));
+	spectator->serialBuffer.AddMsg(C_WandRechts, spectator->GetWand(R_RECHTS));
+	spectator->serialBuffer.AddMsg(C_WandHinten, spectator->GetWand(R_HINTEN));
+	spectator->serialBuffer.AddMsg(C_WandLinks, spectator->GetWand(R_LINKS));
+	spectator->serialBuffer.AddMsg(C_OpferLinks, false);
+	spectator->serialBuffer.AddMsg(C_OpferVorne, false);
+	spectator->serialBuffer.AddMsg(C_OpferRechts, false);
+	spectator->serialBuffer.Flush();
+
+	spectator->serialBuffer.AddMsg(C_AktuelleRichtung, spectator->AktRichtung);
+	spectator->serialBuffer.AddMsg(C_GeradeRampeBefahren, spectator->GeradeRampeBefahren);
+	spectator->serialBuffer.AddMsg(C_GeradeSchwarzesFeldBefahren, spectator->GeradeSchwarzesFeldBefahren);
+	spectator->serialBuffer.Flush();
+
 	Serial.println("DemandNextStep");
 }
 

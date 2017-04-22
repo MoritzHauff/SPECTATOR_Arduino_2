@@ -104,6 +104,8 @@ class MPUFahrerClass
 
 	 /*Konvertiert 'n', 'o', 's', 'w' in die entsprechende byte-Richtung für die Berechnunsfunktionen.*/
 	 byte CharToRichtung(char c);
+	 /*Konvertiert die entsprechende byte-Richtung für die Berechnunsfunktionen in 'n', 'o', 's', 'w'.*/
+	 char RichtungToChar(byte Richtung);
 };
 
 #endif
