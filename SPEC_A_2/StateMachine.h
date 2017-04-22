@@ -79,6 +79,8 @@ class StateMachineClass
 	 /*Führt einen in die KaffeePause gegangenen State fort. Dabei wird dieser nicht initialisiert
 	 und damit die Variablen nicht verändert.*/  // todo: achtung timer!
 	 void resumeState(StateClass *State, unsigned long TimerShiftAmount);
+	 /*Kontrolliert ob der aktuelle State fertig ist und wechselt ihn gegebenenfalls.*/
+	 void checkStates();
 
 	 //Hilfsfunktionen
 	 /*Gibt bei '+' 1, '-' -1 und sonst 0 zurück.*/

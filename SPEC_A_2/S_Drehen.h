@@ -52,6 +52,7 @@ class S_DrehenClass : public StateClass
  protected:
 	 unsigned long startTime;
 	 int counter;
+	 int finishedCounter;
 
 	 int MotorSpeedL;
 	 int MotorSpeedR;

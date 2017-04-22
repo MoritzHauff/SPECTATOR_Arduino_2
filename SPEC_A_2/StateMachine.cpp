@@ -301,24 +301,23 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 	}
 }
 
-void StateMachineClass::DoAction()
+void StateMachineClass::checkStates()
 {
-	handleSerial();
-
-	if (currentState->GetStatus() == Finished && currentState == s_Drehen)
+	if (currentState->GetStatus() == Finished)
 	{
 		Serial.print("Finished Last State: ");
 		Serial.println(currentState->GetName());
+	}
 
+	if (currentState->GetStatus() == Finished && currentState == s_Drehen)
+	{
 		changeState(s_Sense);  // Nach jedem Drehen automatisch Feld erfassen
 	}
 	else if (currentState->GetStatus() == Finished && currentState == s_GeradeAus)
 	{
-		Serial.print("Finished Last State: ");
-		Serial.println(currentState->GetName());
-
 		changeState(s_Drehen);  // Nach jedem geradeaus fahren automatisch drehen
-		s_Drehen->ZielRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
+		//s_Drehen->ZielRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
+		// solange kein neuer Befehl vom RaPi kommt sollte die richtung noch passen.                                                                                          
 	}
 	else if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
 	{
@@ -327,7 +326,16 @@ void StateMachineClass::DoAction()
 
 		changeState(s_Idle);
 	}
-	else if (currentState == s_Idle)
+}
+
+void StateMachineClass::DoAction()
+{
+	handleSerial();
+
+	checkStates();
+
+	// Do the real Action.
+	if (currentState == s_Idle)
 	{
 		s_Idle->Sense();   
 		s_Idle->Think();
