@@ -187,6 +187,7 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 				else
 				{
 					s_Drehen->ZielRichtung = spectator->mpuFahrer.CharToRichtung(msg[2]);
+					spectator->AktRichtung = s_Drehen->ZielRichtung;
 				}
 			}
 		}
@@ -287,9 +288,9 @@ void StateMachineClass::checkStates()
 		Serial.println(currentState->GetName());
 	}
 
-	if (currentState->GetStatus() == Finished && currentState == s_Drehen)
+	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle))
 	{
-		changeState(s_Sense);  // Nach jedem Drehen automatisch Feld erfassen
+		changeState(s_Sense);  // Nach jedem Drehen oder längere Pause automatisch Feld erfassen
 	}
 	else if (currentState->GetStatus() == Finished && currentState == s_GeradeAus)
 	{
@@ -299,9 +300,6 @@ void StateMachineClass::checkStates()
 	}
 	else if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
 	{
-		Serial.print("Finished Last State: ");
-		Serial.println(currentState->GetName());
-
 		changeState(s_Idle);
 	}
 }

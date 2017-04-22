@@ -31,6 +31,11 @@
 ///Constants
 const uint8_t SHARPMEASUREMTS = 8;   // acht sharp-Messungen an einem Sensor dauern genau 940 us. Diese reium an allen würden damit 4 ms dauern.
 
+#define R_VORNE 1
+#define R_RECHTS 2
+#define R_HINTEN 3
+#define R_LINKS 4 
+
 ///////////////////////////////////////////////////////////////////////////
 ///SPECTATORClass
 /*Hier laufen alle anderen benötigten Instanzen und die dazugehörigen 
@@ -60,6 +65,8 @@ class SPECTATORClass
 	void UpdateEncoder();
 
 	void UpdateLDR();
+
+	bool GetWand(byte Direction);
 
 	LEDClass HeartbeatLED = LEDClass(DP13);
 
@@ -92,6 +99,10 @@ class SPECTATORClass
 
 	SerialBuffer serialBuffer = SerialBuffer();
 	MPUFahrerClass mpuFahrer = MPUFahrerClass();
+
+	byte AktRichtung;
+	bool GeradeSchwarzesFeldBefahren;
+	bool GeradeRampeBefahren;
 
 };
 

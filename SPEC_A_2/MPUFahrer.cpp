@@ -204,6 +204,31 @@ byte MPUFahrerClass::CharToRichtung(char c)
 	}
 }
 
+char MPUFahrerClass::RichtungToChar(byte Richtung)
+{
+	if (Richtung == R_NORDEN)
+	{
+		return 'n';
+	}
+	if (Richtung == R_OSTEN)
+	{
+		return 'o';
+	}
+	if (Richtung == R_SUEDEN)
+	{
+		return 's';
+	}
+	if (Richtung == R_WESTEN)
+	{
+		return 'w';
+	}
+	else
+	{
+		// todo: Fehlerausgabe
+		return '5';
+	}
+}
+
 byte MPUFahrerClass::CalculateRichtung(float aktYaw)
 {
 	byte richtung = R_NORDEN;

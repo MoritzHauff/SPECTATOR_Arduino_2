@@ -43,6 +43,11 @@ static void ISRER()  // call-back method for the right-wheel-encoder
 ///Konstruktoren 
 void SPECTATORClass::Init()
 {
+	// Globale Variablen
+	AktRichtung = R_NORDEN;
+	GeradeSchwarzesFeldBefahren = false;
+	GeradeRampeBefahren = false;
+
 	// Digital Pins
 	HeartbeatLED.Init();
 	switchLinks.Init();
@@ -194,4 +199,38 @@ void SPECTATORClass::UpdateEncoder()
 
 	serialBuffer.AddMsg(C_EncoderRC, encoderInfo.CountsSinceLastTick);
 	serialBuffer.AddMsg(C_EncoderRT, encoderInfo.MillisSinceLastTick);
+}
+
+bool SPECTATORClass::GetWand(byte Direction)
+{
+	if (Direction == R_VORNE)
+	{
+		if (ultraschallVorne.GetDistance() < 8)
+		{
+			return true;
+		}
+	}
+	if (Direction == R_RECHTS)
+	{
+		if (ultraschallRechts.GetDistance() < 8)
+		{
+			return true;
+		}
+	}
+	if (Direction == R_HINTEN)
+	{
+		if (ultraschallHinten.GetDistance() < 8)
+		{
+			return true;
+		}
+	}
+	if (Direction == R_LINKS)
+	{
+		if (ultraschallLinks.GetDistance() < 8)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

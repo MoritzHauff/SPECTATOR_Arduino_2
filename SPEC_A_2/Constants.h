@@ -47,4 +47,15 @@
 #define C_EncoderRC 0x40
 #define C_EncoderRT 0x41
 
+#define C_WandLinks 0x50
+#define C_WandVorne 0x51
+#define C_WandRechts 0x52
+#define C_WandHinten 0x53
+#define C_OpferLinks 0x54
+#define C_OpferVorne 0x55
+#define C_OpferRechts 0x56
+#define C_AktuelleRichtung 0x57
+#define C_GeradeSchwarzesFeldBefahren 0x58
+#define C_GeradeRampeBefahren 0x59
+
 #endif
