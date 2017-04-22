@@ -1,4 +1,4 @@
-// Overwatcher.h - Moritz Hauff - 06.04.2017
+// S_SchwaresFeld.h - Moritz Hauff - 23.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -22,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _OVERWATCHER_h
-#define _OVERWATCHER_h
+#ifndef _S_SCHWARZESFELD_h
+#define _S_SCHWARZESFELD_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -33,37 +33,42 @@
 	#include "WProgram.h"
 #endif
 
-#include "SPECTATORClass.h"
-#include "StateMachine.h"
+#include "State.h"
 
 ///////////////////////////////////////////////////////////////////////////
-///Overwatcher-Class
-/*Diese Klasse überwacht den globalen Zustand und einzelne Aktionen. Dazu 
-sammelt sie die Fehlermeldungen der einzelnen Komponenten und greift gegebenfalls 
-mit Recover-Funktionen in das Geschehen ein.*/
-class OverwatcherClass  
+///State-Class
+/*Dieser State dient dem Verlassen eines schwarzen Feldes.*/
+class S_SchwarzesFeldClass : public StateClass
 {
 ///////////////////////////////////////////////////////////////////////////
- protected:   /// Konstanten
-	 const static int C_SchwarzesFeld = 200;
-
+ protected: ///Konstanten
+	 const static int S_SchwarzesFeld_MaxTimer = 400;
+	 const static int S_SchwarzesFeld_USHinten = 7;
 
  protected:
-	 StateMachineClass *stateMachine;
+	 unsigned long startTime;
+	 
+	 int speedL;
+	 int speedR;
+	 int encoderL;
+	 int encoderR;
 
-	 int actions;   // beeinhalt die seit dem ArduinoStart durchgeführte Aktionen.
+	 int stoppWahrscheinlichkeit;
 
-	 static void ErrorHandler(String Msg);   // you need static for the function pointer
 
  public:
-	 void Init(StateMachineClass *StateMachine);
+	S_SchwarzesFeldClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
+	{ }
 
-	 /*Führt eine Statuskontrolle durch. Dies sollte in jedem (2.) loop Durchlauf geschehen.*/
-	 void Control();
+	void Init();
+	void Sense();
+	void Think();
+	void Act();
 
-	 int GetActions() { return actions; }
+	void ShiftTimers(unsigned long ShiftAmount);
+
+	int ExpectedNumberOfEncoderTicks;
 };
 
-extern OverwatcherClass OW;
-
 #endif
+

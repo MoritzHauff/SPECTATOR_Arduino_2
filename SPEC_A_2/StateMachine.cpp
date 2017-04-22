@@ -45,6 +45,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_Calibrate = new S_CalibrateClass(spectator, "Calibrate");
 	s_GeradeAus = new S_GeradeAusClass(spectator, "GeradeAus");
 	s_Sense = new S_SenseClass(spectator, "Sense");
+	s_SchwarzesFeld = new S_SchwarzesFeldClass(spectator, "SchwarzesFeld");
 	
 	currentState = 0;
 
@@ -69,6 +70,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_GeradeAus;
 	delete s_Sense;
 	delete s_Idle;
+	delete s_SchwarzesFeld;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -161,28 +163,34 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 			s_CoffeeBreak->LastState = s;
 		}
 	}
-	if (msg[0] == 'C' && msg[1] == 'O' && msg[2] == 'N' && msg[3] == 'T' && msg[4] == 'I' && msg[5] == 'N' && msg[6] == 'U' && msg[7] == 'E' && currentState == s_CoffeeBreak)  // todo: Achtung CoffeeBreak.LastState kann NULL sein.
+	else if (msg[0] == 'C' && msg[1] == 'O' && msg[2] == 'N' && msg[3] == 'T' && msg[4] == 'I' && msg[5] == 'N' && msg[6] == 'U' && msg[7] == 'E' && currentState == s_CoffeeBreak)  // todo: Achtung CoffeeBreak.LastState kann NULL sein.
 	{
 		resumeState(s_CoffeeBreak->LastState, s_CoffeeBreak->GetTimerShiftAmount());
 	}
-	if (msg[0] == C_TELEOPSTART && msg[1] == 'I' && msg[2] == 'D' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'I' && msg[2] == 'D' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
 	{
 		changeState(s_Idle);
 	}
-	if (msg[0] == C_TELEOPSTART && msg[1] == 'C' && msg[2] == 'A' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'C' && msg[2] == 'A' && msg[3] == 'L' && msg[4] == C_TELEOPSTOP)
 	{
 		changeState(s_Calibrate);
 	}
-	if (msg[0] == C_TELEOPSTART && msg[1] == 'S' && msg[2] == 'E' && msg[3] == 'N' && msg[4] == C_TELEOPSTOP)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'S' && msg[2] == 'E' && msg[3] == 'N' && msg[4] == C_TELEOPSTOP)
 	{
 		changeState(s_Sense);
 	}
-	if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'S' && msg[2] == 'F' && msg[3] == 'R' && msg[4] == C_TELEOPSTOP)
+	{
+		changeState(s_SchwarzesFeld);
+		s_SchwarzesFeld->ExpectedNumberOfEncoderTicks = s_GeradeAus->GetEncoderL(); // todo maybe use both sides
+		spectator->GeradeSchwarzesFeldBefahren = true;
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{
 		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);
 		changeState(s_GeradeAus);
 	}
-	if (msg[0] == C_TELEOPSTART)
+	else if (msg[0] == C_TELEOPSTART)
 	{
 		if (msg[5] == C_TELEOPSTOP)
 		{
@@ -263,6 +271,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_Sense->Init();
 	}
+	else if (currentState == s_SchwarzesFeld)
+	{
+		s_SchwarzesFeld->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -294,6 +306,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		else if (currentState == s_Sense)
 		{
 			s_Sense->ShiftTimers(TimerShiftAmount);
+		}
+		else if (currentState == s_SchwarzesFeld)
+		{
+			s_SchwarzesFeld->ShiftTimers(TimerShiftAmount);
 		}
 
 		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein.
@@ -389,6 +405,12 @@ void StateMachineClass::DoAction()
 		s_Sense->Sense();
 		s_Sense->Think();
 		s_Sense->Act();
+	}
+	else if (currentState == s_SchwarzesFeld)
+	{
+		s_SchwarzesFeld->Sense();
+		s_SchwarzesFeld->Think();
+		s_SchwarzesFeld->Act();
 	}
 }
 

@@ -43,6 +43,7 @@
 #include "S_GeradeAus.h"
 #include "S_Sense.h"
 #include "S_Idle.h"
+#include "S_SchwarzesFeld.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -64,6 +65,7 @@ class StateMachineClass
 	 S_CalibrateClass *s_Calibrate;
 	 S_GeradeAusClass *s_GeradeAus;
 	 S_SenseClass *s_Sense;
+	 S_SchwarzesFeldClass *s_SchwarzesFeld;
 
 	 StateClass *currentState;
 

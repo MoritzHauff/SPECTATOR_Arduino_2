@@ -46,10 +46,9 @@ void OverwatcherClass::Init(StateMachineClass *StateMachine)
 	actions = 0;
 	
 	stateMachine = StateMachine;
+	stateMachine->OverwatcherMsg = &this->ErrorHandler;
 
 	stateMachine->SendDirectCommand("bCALe");  // Testbefehl (Kalibrierung) an StateMachine senden.
-
-	stateMachine->OverwatcherMsg = &this->ErrorHandler;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -61,6 +60,10 @@ void OverwatcherClass::Control()
 		actions++;
 	}
 
+	if (SA.ldr.GetValue() < C_SchwarzesFeld)
+	{
+		stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwaresFeldRecover".
+	}
 	// todo
 }
 
