@@ -26,6 +26,8 @@ void OverwatcherClass::Init(StateMachineClass *StateMachine)
 	stateMachine = StateMachine;
 
 	stateMachine->SendDirectCommand("bCALe");  // Testbefehl (Kalibrierung) an StateMachine senden.
+
+	stateMachine->OverwatcherMsg = &this->ErrorHandler;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,4 +42,11 @@ void OverwatcherClass::Control()
 	// todo
 }
 
-
+void OverwatcherClass::ErrorHandler(String Msg)
+{
+	if (Msg == "DrehFehler")
+	{
+		Serial.println("Behebe Drehfehler");
+		// todo do something ...
+	}
+}

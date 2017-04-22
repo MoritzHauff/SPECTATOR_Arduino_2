@@ -22,9 +22,7 @@ const int S_GeradeAus_MaxTimer = 1500;	//1300	// Wie lange maximal geradeaus gef
 const int S_GeradeAus_MaxStoppWahrscheinlichkeit = 100;
 const int S_GeradeAus_WinkelRatio = 300;		// Wie stark die Winkelabweichung in die Fahrgeschwindigkeit wirkt.  //75
 
-const int S_GeradeAus_WandEntfernungen[] = { 90, 405, 705, 1005 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
-const int S_GeradeAus_WandEntfernungenVor[] = { 160, 480, 780, 1080 };  // Die Wandkategorien für die Vorwärtsfahrt.
-const int S_GeradeAus_WandEntfernungenRueck[] = { 30, 340, 640, 940 };  // Die Wandkategorien für die Rückwärtsfahrt.
+
 //const int S_GeradeAus_WandEntfernungsKorrektur = 70;
 
 const int S_GeradeAus_MinUltraschallEntfernung = 6;   // Ab welcher Entfernung die Ultraschallsensoren eine Weiterfahrt unterbinden sollen.
@@ -38,6 +36,10 @@ const int S_Drehen_SharpMin = 150;  // Sobald die Wänder weiter weg sind, also u
 class S_GeradeAusClass : public StateClass
 {
  protected:
+	 const int S_GeradeAus_WandEntfernungen[4] = { 90, 405, 705, 1005 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
+	 const int S_GeradeAus_WandEntfernungenVor[4] = { 150, 480, 780, 1080 };  // Die Wandkategorien für die Vorwärtsfahrt.
+	 const int S_GeradeAus_WandEntfernungenRueck[4] = { 30, 340, 640, 940 };  // Die Wandkategorien für die Rückwärtsfahrt.
+
 	 unsigned long startTime;
 
 	 bool toggleState;
@@ -64,6 +66,8 @@ class S_GeradeAusClass : public StateClass
 
 	 void kontrolliereFortschritt();
 	 float verwerteSharp(int Vorne, int Hinten);
+
+	 int aktZielEntfernung;
 
 	 MedianFilterClass laserFilter;
 

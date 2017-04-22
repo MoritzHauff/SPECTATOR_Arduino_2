@@ -38,6 +38,7 @@ void S_GeradeAusClass::Init()
 	laserFilter.Init(5);
 	startWandKategorie = ermittleStartWandKategorie();
 	zielWandKategorie = errechneZielWandKategorie(startWandKategorie, Direction);
+	//aktZielEntfernung = 
 
 	// todo bei langen strekcen wandeinlass mit sharp sensoren erkennen!
 

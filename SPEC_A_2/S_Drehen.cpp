@@ -20,6 +20,7 @@ void S_DrehenClass::Init()
 
 	finishedCounter = 0;
 
+	ZielRichtung = R_NORDEN;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -103,14 +104,14 @@ void S_DrehenClass::running()
 			MotorSpeedL = motorspeed;
 			MotorSpeedR = -motorspeed;
 
-			// Die jeweils vorwärtsfahrende Kette muss ein bisschen beschluenigt werden damit sie sich gleichmäßig dreht.
+			// Die jeweils vorwärtsfahrende Kette muss ein bisschen beschleunigt werden damit sie sich gleichmäßig dreht.
 			if (MotorSpeedL > 0)
 			{
-				MotorSpeedL += 5;
+				MotorSpeedL += 10;
 			}
 			if (MotorSpeedR > 0)
 			{
-				MotorSpeedR += 5;
+				MotorSpeedR += 10;
 			}
 
 			// Control MotorLimits.

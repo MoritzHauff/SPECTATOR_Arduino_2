@@ -288,6 +288,11 @@ void StateMachineClass::checkStates()
 		Serial.println(currentState->GetName());
 	}
 
+	if (currentState->GetStatus() == Error && currentState == s_Drehen)
+	{
+		OverwatcherMsg("DrehFehler");
+	}
+
 	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle))
 	{
 		changeState(s_Sense);  // Nach jedem Drehen oder längere Pause automatisch Feld erfassen
@@ -298,9 +303,9 @@ void StateMachineClass::checkStates()
 		//s_Drehen->ZielRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
 		// solange kein neuer Befehl vom RaPi kommt sollte die richtung noch passen.                                                                                          
 	}
-	else if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
+	else if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Error)
 	{
-		changeState(s_Idle);
+		changeState(s_Idle);   // todo add some recover strategies
 	}
 }
 

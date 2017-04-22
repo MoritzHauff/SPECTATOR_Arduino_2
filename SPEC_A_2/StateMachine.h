@@ -78,6 +78,9 @@ class StateMachineClass
 	 /*Gibt an ob seit dem letzten Aufruf dieser Funktion eine neue Aktion gestartet wurde.
 	 Dies wird vom Overwatcher dazu verwendet den gesamtFortschritt zu überwachen.*/
 	 bool StartedNewAction();
+
+	 /*Funktionszeiegr zur Kommunikation mit dem Overwatcher.*/
+	 void(*OverwatcherMsg)(String Msg);
 };
 
 #endif
