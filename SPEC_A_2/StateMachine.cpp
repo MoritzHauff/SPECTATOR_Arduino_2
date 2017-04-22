@@ -305,7 +305,22 @@ void StateMachineClass::DoAction()
 {
 	handleSerial();
 
-	if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
+	if (currentState->GetStatus() == Finished && currentState == s_Drehen)
+	{
+		Serial.print("Finished Last State: ");
+		Serial.println(currentState->GetName());
+
+		changeState(s_Sense);  // Nach jedem Drehen automatisch Feld erfassen
+	}
+	else if (currentState->GetStatus() == Finished && currentState == s_GeradeAus)
+	{
+		Serial.print("Finished Last State: ");
+		Serial.println(currentState->GetName());
+
+		changeState(s_Drehen);  // Nach jedem geradeaus fahren automatisch drehen
+		s_Drehen->ZielRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
+	}
+	else if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Finished)
 	{
 		Serial.print("Finished Last State: ");
 		Serial.println(currentState->GetName());
