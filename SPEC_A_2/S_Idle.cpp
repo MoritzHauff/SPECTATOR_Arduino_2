@@ -15,6 +15,8 @@ void S_IdleClass::Init()
 	// Variablen zurücksetzen.
 	status = Running;
 	counter = 0;
+
+	Serial.println("DemandNextStep");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -27,8 +29,8 @@ void S_IdleClass::Sense()
 
 	spectator->UpdateLDR();
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
 }
 
 void S_IdleClass::Think()

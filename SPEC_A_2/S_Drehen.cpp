@@ -18,6 +18,8 @@ void S_DrehenClass::Init()
 	MotorSpeedL = 0;
 	MotorSpeedR = 0;
 
+	finishedCounter = 0;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,12 @@ void S_DrehenClass::running()
 		float winkelAbstand = spectator->mpuFahrer.GetWinkelAbstand(ZielRichtung, spectator->mpu.GetYaw());
 		
 		if (abs(winkelAbstand) <= 0.01)  // stopp-toleranz   // 0.1 = 5,7°
+		{
+			finishedCounter++;
+			MotorSpeedL = 0;
+			MotorSpeedR = 0;
+		}
+		if (finishedCounter > 10)
 		{
 			this->status = Finished;
 

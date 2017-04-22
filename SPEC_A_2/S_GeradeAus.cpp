@@ -73,8 +73,8 @@ void S_GeradeAusClass::Sense()
 
 	spectator->UpdateSwitches();
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();    // Alle Sensornachrichten auf einmal sind zu lang für den SerialBuffer.
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();    // Alle Sensornachrichten auf einmal sind zu lang für den SerialBuffer.
 
 	spectator->UpdateLDR();
 
@@ -82,8 +82,8 @@ void S_GeradeAusClass::Sense()
 
 	spectator->UpdateEncoder();
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
 }
 
 bool S_GeradeAusClass::abweichungZuGros(int Value1, int Value2, int MaxAbweichung)

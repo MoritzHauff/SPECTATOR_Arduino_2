@@ -25,7 +25,8 @@ void S_SenseClass::Sense()
 
 	spectator->UpdateMLX();
 
-	spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
+	//spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
+	spectator->serialBuffer.Clear();
 
 	//spectator->UpdateLaser();
 
@@ -33,7 +34,8 @@ void S_SenseClass::Sense()
 
 	spectator->UpdateLDR();
 
-	spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
+	//spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
+	spectator->serialBuffer.Clear();
 
 	spectator->UpdateSwitches();
 
@@ -41,8 +43,8 @@ void S_SenseClass::Sense()
 
 	spectator->UpdateHCSr04VorneHinten();
 
-	spectator->serialBuffer.Flush();
-	//spectator->serialBuffer.Clear();
+	//spectator->serialBuffer.Flush();
+	spectator->serialBuffer.Clear();
 }
 
 void S_SenseClass::Think()
