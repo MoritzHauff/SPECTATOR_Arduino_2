@@ -35,7 +35,7 @@ class StateMachineClass
  protected:
 	 SPECTATORClass *spectator;
 
-	 S_IdleClass *s_Idle;
+	 S_IdleClass *s_Idle /* = S_IdleClass(spectator, "Idle")*/;
 	 S_TeleOpClass *s_TeleOp;
 	 S_DrehenClass *s_Drehen;
 	 S_CoffeeBreakClass *s_CoffeeBreak;

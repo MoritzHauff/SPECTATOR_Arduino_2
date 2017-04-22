@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\libraries\dio2\src;C:\Program Files (x86)\Arduino\libraries\MPU6050_2;C:\Program Files (x86)\Arduino\libraries\I2Cdev;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src;C:\Program Files (x86)\Arduino\libraries\Adafruit-MLX90614-Library-master;C:\Program Files (x86)\Arduino\libraries\Adafruit_VL53L0X\src;C:\Program Files (x86)\Arduino\libraries\Adafruit_Motor_Shield_V2_Library-master;C:\Program Files (x86)\Arduino\libraries\Stepper\src;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Users\morit\OneDrive - bwedu\Dokumente\Moritz\Programmieren\Arduino\Sketchbook\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\morit\OneDrive - bwedu\Dokumente\Moritz\Programmieren\Programmieren Jahr 7\2. ArduinoProgrammierung\SPECTATOR_Arduino_2\SPEC_A_2;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\avr\;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\Arduino\libraries\dio2\src;C:\Program Files (x86)\Arduino\libraries\MPU6050_2;C:\Program Files (x86)\Arduino\libraries\I2Cdev;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src;C:\Program Files (x86)\Arduino\libraries\Adafruit-MLX90614-Library-master;C:\Program Files (x86)\Arduino\libraries\Adafruit_VL53L0X\src;C:\Program Files (x86)\Arduino\libraries\Adafruit_Motor_Shield_V2_Library-master;C:\Program Files (x86)\Arduino\libraries\Stepper\src;C:\Program Files (x86)\Arduino\libraries\Adafruit_Motor_Shield_V2_Library-master\utility;C:\Program Files (x86)\Arduino\libraries\Adafruit_VL53L0X\src\utility;C:\Program Files (x86)\Arduino\libraries\Adafruit-MLX90614-Library-master\utility;C:\Program Files (x86)\Arduino\libraries\dio2\src\utility;C:\Program Files (x86)\Arduino\libraries\I2Cdev\utility;C:\Program Files (x86)\Arduino\libraries\MPU6050_2\utility;C:\Program Files (x86)\Arduino\libraries\Stepper\src\utility;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src\utility;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Users\morit\OneDrive - bwedu\Dokumente\Moritz\Programmieren\Arduino\Sketchbook\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Users\morit\OneDrive - bwedu\Dokumente\Moritz\Programmieren\Programmieren Jahr 7\2. ArduinoProgrammierung\SPECTATOR_Arduino_2\SPEC_A_2;C:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino;C:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\mega;C:\Program Files (x86)\Arduino\libraries\dio2\src;C:\Program Files (x86)\Arduino\libraries\MPU6050_2;C:\Program Files (x86)\Arduino\libraries\I2Cdev;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries\Wire\src;C:\Program Files (x86)\Arduino\libraries\Adafruit-MLX90614-Library-master;C:\Program Files (x86)\Arduino\libraries\Adafruit_VL53L0X\src;C:\Program Files (x86)\Arduino\libraries\Adafruit_Motor_Shield_V2_Library-master;C:\Program Files (x86)\Arduino\libraries\Stepper\src;C:\Program Files (x86)\Arduino\libraries;C:\Program Files (x86)\Arduino\hardware\arduino\avr\libraries;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\Extensions\hrazmpr5.org\Micro Platforms\default\debuggers;C:\Users\morit\OneDrive - bwedu\Dokumente\Moritz\Programmieren\Arduino\Sketchbook\libraries;C:\Program Files (x86)\Arduino\libraries\Adafruit_Motor_Shield_V2_Library-master\utility;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\;C:\Program Files (x86)\Arduino\hardware\tools\avr\avr\include\avr\;C:\Program Files (x86)\Arduino\hardware\tools\avr\lib\gcc\avr\4.8.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>C:\Users\morit\OneDrive - bwedu\Dokumente\Moritz\Programmieren\Programmieren Jahr 7\2. ArduinoProgrammierung\SPECTATOR_Arduino_2\SPEC_A_2\__vm\.SPEC_A_2.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__AVR_ATmega2560__;F_CPU=16000000L;ARDUINO=10800;ARDUINO_AVR_MEGA2560;ARDUINO_ARCH_AVR;__cplusplus=201103L;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -83,6 +83,7 @@
     <ClInclude Include="DigitalIO.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="HCSr04.h" />
+    <ClInclude Include="LDR.h" />
     <ClInclude Include="MedianFilter.h" />
     <ClInclude Include="MLX90614Class.h" />
     <ClInclude Include="MPU.h" />
@@ -98,6 +99,8 @@
     <ClInclude Include="S_CoffeeBreak.h" />
     <ClInclude Include="S_Drehen.h" />
     <ClInclude Include="S_GeradeAus.h" />
+    <ClInclude Include="S_Idle.h" />
+    <ClInclude Include="S_Sense.h" />
     <ClInclude Include="S_TeleOp.h" />
     <ClInclude Include="VL53L0X.h" />
     <ClInclude Include="WheelEncoder.h" />
@@ -107,6 +110,7 @@
     <ClCompile Include="DigitalIO.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="HCSr04.cpp" />
+    <ClCompile Include="LDR.cpp" />
     <ClCompile Include="MedianFilter.cpp" />
     <ClCompile Include="MLX90614Class.cpp" />
     <ClCompile Include="MPU.cpp" />
@@ -122,6 +126,8 @@
     <ClCompile Include="S_CoffeeBreak.cpp" />
     <ClCompile Include="S_Drehen.cpp" />
     <ClCompile Include="S_GeradeAus.cpp" />
+    <ClCompile Include="S_Idle.cpp" />
+    <ClCompile Include="S_Sense.cpp" />
     <ClCompile Include="S_TeleOp.cpp" />
     <ClCompile Include="VL53L0X.cpp" />
     <ClCompile Include="WheelEncoder.cpp" />

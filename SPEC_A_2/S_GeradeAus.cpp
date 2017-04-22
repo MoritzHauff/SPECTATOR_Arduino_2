@@ -278,7 +278,11 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 			stoppWahrscheinlichkeit += 50;
 
 			Serial.print("S_GeradeAus.Think(): Laser empfiehlt die Felddurchquerung zu beenden. Entfernung: ");
-			Serial.println(spectator->laserVorne.GetDistance());
+			Serial.print(spectator->laserVorne.GetDistance());
+			Serial.print(" Zielkategorie: ");
+			Serial.print(zielWandKategorie);
+			Serial.print(" Ziel entfernung :");
+			Serial.println(S_GeradeAus_WandEntfernungenVor[zielWandKategorie]);
 		}
 		if (spectator->ultraschallVorne.GetDistance() <= S_GeradeAus_MinUltraschallEntfernung)
 		{

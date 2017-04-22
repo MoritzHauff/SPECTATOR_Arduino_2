@@ -95,6 +95,15 @@
     <ClInclude Include="MedianFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LDR.h">
+      <Filter>Header Files - Sensors</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Sense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="S_Idle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MedianFilter.cpp">
@@ -159,6 +168,15 @@
     </ClCompile>
     <ClCompile Include="S_GeradeAus.cpp">
       <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="LDR.cpp">
+      <Filter>Source Files - Sensors</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Sense.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="S_Idle.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
