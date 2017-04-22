@@ -100,6 +100,7 @@
     <ClInclude Include="S_Drehen.h" />
     <ClInclude Include="S_GeradeAus.h" />
     <ClInclude Include="S_Idle.h" />
+    <ClInclude Include="S_SchwarzesFeld.h" />
     <ClInclude Include="S_Sense.h" />
     <ClInclude Include="S_TeleOp.h" />
     <ClInclude Include="VL53L0X.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="S_Drehen.cpp" />
     <ClCompile Include="S_GeradeAus.cpp" />
     <ClCompile Include="S_Idle.cpp" />
+    <ClCompile Include="S_SchwarzesFeld.cpp" />
     <ClCompile Include="S_Sense.cpp" />
     <ClCompile Include="S_TeleOp.cpp" />
     <ClCompile Include="VL53L0X.cpp" />

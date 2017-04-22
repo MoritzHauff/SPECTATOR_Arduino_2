@@ -21,6 +21,11 @@ sammelt sie die Fehlermeldungen der einzelnen Komponenten und greift gegebenfall
 mit Recover-Funktionen in das Geschehen ein.*/
 class OverwatcherClass  
 {
+///////////////////////////////////////////////////////////////////////////
+ protected:   /// Konstanten
+	 const static int C_SchwarzesFeld = 200;
+
+
  protected:
 	 StateMachineClass *stateMachine;
 

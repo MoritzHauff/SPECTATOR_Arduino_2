@@ -31,6 +31,10 @@ void S_IdleClass::Init()
 	spectator->serialBuffer.Flush();
 
 	Serial.println("DemandNextStep");
+
+	// Resete die Werte
+	spectator->GeradeRampeBefahren = false;
+	spectator->GeradeSchwarzesFeldBefahren = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -83,6 +83,9 @@ class S_GeradeAusClass : public StateClass
 	 void ShiftTimers(unsigned long ShiftAmount);
 
 	 int Direction;
+
+	 int GetEncoderL() { return encoderL; }
+	 int GetEncoderR() { return encoderR; }
 };
 
 #endif
