@@ -224,7 +224,8 @@ void StateMachineClass::SendDirectCommand(char *msg)
 ///State-Functions
 void StateMachineClass::changeState(StateClass *NextState)
 {
-	Serial.println(String("Starte Modus: " + NextState->GetName()));  // for debugging on the RaPi
+	Serial.print("Started Next State: "); // to inform the Rapi 
+	Serial.println(NextState->GetName());  
 	startedNewAction = true;
 	
 	if (currentState != NextState)
@@ -340,11 +341,11 @@ void StateMachineClass::DoAction()
 	}
 	else if (currentState == s_Calibrate)
 	{
-		if (s_Calibrate->GetStatus() == Finished)
+		/*if (s_Calibrate->GetStatus() == Finished)
 		{
 			changeState(s_TeleOp); // todo: Should be s_Idle.
 		}
-		else
+		else*/
 		{
 			s_Calibrate->Sense();
 			s_Calibrate->Think();
