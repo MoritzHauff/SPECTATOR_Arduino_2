@@ -38,18 +38,33 @@ void OverwatcherClass::Control()
 	if (stateMachine->StartedNewAction())
 	{
 		actions++;
+		rampenCounter = 0;
 	}
 
-	// Kontrolliere ob ein schwarzes Feld befahren wird.
-	//Serial.print("Aktuelle Helligkeit: ");
-	//Serial.println(SA.ldr.GetValue());
-	if (SA.ldr.GetValue() < C_SchwarzesFeld && stateMachine->GetCurrentState() != "SchwarzesFeld")   // todo add a counter
+	if (stateMachine->GetCurrentState() != "CoffeeBreak" && stateMachine->GetCurrentState() != "TeleOp")
 	{
-		stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwarzesFeldRecover".
-		Serial.println("Fahre vom schwarzen Feld zurück.");
-	}
+		// Kontrolliere ob ein schwarzes Feld befahren wird.
+		//Serial.print("Aktuelle Helligkeit: ");
+		//Serial.println(SA.ldr.GetValue());
+		if (SA.ldr.GetValue() < C_SchwarzesFeld && stateMachine->GetCurrentState() != "SchwarzesFeld")   // todo add a counter
+		{
+			Serial.println("Overwatcher: Fahre vom schwarzen Feld zurück.");
+			stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwarzesFeldRecover".
+		}
 
-	// todo
+		// Kontrolliere ob Rape gerade Befahren wird.
+		if (SA.mpu.GetPitch() < -C_Overwatcher_RampenWinkel || SA.mpu.GetPitch() > C_Overwatcher_RampenWinkel)
+		{
+			rampenCounter++;
+		}
+		if (rampenCounter > 10 && stateMachine->GetCurrentState() != "Rampe")
+		{
+			Serial.println("Overwatcher: Befahre gerade die Rampe. Aendere Status.");
+			stateMachine->SendDirectCommand("bRAMe");
+		}
+
+		// todo
+	}
 }
 
 void OverwatcherClass::ErrorHandler(String Msg)
