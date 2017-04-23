@@ -40,13 +40,15 @@ void OverwatcherClass::Control()
 		actions++;
 	}
 
+	// Kontrolliere ob ein schwarzes Feld befahren wird.
 	//Serial.print("Aktuelle Helligkeit: ");
 	//Serial.println(SA.ldr.GetValue());
-	if (SA.ldr.GetValue() < C_SchwarzesFeld && stateMachine->GetCurrentState() != "SchwarzesFeld")
+	if (SA.ldr.GetValue() < C_SchwarzesFeld && stateMachine->GetCurrentState() != "SchwarzesFeld")   // todo add a counter
 	{
 		stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwarzesFeldRecover".
 		Serial.println("Fahre vom schwarzen Feld zurück.");
 	}
+
 	// todo
 }
 

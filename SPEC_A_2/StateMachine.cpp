@@ -24,6 +24,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_GeradeAus = new S_GeradeAusClass(spectator, "GeradeAus");
 	s_Sense = new S_SenseClass(spectator, "Sense");
 	s_SchwarzesFeld = new S_SchwarzesFeldClass(spectator, "SchwarzesFeld");
+	s_Rampe = new S_RampeClass(spectator, "Rampe");
 	
 	currentState = 0;
 
@@ -49,6 +50,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_Sense;
 	delete s_Idle;
 	delete s_SchwarzesFeld;
+	delete s_Rampe;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -163,6 +165,10 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		s_SchwarzesFeld->ExpectedNumberOfEncoderTicks = s_GeradeAus->GetEncoderL(); // todo maybe use both sides
 		spectator->GeradeSchwarzesFeldBefahren = true;
 	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'M' && msg[4] == C_TELEOPSTOP)
+	{
+		changeState(s_Rampe);
+	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{
 		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);
@@ -256,6 +262,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_SchwarzesFeld->Init();
 	}
+	else if (currentState == s_Rampe)
+	{
+		s_Rampe->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -292,6 +302,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		{
 			s_SchwarzesFeld->ShiftTimers(TimerShiftAmount);
 		}
+		else if (currentState == s_Rampe)
+		{
+			s_Rampe->ShiftTimers(TimerShiftAmount);
+		}
 
 		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein.
 
@@ -316,7 +330,7 @@ void StateMachineClass::checkStates()
 	{
 		changeState(s_Sense);  // Nach jedem Drehen oder längere Pause automatisch Feld erfassen
 	}
-	else if (currentState->GetStatus() == Finished && currentState == s_GeradeAus)
+	else if (currentState->GetStatus() == Finished &&( currentState == s_GeradeAus || currentState == s_Rampe || currentState == s_SchwarzesFeld))
 	{
 		changeState(s_Drehen);  // Nach jedem geradeaus fahren automatisch drehen
 		//s_Drehen->ZielRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
@@ -392,6 +406,12 @@ void StateMachineClass::DoAction()
 		s_SchwarzesFeld->Sense();
 		s_SchwarzesFeld->Think();
 		s_SchwarzesFeld->Act();
+	}
+	else if (currentState == s_Rampe)
+	{
+		s_Rampe->Sense();
+		s_Rampe->Think();
+		s_Rampe->Act();
 	}
 }
 
