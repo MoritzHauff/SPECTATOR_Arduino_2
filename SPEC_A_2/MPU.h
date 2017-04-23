@@ -86,6 +86,9 @@ public:
 	float GetYaw();
 	float GetPitch();
 	float GetRoll();
+
+	/*Setzt den FIFO zurück, wenn der MPU eine läöngere Zeit nicht befragt wurde um veralteten Daten vorzubeugen.*/
+	void ResetFIFO();
 };
 
 #endif
