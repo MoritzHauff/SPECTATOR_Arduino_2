@@ -46,8 +46,8 @@ void S_SchwarzesFeldClass::Init()
 
 	stoppWahrscheinlichkeit = 0;
 
-	Serial.print("SchwarzesFeld.Init(): stoppWahrscheinlichkeit: ");
-	Serial.println(stoppWahrscheinlichkeit);
+	//Serial.print("SchwarzesFeld.Init(): stoppWahrscheinlichkeit: ");
+	//Serial.println(stoppWahrscheinlichkeit);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ void S_SchwarzesFeldClass::Sense()
 
 	spectator->UpdateHCSr04VorneHinten();
 
-	spectator->UpdateLDR(); // Update this otherwise the Overwatcher will nerver stop seindig th bSFRe Command.
+	spectator->UpdateLDR(); // Update this! otherwise the Overwatcher will never stop sending the 'bSFRe'-Command.
 	
 	spectator->UpdateEncoder();
 
@@ -70,6 +70,15 @@ void S_SchwarzesFeldClass::Sense()
 
 void S_SchwarzesFeldClass::Think()
 {
+	if (stoppWahrscheinlichkeit >= 10)   // todo move this to StateClass
+	{
+		stoppWahrscheinlichkeit -= 10;    // Jeden Tick verringert sich die Stoppwahrscheinlihckeit wieder falls es mal zu einem "Fehlalarm" gekommen ist.
+	}
+	else if (stoppWahrscheinlichkeit < 0)
+	{
+		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stopnnen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
+	}
+
 	if (status == Running && startTime + S_SchwarzesFeld_MaxTimer < millis())
 	{
 		speedL = 0;
@@ -95,13 +104,13 @@ void S_SchwarzesFeldClass::Think()
 
 		stoppWahrscheinlichkeit = 200;
 	}
-	/*if (spectator->ultraschallHinten.GetDistance() <= 7)
+	if (spectator->ultraschallHinten.GetDistance() <= S_SchwarzesFeld_USHinten)
 	{
-		stoppWahrscheinlichkeit += 60;
+		stoppWahrscheinlichkeit += 40;
 
 		Serial.print("S_SchwarzesFeld.Think(): Ultraschall detektiert hinten ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallHinten.GetDistance());
-	}*/
+	}
 
 	if (stoppWahrscheinlichkeit > 100)
 	{

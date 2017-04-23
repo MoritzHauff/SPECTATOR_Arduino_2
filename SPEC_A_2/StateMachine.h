@@ -44,6 +44,7 @@
 #include "S_Sense.h"
 #include "S_Idle.h"
 #include "S_SchwarzesFeld.h"
+#include "S_Rampe.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -66,6 +67,7 @@ class StateMachineClass
 	 S_GeradeAusClass *s_GeradeAus;
 	 S_SenseClass *s_Sense;
 	 S_SchwarzesFeldClass *s_SchwarzesFeld;
+	 S_RampeClass *s_Rampe;
 
 	 StateClass *currentState;
 
