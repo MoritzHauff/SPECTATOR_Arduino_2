@@ -53,6 +53,8 @@ void S_GeradeAusClass::Init()
 	Serial.print(" Zielentfernung: ");
 	Serial.println(S_GeradeAus_WandEntfernungen[zielWandKategorie]);
 
+	//spectator->OpferKontroller.Reset();   // passiert in s_Idle
+	 
 	// Timer starten.
 	startTime = millis();
 }
@@ -66,6 +68,7 @@ void S_GeradeAusClass::Sense()
 	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
 	{
 		spectator->UpdateMLX();
+		spectator->OpferKontroller.Check(spectator->MLXLinks.GetObjTemp(), spectator->MLXVorne.GetObjTemp(), spectator->MLXRechts.GetObjTemp());
 	}
 
 	spectator->UpdateLaser();

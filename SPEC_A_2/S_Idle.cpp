@@ -20,9 +20,9 @@ void S_IdleClass::Init()
 	spectator->serialBuffer.AddMsg(C_WandRechts, spectator->GetWand(R_RECHTS));
 	spectator->serialBuffer.AddMsg(C_WandHinten, spectator->GetWand(R_HINTEN));
 	spectator->serialBuffer.AddMsg(C_WandLinks, spectator->GetWand(R_LINKS));
-	spectator->serialBuffer.AddMsg(C_OpferLinks, false);
-	spectator->serialBuffer.AddMsg(C_OpferVorne, false);
-	spectator->serialBuffer.AddMsg(C_OpferRechts, false);
+	spectator->serialBuffer.AddMsg(C_OpferLinks, spectator->OpferKontroller.OpferLinks());
+	spectator->serialBuffer.AddMsg(C_OpferVorne, spectator->OpferKontroller.OpferVorne());
+	spectator->serialBuffer.AddMsg(C_OpferRechts, spectator->OpferKontroller.OpferRechts());
 	spectator->serialBuffer.Flush();
 
 	spectator->serialBuffer.AddMsg(C_AktuelleRichtung, spectator->AktRichtung);
@@ -35,6 +35,7 @@ void S_IdleClass::Init()
 	// Resete die Werte
 	spectator->GeradeRampeBefahren = false;
 	spectator->GeradeSchwarzesFeldBefahren = false;
+	spectator->OpferKontroller.Reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////

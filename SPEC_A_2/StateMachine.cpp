@@ -168,6 +168,7 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'M' && msg[4] == C_TELEOPSTOP)
 	{
 		changeState(s_Rampe);
+		spectator->GeradeRampeBefahren = true;
 	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{

@@ -23,6 +23,7 @@
 
 #include "SerialBuffer.h"
 #include "MPUFahrer.h"
+#include "OpferKontrolleur.h"
 
 #include "Functions.h"
 #include "Constants.h"
@@ -99,6 +100,8 @@ class SPECTATORClass
 
 	SerialBuffer serialBuffer = SerialBuffer();
 	MPUFahrerClass mpuFahrer = MPUFahrerClass();
+
+	OpferKontrolleurClass OpferKontroller = OpferKontrolleurClass();
 
 	byte AktRichtung;
 	bool GeradeSchwarzesFeldBefahren;
