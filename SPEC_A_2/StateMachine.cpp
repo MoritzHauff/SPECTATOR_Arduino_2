@@ -195,8 +195,11 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 				else
 				{
 					s_Drehen->ZielRichtung = spectator->mpuFahrer.CharToRichtung(msg[2]);
-					spectator->AktRichtung = s_Drehen->ZielRichtung;
 				}
+				
+				spectator->AktRichtung = s_Drehen->ZielRichtung;
+				//Serial.print("Neue Richtung gesetzt: ");
+				//Serial.println(spectator->AktRichtung);
 			}
 		}
 	}
@@ -317,7 +320,7 @@ void StateMachineClass::checkStates()
 	{
 		changeState(s_Drehen);  // Nach jedem geradeaus fahren automatisch drehen
 		//s_Drehen->ZielRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
-		// solange kein neuer Befehl vom RaPi kommt sollte die richtung noch passen.                                                                                          
+		s_Drehen->ZielRichtung = spectator->AktRichtung; // beim S_Drehen.Init() wird die richtung zurückgesetzt.  // solange aber keine neuen Befhel kommen sollte die im spectator gepseicherte Richtung die richtige sein.
 	}
 	else if (currentState->GetStatus() == Finished || currentState->GetStatus() == Aborted || currentState->GetStatus() == Error)
 	{
