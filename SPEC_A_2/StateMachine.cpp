@@ -170,6 +170,18 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		changeState(s_Rampe);
 		spectator->GeradeRampeBefahren = true;
 	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'O' && msg[2] == 'L' && msg[3] == C_TELEOPSTOP)
+	{
+		spectator->Motoren.AbwurfLinks();
+		spectator->mpu.ResetFIFO();
+		changeState(s_Sense);   // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'O' && msg[2] == 'R' && msg[3] == C_TELEOPSTOP)
+	{
+		spectator->Motoren.AbwurfRechts();
+		spectator->mpu.ResetFIFO();
+		changeState(s_Sense);   // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
+	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{
 		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);

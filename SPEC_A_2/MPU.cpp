@@ -81,7 +81,7 @@ void MPU::Update()
 		if (fifoCount == 1024) 
 		{
 			// reset so we can continue cleanly
-			mpu.resetFIFO();
+			ResetFIFO();
 			Serial.println(F("FIFO overflow!"));
 		}
 		else if (fifoCount > packetSize)
@@ -165,4 +165,9 @@ float MPU::GetRoll()
 bool MPU::NewDataAvaible()
 {
 	return DataUpdated;
+}
+
+void MPU::ResetFIFO()
+{
+	mpu.resetFIFO();
 }
