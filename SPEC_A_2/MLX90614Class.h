@@ -23,9 +23,13 @@ class MLX90614Class
 	 byte _address;
 	 Adafruit_MLX90614 mlx;
 
+	 float lastObjTemp;
+
  public:
 	 MLX90614Class(byte Address = 0x5A);
-	 /*Returns the object temperature in °C.*/
+	 /*Reads a new Object Temperatur from the Sensor; Wire must be set to max 100KHz!*/
+	 void Update();
+	 /*Returns the last object temperature in °C.*/
 	 float GetObjTemp();
 	 
 };

@@ -29,7 +29,8 @@ class OverwatcherClass
  protected:   /// Konstanten
 	 const static int C_SchwarzesFeld = 820;
 
- protected:
+ //protected:
+ public: 
 	 StateMachineClass *stateMachine;
 
 	 int actions;   // beeinhalt die seit dem ArduinoStart durchgeführte Aktionen.

@@ -37,7 +37,7 @@ class S_GeradeAusClass : public StateClass
 {
  protected:
 	 const int S_GeradeAus_WandEntfernungen[4] = { 90, 405, 705, 1005 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
-	 const int S_GeradeAus_WandEntfernungenVor[4] = { 150, 480, 780, 1080 };  // Die Wandkategorien für die Vorwärtsfahrt.
+	 const int S_GeradeAus_WandEntfernungenVor[4] = { 130, 460, 760, 1060 };  // Die Wandkategorien für die Vorwärtsfahrt.
 	 const int S_GeradeAus_WandEntfernungenRueck[4] = { 30, 340, 640, 940 };  // Die Wandkategorien für die Rückwärtsfahrt.
 
 	 unsigned long startTime;
