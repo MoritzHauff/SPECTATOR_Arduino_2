@@ -1,4 +1,4 @@
-// S_Rampe.h - Moritz Hauff - 23.04.2017
+// OpferKontrolleur.h - Moritz Hauff - 23.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -22,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _S_RAMPE_h
-#define _S_RAMPE_h
+#ifndef _OPFERKONTROLLEUR_h
+#define _OPFERKONTROLLEUR_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -33,37 +33,32 @@
 	#include "WProgram.h"
 #endif
 
-#include "State.h"
+///////////////////////////////////////////////////////////////////////////
+///Konstanten
+static const float C_Opfer_TempUnterschied = 1.0;
 
 ///////////////////////////////////////////////////////////////////////////
-///State-Class
-/*Dieser State dient dem Befahren der Rampe.*/
-class S_RampeClass : public StateClass
+///OpferKontrolleur-Klasse
+/*Diese Klasse kontrolliert ständig die Temperatur und gibt gebenfalls an, dass Opfervorhandne sind.*/
+class OpferKontrolleurClass
 {
-///////////////////////////////////////////////////////////////////////////
- protected: ///Konstanten
-	 const static int S_Rampe_USVorne = 7;
-	 const static int S_Rampe_NormalSpeed = 110;
- 
- protected:
-	 int stoppWahrscheinlichkeit;   // todo move to StateClass
-	 int speedL;  // todo move to StateClass
-	 int speedR;
-	 byte startRichtung;
-	 float winkelKorrektur;
+protected:
+	bool letztesFeldOpferErkannt;
+	int opferLinks;
+	int opferRechts;
+	int opferVorne;
 
-	 float verwerteSharp(int Vorne, int Hinten);
+public:
+	OpferKontrolleurClass();
 
- public:
-	 S_RampeClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
-	 { }
+	/*Kontrolliert die Temperaturen und aktualisiert gegebenfalls den OpferStatus.*/
+	void Check(float TempLinks, float TmpVorne, float TmpRechts);
+	/*Setzt den OpferStatus (z.B.) Beim Befahren des nächsten Feldes zurück.*/
+	void Reset();
 
-	 void Init();
-	 void Sense();
-	 void Think();
-	 void Act();
-
-	 void ShiftTimers(unsigned long ShiftAmount);
+	bool OpferLinks();
+	bool OpferVorne();
+	bool OpferRechts();
 };
 
 #endif

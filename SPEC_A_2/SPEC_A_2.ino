@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "OpferKontrolleur.h"
 #include "S_Rampe.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
