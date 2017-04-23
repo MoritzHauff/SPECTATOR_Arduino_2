@@ -277,9 +277,9 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 	Serial.print(encoderL);
 	Serial.print(" R: ");
 	Serial.println(encoderR);*/  // 30 cm = 16 EncoderCounts
-	if ((abs(encoderL) < 8 || abs(encoderR) < 8) && stoppWahrscheinlichkeit > 0)
+	if ((abs(encoderL) < 10 || abs(encoderR) < 10) && stoppWahrscheinlichkeit > 0)
 	{
-		stoppWahrscheinlichkeit -= 40;  // Das Feld kann noch gar nicht durchquert sein.
+		stoppWahrscheinlichkeit -= 60;  // Das Feld kann noch gar nicht durchquert sein.
 	}
 	else if ((abs(encoderL) < 16 || abs(encoderR) < 16) && stoppWahrscheinlichkeit > 0)
 	{

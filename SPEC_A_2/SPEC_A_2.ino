@@ -30,16 +30,35 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
+// -----------------------------------------------------------------------------
+int freeRam() {
+	extern int __heap_start, *__brkval;
+	int v;
+	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
+}
+
+
+// -----------------------------------------------------------------------------
+
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
 {		
+	Serial.print("Unused RAM: ");
+	Serial.println(freeRam(), DEC);  // calls StackCount() to report the unused RAM
+
 	SA.Init();
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();	
 
+	Serial.print("Unused RAM: ");
+	Serial.println(freeRam(), DEC);  // calls StackCount() to report the unused RAM
+
 	OW.Init(stateMachine);
+
+	Serial.print("Unused RAM: ");
+	Serial.println(freeRam(), DEC);  // calls StackCount() to report the unused RAM
 }
 
 ///////////////////////////////////////////////////////////////////////////

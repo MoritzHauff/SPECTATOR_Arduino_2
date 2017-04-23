@@ -37,6 +37,10 @@
 #include "StateMachine.h"
 
 ///////////////////////////////////////////////////////////////////////////
+/// Konstanten
+const static float C_Overwatcher_RampenWinkel = 0.2;
+
+///////////////////////////////////////////////////////////////////////////
 ///Overwatcher-Class
 /*Diese Klasse überwacht den globalen Zustand und einzelne Aktionen. Dazu 
 sammelt sie die Fehlermeldungen der einzelnen Komponenten und greift gegebenfalls 
@@ -47,13 +51,14 @@ class OverwatcherClass
  protected:   /// Konstanten
 	 const static int C_SchwarzesFeld = 820;
 
-
  protected:
 	 StateMachineClass *stateMachine;
 
 	 int actions;   // beeinhalt die seit dem ArduinoStart durchgeführte Aktionen.
 
 	 static void ErrorHandler(String Msg);   // you need static for the function pointer
+
+	 int rampenCounter;
 
  public:
 	 void Init(StateMachineClass *StateMachine);
