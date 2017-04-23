@@ -207,7 +207,7 @@ void SPECMotorenClass::TurnLEDOff()
 void SPECMotorenClass::AbwurfLinks()
 {
 	stepperL->step(STEPS);
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		delay(200);
 		TurnLEDOff();
@@ -224,7 +224,7 @@ void SPECMotorenClass::StepL(float Revolutions)
 void SPECMotorenClass::AbwurfRechts()
 {
 	stepperR->step(STEPS);
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		delay(200);
 		TurnLEDOff();

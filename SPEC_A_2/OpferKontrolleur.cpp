@@ -64,11 +64,19 @@ void OpferKontrolleurClass::Reset()
 
 void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRechts)
 {
-	float mittelwert = 0.5 * (TempLinks + TempVorne);
+	/*Serial.println("OpferCheck: ");
+	Serial.print("\tLinks: ");
+	Serial.print(TempLinks);
+	Serial.print("\tVorne: ");
+	Serial.print(TempVorne);
+	Serial.print("\tRechts");
+	Serial.println(TempRechts);*/
+	float mittelwert = 0.5 * (TempVorne + TempRechts);
 
-	if (TempRechts > mittelwert + C_Opfer_TempUnterschied)
+	if (TempLinks > mittelwert + C_Opfer_TempUnterschied)
 	{
-		opferRechts++;
+		opferLinks++;
+		Serial.println("OpferLinks erkannt.");
 	}
 
 	mittelwert = 0.5 * (TempLinks + TempRechts);
@@ -86,7 +94,7 @@ void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRe
 
 bool OpferKontrolleurClass::OpferLinks()
 {
-	if (opferLinks > 20 && letztesFeldOpferErkannt == false)
+	if (opferLinks > 5 && letztesFeldOpferErkannt == false)
 	{
 		return true;
 	}
@@ -95,7 +103,7 @@ bool OpferKontrolleurClass::OpferLinks()
 
 bool OpferKontrolleurClass::OpferVorne()
 {
-	if (opferVorne > 20 && letztesFeldOpferErkannt == false)
+	if (opferVorne > 5 && letztesFeldOpferErkannt == false)
 	{
 		return true;
 	}
@@ -104,7 +112,7 @@ bool OpferKontrolleurClass::OpferVorne()
 
 bool OpferKontrolleurClass::OpferRechts()
 {
-	if (opferRechts > 20 && letztesFeldOpferErkannt == false)
+	if (opferRechts > 5 && letztesFeldOpferErkannt == false)
 	{
 		return true;
 	}

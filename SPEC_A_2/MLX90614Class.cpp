@@ -45,5 +45,10 @@ MLX90614Class::MLX90614Class(byte Address)
 ///Funktionen
 float MLX90614Class::GetObjTemp()
 {
-	return mlx.readObjectTempC();
+	return lastObjTemp;
+}
+
+void MLX90614Class::Update()
+{
+	lastObjTemp = mlx.readObjectTempC();
 }

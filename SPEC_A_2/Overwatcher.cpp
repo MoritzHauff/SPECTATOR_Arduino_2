@@ -89,11 +89,18 @@ void OverwatcherClass::Control()
 	}
 }
 
+static void drehfehler()
+{
+	//OW.stateMachine->SendDirectCommand("Dreh dich richtig zu Schmock");
+}
+
+
 void OverwatcherClass::ErrorHandler(String Msg)
 {
 	if (Msg == "DrehFehler")
 	{
 		Serial.println("Behebe Drehfehler");
-		// todo do something ...
+		
+		drehfehler();   // todo add right implementation
 	}
 }

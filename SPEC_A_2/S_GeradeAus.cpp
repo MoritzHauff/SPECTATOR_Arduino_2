@@ -50,11 +50,11 @@ void S_GeradeAusClass::Init()
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
 	winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
 
-	if (abs(winkelKorrektur) > 0.1)
+	/*if (abs(winkelKorrektur) > 0.1)
 	{
 		status = Aborted;
 		Serial.println("ABORTED S_GeradeAus.Init(): Spectator steht zu schief, bitte zuerst eine Drehung ausführen!");
-	}
+	}*/   // Es gibt keine Korrekturmaßnahmen also sollte dies nicht überprüft werden.
 
 	// Wandkategorie ermitteln.
 	laserFilter.Init(5);
@@ -75,7 +75,7 @@ void S_GeradeAusClass::Init()
 	Serial.print(" Zielentfernung: ");
 	Serial.println(S_GeradeAus_WandEntfernungen[zielWandKategorie]);
 
-	//spectator->OpferKontroller.Reset();   // passiert in s_Idle
+	spectator->OpferKontroller.Reset();
 	 
 	// Timer starten.
 	startTime = millis();

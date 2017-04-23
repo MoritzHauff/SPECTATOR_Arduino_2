@@ -57,7 +57,7 @@ void S_IdleClass::Init()
 	// Resete die Werte
 	spectator->GeradeRampeBefahren = false;
 	spectator->GeradeSchwarzesFeldBefahren = false;
-	spectator->OpferKontroller.Reset();
+	//spectator->OpferKontroller.Reset();  // only reset when your really move to another field.
 }
 
 ///////////////////////////////////////////////////////////////////////////
