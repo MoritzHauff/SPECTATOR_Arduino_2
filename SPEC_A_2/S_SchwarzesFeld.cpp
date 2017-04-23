@@ -82,13 +82,13 @@ void S_SchwarzesFeldClass::Think()
 
 		stoppWahrscheinlichkeit = 200;
 	}
-	if (spectator->ultraschallHinten.GetDistance() <= S_SchwarzesFeld_USHinten)
+	/*if (spectator->ultraschallHinten.GetDistance() <= S_SchwarzesFeld_USHinten)
 	{
 		stoppWahrscheinlichkeit += 40;
 
 		Serial.print("S_SchwarzesFeld.Think(): Ultraschall detektiert hinten ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallHinten.GetDistance());
-	}
+	}*/
 
 	if (stoppWahrscheinlichkeit > 100)
 	{
