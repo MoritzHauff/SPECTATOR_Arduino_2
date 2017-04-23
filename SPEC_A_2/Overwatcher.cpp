@@ -49,6 +49,8 @@ void OverwatcherClass::Init(StateMachineClass *StateMachine)
 	stateMachine->OverwatcherMsg = &this->ErrorHandler;
 
 	stateMachine->SendDirectCommand("bCALe");  // Testbefehl (Kalibrierung) an StateMachine senden.
+
+	SA.Motoren.TurnLEDOn();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,9 +62,12 @@ void OverwatcherClass::Control()
 		actions++;
 	}
 
-	if (SA.ldr.GetValue() < C_SchwarzesFeld)
+	//Serial.print("Aktuelle Helligkeit: ");
+	//Serial.println(SA.ldr.GetValue());
+	if (SA.ldr.GetValue() < C_SchwarzesFeld && stateMachine->GetCurrentState() != "SchwarzesFeld")
 	{
-		stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwaresFeldRecover".
+		stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwarzesFeldRecover".
+		Serial.println("Fahre vom schwarzen Feld zurück.");
 	}
 	// todo
 }

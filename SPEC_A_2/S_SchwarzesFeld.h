@@ -42,7 +42,7 @@ class S_SchwarzesFeldClass : public StateClass
 {
 ///////////////////////////////////////////////////////////////////////////
  protected: ///Konstanten
-	 const static int S_SchwarzesFeld_MaxTimer = 400;
+	 const static int S_SchwarzesFeld_MaxTimer = 1500;
 	 const static int S_SchwarzesFeld_USHinten = 7;
 
  protected:

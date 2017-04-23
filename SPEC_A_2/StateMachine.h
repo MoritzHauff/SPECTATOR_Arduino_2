@@ -105,6 +105,8 @@ class StateMachineClass
 
 	 /*Funktionszeiegr zur Kommunikation mit dem Overwatcher.*/
 	 void(*OverwatcherMsg)(String Msg);
+
+	 String GetCurrentState() { return currentState->GetName(); }
 };
 
 #endif
