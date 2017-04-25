@@ -52,8 +52,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///StateMachine-Class
-/*Diese Klasse überwacht die aktuellen Aufgaben des Roboters.
-Analysiert außerdem die seriellen Befehle.*/
+/// <summary>
+/// Diese Klasse überwacht die aktuellen Aufgaben des Roboters. <para/>
+/// Analysiert außerdem die seriellen Befehle.
+/// </summary>
 class StateMachineClass
 {
  protected:

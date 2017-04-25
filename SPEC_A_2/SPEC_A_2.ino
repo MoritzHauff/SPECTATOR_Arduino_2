@@ -12,13 +12,10 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "OpferKontrolleur.h"
-#include "S_Rampe.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
 
 #include "StateMachine.h"
-
  
 ///////////////////////////////////////////////////////////////////////////
 ///Variablen
@@ -31,35 +28,41 @@ unsigned long drei = 0;
 ///Instanzen
 StateMachineClass *stateMachine;
 
-// -----------------------------------------------------------------------------
-int freeRam() {
+///////////////////////////////////////////////////////////////////////////
+///SRAM-Funktion
+/*Diese Funktion gibt die Menge des aktuell unbenutzten SRAMs zurück. 
+Für weitere Informationen siehe: Adafruit.*/
+int freeRam()
+{
 	extern int __heap_start, *__brkval;
 	int v;
 	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }
 
-
-// -----------------------------------------------------------------------------
+/// <summary>
+/// Diese Funktion gibt die Menge des aktuell unbenutzen SRAMs über
+/// die serielle Schnittstelle aus. Diese muss davor gegebenfalls gestartet werden.
+/// </summary>
+void printFreeRam()
+{
+	Serial.print("Unused RAM: ");
+	Serial.println(freeRam(), DEC);
+}
 
 ///////////////////////////////////////////////////////////////////////////
 ///Setup
 void setup()
 {		
-	Serial.print("Unused RAM: ");
-	Serial.println(freeRam(), DEC);  // calls StackCount() to report the unused RAM
-
 	SA.Init();
 	
 	stateMachine = new StateMachineClass(&SA);
 	stateMachine->Init();	
 
-	Serial.print("Unused RAM: ");
-	Serial.println(freeRam(), DEC);  // calls StackCount() to report the unused RAM
+	printFreeRam();
 
 	OW.Init(stateMachine);
 
-	Serial.print("Unused RAM: ");
-	Serial.println(freeRam(), DEC);  // calls StackCount() to report the unused RAM
+	printFreeRam();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -79,7 +82,7 @@ void loop()
 
 	eins = micros();
 	
-	// todo: Zeitmessung der StateMachine!
+	// todo: Zeitmessung des Overwatchers
 	OW.Control();
 
 	/*Serial.print("Bisher durchgefuehrte Aktionen: ");

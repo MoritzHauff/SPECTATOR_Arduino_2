@@ -255,6 +255,12 @@ void StateMachineClass::SendDirectCommand(char *msg)
 ///State-Functions
 void StateMachineClass::changeState(StateClass *NextState)
 {
+	if (currentState == s_CoffeeBreak)
+	{
+		Serial.println(F("StateMachine.changeState(): ERROR Aktueller Status ist s_CoffeeBreak, kann keinen neuen Status annehmen. Bitte erste \"CONTINUE\" ausfuehren."));
+		return;
+	}
+	
 	Serial.print("Started Next State: "); // to inform the Rapi 
 	Serial.println(NextState->GetName());  
 	startedNewAction = true;
@@ -342,9 +348,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 			s_Rampe->ShiftTimers(TimerShiftAmount);
 		}
 
-		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein.
+		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein, da diese blinkt.
 
-		Serial.println(String("Modus wieder aufgenommen: " + currentState->GetName()));  // Debugging
+		Serial.print(F("Modus wieder aufgenommen: "));
+		Serial.println(currentState->GetName());  // Debugging
 	}
 }
 
