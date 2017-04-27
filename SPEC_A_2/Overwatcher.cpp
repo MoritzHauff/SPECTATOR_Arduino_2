@@ -7,6 +7,9 @@
 *** Moritz Hauff, 06.04.2017
 **/
 
+// todo nach einer gewissen Zeit erneut kalibrieren.
+// todo bumperkontrolle.
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
 #include "Overwatcher.h"

@@ -82,7 +82,7 @@ void S_SchwarzesFeldClass::Think()
 
 		stoppWahrscheinlichkeit = 200;
 	}
-	/*if (spectator->ultraschallHinten.GetDistance() <= S_SchwarzesFeld_USHinten)
+	/*if (spectator->ultraschallHinten.GetDistance() <= S_SchwarzesFeld_USHinten)   // todo warum funktioniert diese Messung nicht??
 	{
 		stoppWahrscheinlichkeit += 40;
 

@@ -40,7 +40,9 @@ class S_DrehenClass : public StateClass
 
  public:
 	 S_DrehenClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
-	 { }
+	 {
+		 ZielRichtung = R_NORDEN;
+	 }
 
 	 void Init();
 	 void Sense();

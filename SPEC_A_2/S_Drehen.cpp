@@ -19,8 +19,6 @@ void S_DrehenClass::Init()
 	MotorSpeedR = 0;
 
 	finishedCounter = 0;
-
-	ZielRichtung = R_NORDEN;
 }
 
 ///////////////////////////////////////////////////////////////////////////
