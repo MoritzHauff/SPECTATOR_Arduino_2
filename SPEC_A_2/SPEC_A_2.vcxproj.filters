@@ -113,6 +113,12 @@
     <ClInclude Include="S_Rampe.h">
       <Filter>Header Files - States</Filter>
     </ClInclude>
+    <ClInclude Include="ScriptedMovement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MedianFilter.cpp">
@@ -195,6 +201,12 @@
     </ClCompile>
     <ClCompile Include="S_Rampe.cpp">
       <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptedMovement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementList.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

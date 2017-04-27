@@ -12,6 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "MovementList.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
 

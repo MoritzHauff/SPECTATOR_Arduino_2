@@ -86,10 +86,12 @@
     <ClInclude Include="LDR.h" />
     <ClInclude Include="MedianFilter.h" />
     <ClInclude Include="MLX90614Class.h" />
+    <ClInclude Include="MovementList.h" />
     <ClInclude Include="MPU.h" />
     <ClInclude Include="MPUFahrer.h" />
     <ClInclude Include="OpferKontrolleur.h" />
     <ClInclude Include="Overwatcher.h" />
+    <ClInclude Include="ScriptedMovement.h" />
     <ClInclude Include="SerialBuffer.h" />
     <ClInclude Include="SharpIR.h" />
     <ClInclude Include="SPECMotoren.h" />
@@ -116,10 +118,12 @@
     <ClCompile Include="LDR.cpp" />
     <ClCompile Include="MedianFilter.cpp" />
     <ClCompile Include="MLX90614Class.cpp" />
+    <ClCompile Include="MovementList.cpp" />
     <ClCompile Include="MPU.cpp" />
     <ClCompile Include="MPUFahrer.cpp" />
     <ClCompile Include="OpferKontrolleur.cpp" />
     <ClCompile Include="Overwatcher.cpp" />
+    <ClCompile Include="ScriptedMovement.cpp" />
     <ClCompile Include="SerialBuffer.cpp" />
     <ClCompile Include="SharpIR.cpp" />
     <ClCompile Include="SPECMotoren.cpp" />
