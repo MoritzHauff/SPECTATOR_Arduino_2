@@ -107,6 +107,7 @@
     <ClInclude Include="S_Idle.h" />
     <ClInclude Include="S_Rampe.h" />
     <ClInclude Include="S_SchwarzesFeld.h" />
+    <ClInclude Include="S_ScriptedMovement.h" />
     <ClInclude Include="S_Sense.h" />
     <ClInclude Include="S_TeleOp.h" />
     <ClInclude Include="VL53L0X.h" />
@@ -140,6 +141,7 @@
     <ClCompile Include="S_Idle.cpp" />
     <ClCompile Include="S_Rampe.cpp" />
     <ClCompile Include="S_SchwarzesFeld.cpp" />
+    <ClCompile Include="S_ScriptedMovement.cpp" />
     <ClCompile Include="S_Sense.cpp" />
     <ClCompile Include="S_TeleOp.cpp" />
     <ClCompile Include="VL53L0X.cpp" />

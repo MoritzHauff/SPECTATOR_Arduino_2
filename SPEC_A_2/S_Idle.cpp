@@ -28,6 +28,7 @@ void S_IdleClass::Init()
 	spectator->serialBuffer.AddMsg(C_AktuelleRichtung, spectator->AktRichtung);
 	spectator->serialBuffer.AddMsg(C_GeradeRampeBefahren, spectator->GeradeRampeBefahren);
 	spectator->serialBuffer.AddMsg(C_GeradeSchwarzesFeldBefahren, spectator->GeradeSchwarzesFeldBefahren);
+	spectator->serialBuffer.AddMsg(C_GeradeSonstWieNichtVorangekommen, spectator->GeradeSonstWieNichtVorangekommen);
 	spectator->serialBuffer.Flush();
 
 	Serial.println("DemandNextStep");
@@ -35,6 +36,7 @@ void S_IdleClass::Init()
 	// Resete die Werte
 	spectator->GeradeRampeBefahren = false;
 	spectator->GeradeSchwarzesFeldBefahren = false;
+	spectator->GeradeSonstWieNichtVorangekommen = false;
 	//spectator->OpferKontroller.Reset();  // only reset when your really move to another field.
 }
 

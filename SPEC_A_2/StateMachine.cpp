@@ -25,6 +25,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_Sense = new S_SenseClass(spectator, "Sense");
 	s_SchwarzesFeld = new S_SchwarzesFeldClass(spectator, "SchwarzesFeld");
 	s_Rampe = new S_RampeClass(spectator, "Rampe");
+	s_ScriptedMovement = new S_ScriptedMovementClass(spectator, "ScriptedMovement");
 	
 	currentState = 0;
 
@@ -51,6 +52,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_Idle;
 	delete s_SchwarzesFeld;
 	delete s_Rampe;
+	delete s_ScriptedMovement;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -206,14 +208,26 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	else if (msg[0] == C_TELEOPSTART && msg[5] == C_TELEOPSTOP)
 	{
 		changeState(s_TeleOp);
-			
+
 		s_TeleOp->MotorSpeedL = convertCharToVorzeichen(msg[1]) * (byte)msg[2];
 		s_TeleOp->MotorSpeedR = convertCharToVorzeichen(msg[3]) * (byte)msg[4];
 
 		/*Serial.print("Neue Motordaten erhalten: l=");
 		Serial.print(l);
 		Serial.print(" r=");
-		Serial.println(r);*/		
+		Serial.println(r);*/
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'S' && msg[3] == C_TELEOPSTOP)
+	{
+		if (msg[2] == 'L')
+		{
+			changeState(s_ScriptedMovement);
+			s_ScriptedMovement->AusweichBewegung = BumperLinks;
+		}
+		else if (msg[2] == 'R')
+		{
+			// todo add
+		}
 	}
 }
 
@@ -278,6 +292,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_Rampe->Init();
 	}
+	else if (currentState == s_ScriptedMovement)
+	{
+		s_ScriptedMovement->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -318,6 +336,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		{
 			s_Rampe->ShiftTimers(TimerShiftAmount);
 		}
+		else if (currentState == s_ScriptedMovement)
+		{
+			s_ScriptedMovement->ShiftTimers(TimerShiftAmount);
+		}
 
 		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein, da diese blinkt.
 
@@ -342,6 +364,11 @@ void StateMachineClass::checkStates()
 	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle))
 	{
 		changeState(s_Sense);  // Nach jedem Drehen oder längere Pause automatisch Feld erfassen
+	}
+	else if (currentState == s_ScriptedMovement && currentState->GetStatus() != Running)
+	{
+		changeState(s_Sense);  // auch nach einem Fahrfehler soll das Feld ausgemessen werden.
+		spectator->GeradeSonstWieNichtVorangekommen = true;
 	}
 	else if (currentState->GetStatus() == Finished &&( currentState == s_GeradeAus || currentState == s_Rampe || currentState == s_SchwarzesFeld))
 	{
@@ -418,6 +445,12 @@ void StateMachineClass::DoAction()
 		s_Rampe->Sense();
 		s_Rampe->Think();
 		s_Rampe->Act();
+	}
+	else if (currentState == s_ScriptedMovement)
+	{
+		s_ScriptedMovement->Sense();
+		s_ScriptedMovement->Think();
+		s_ScriptedMovement->Act();
 	}
 }
 

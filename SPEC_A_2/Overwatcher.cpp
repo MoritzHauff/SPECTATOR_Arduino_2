@@ -66,6 +66,9 @@ void OverwatcherClass::Control()
 			stateMachine->SendDirectCommand("bRAMe");
 		}
 
+		// todo add bumperKontroller
+		//stateMachine->SendDirectCommand("bSLe");
+
 		// todo
 	}
 }

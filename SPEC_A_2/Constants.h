@@ -57,5 +57,6 @@
 #define C_AktuelleRichtung 0x57
 #define C_GeradeSchwarzesFeldBefahren 0x58
 #define C_GeradeRampeBefahren 0x59
+#define C_GeradeSonstWieNichtVorangekommen 0x60 // todo add this in the deserializer!
 
 #endif

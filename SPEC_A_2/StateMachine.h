@@ -23,6 +23,7 @@
 #include "S_Idle.h"
 #include "S_SchwarzesFeld.h"
 #include "S_Rampe.h"
+#include "S_ScriptedMovement.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -48,6 +49,7 @@ class StateMachineClass
 	 S_SenseClass *s_Sense;
 	 S_SchwarzesFeldClass *s_SchwarzesFeld;
 	 S_RampeClass *s_Rampe;
+	 S_ScriptedMovementClass *s_ScriptedMovement;
 
 	 StateClass *currentState;
 

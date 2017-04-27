@@ -48,7 +48,5 @@ class MovementArrayClass
 	 MotorDaten* GetNextMovement(const int Movements[][2], const int Rows);
 };
 
-extern MovementArrayClass MovementArray;
-
 #endif
 
