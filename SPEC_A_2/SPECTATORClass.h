@@ -128,6 +128,7 @@ class SPECTATORClass
 	byte AktRichtung;
 	bool GeradeSchwarzesFeldBefahren;
 	bool GeradeRampeBefahren;
+	bool GeradeSonstWieNichtVorangekommen;
 
 };
 

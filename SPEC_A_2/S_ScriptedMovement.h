@@ -1,4 +1,4 @@
-// MovementArray.h - Moritz Hauff - 27.04.2017
+// S_ScriptedMovement.h - Moritz Hauff - 27.04.2017
 
 ///////////////////////////////////////////////////////////////////////////
 /// Copyright (C) {2017}  {Moritz Hauff}
@@ -22,8 +22,8 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef _MOVEMENTARRAY_h
-#define _MOVEMENTARRAY_h
+#ifndef _S_SCRIPTEDMOVEMENT_h
+#define _S_SCRIPTEDMOVEMENT_h
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
@@ -33,42 +33,48 @@
 	#include "WProgram.h"
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-///MoterDaten-Struct
-struct MotorDaten
-{
-	int MotorSpeedL;
-	int MotorSpeedR;
+#include "State.h"
+#include "MovementArray.h"
+#include "MovementArrays.h"
 
-	MotorDaten(int MotorSpeedL = 0, int MotorSpeedR = 0)
-	{
-		this->MotorSpeedL = MotorSpeedL;
-		this->MotorSpeedR = MotorSpeedR;
-	}
+///////////////////////////////////////////////////////////////////////////
+///enum Ausweichmanöver
+enum AusweichBewegung
+{
+	BumperLinks,
+	BumperRechts
 };
 
 ///////////////////////////////////////////////////////////////////////////
-///ScriptedMovement-Class
-/*Stellt Funktionen zur bearbeitung von Movement Arrays bereit.*/
-class MovementArrayClass
+///State-Class
+/// <summary>
+/// Dieser State dient dem Abfahren eines vorgelegten Scripts (MovementArray) <para/>
+/// welches die genauen Motorgeschwindigkeiten für jeden Tick beinhaltet. <para/>
+/// Dabei laufen nur die grundlegensten Zusammenstoßverhinderungsmaßnahmen. <para/>
+/// </summary>
+class S_ScriptedMovementClass : public StateClass
 {
+///////////////////////////////////////////////////////////////////////////
+ protected: ///Konstanten 
+	 static const int S_ScriptedMovement_MaxTime = 2000;
+
  protected:
-	 int aktPos;
+	 MovementArrayClass movementArrayHandler = MovementArrayClass();
+
+	 unsigned long startTime;
 
  public:
-	 /// <summary>
-	 /// Setzt die aktuelle Array-Position auf die erste Bewegung und beginnt
-	 /// so mit der Liste von Bewegungen von vorne.
-	 /// </summary>
-	 void GoToStart();
+	 S_ScriptedMovementClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
+	 { }
 
-	 /// <summary>
-	 /// Gibt die in der Liste nächste Bewegung zurück und wandert mit der
-	 /// aktuellen Array-Postion eine Stelle weiter. Gibt null zurück, wenn keine weitere
-	 /// Bewegung mehr geplant ist.
-	 /// </summary>
-	 MotorDaten* GetNextMovement(const int Movements[][2], const int Rows);
+	 void Init();
+	 void Sense();
+	 void Think();
+	 void Act();
+
+	 void ShiftTimers(unsigned long ShiftAmount);
+
+	 AusweichBewegung AusweichBewegung;
 };
 
 #endif
-
