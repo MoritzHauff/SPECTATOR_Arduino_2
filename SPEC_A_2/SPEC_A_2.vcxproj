@@ -86,6 +86,8 @@
     <ClInclude Include="LDR.h" />
     <ClInclude Include="MedianFilter.h" />
     <ClInclude Include="MLX90614Class.h" />
+    <ClInclude Include="MovementArray.h" />
+    <ClInclude Include="MovementArrays.h" />
     <ClInclude Include="MovementList.h" />
     <ClInclude Include="MPU.h" />
     <ClInclude Include="MPUFahrer.h" />
@@ -118,6 +120,7 @@
     <ClCompile Include="LDR.cpp" />
     <ClCompile Include="MedianFilter.cpp" />
     <ClCompile Include="MLX90614Class.cpp" />
+    <ClCompile Include="MovementArray.cpp" />
     <ClCompile Include="MovementList.cpp" />
     <ClCompile Include="MPU.cpp" />
     <ClCompile Include="MPUFahrer.cpp" />

@@ -12,7 +12,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
-#include "MovementList.h"
+#include "MovementArray.h"
+#include "MovementArrays.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
 
@@ -64,6 +65,18 @@ void setup()
 	OW.Init(stateMachine);
 
 	printFreeRam();
+
+	MovementArray.GoToStart();
+	MotorDaten *md;
+	do {
+		md = MovementArray.GetNextMovement(bumperLinks, bumperLinksRows);
+		if (md != NULL)
+		{
+			Serial.print(md->MotorSpeedL);
+			Serial.print(" ");
+			Serial.println(md->MotorSpeedR);
+		}
+	} while (md != NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////
