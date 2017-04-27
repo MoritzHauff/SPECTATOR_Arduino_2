@@ -209,40 +209,33 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);
 		changeState(s_GeradeAus);
 	}
-	else if (msg[0] == C_TELEOPSTART)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'd' && msg[3] == C_TELEOPSTOP)
 	{
-		if (msg[5] == C_TELEOPSTOP)
+		changeState(s_Drehen);
+		if (msg[2] < 10)
 		{
-			// todo: genauen Modus entscheiden.
-			changeState(s_TeleOp);
-			
-			s_TeleOp->MotorSpeedL = convertCharToVorzeichen(msg[1]) * (byte)msg[2];
-			s_TeleOp->MotorSpeedR = convertCharToVorzeichen(msg[3]) * (byte)msg[4];
+			s_Drehen->ZielRichtung = (int)msg[2];
+		}
+		else
+		{
+			s_Drehen->ZielRichtung = spectator->mpuFahrer.CharToRichtung(msg[2]);
+		}
 
-			/*Serial.print("Neue Motordaten erhalten: l=");
-			Serial.print(l);
-			Serial.print(" r=");
-			Serial.println(r);*/
-		}
-		if (msg[3] == C_TELEOPSTOP)
-		{
-			if (msg[1] == 'd')
-			{
-				changeState(s_Drehen);
-				if (msg[2] < 10)
-				{
-					s_Drehen->ZielRichtung = (int)msg[2];
-				}
-				else
-				{
-					s_Drehen->ZielRichtung = spectator->mpuFahrer.CharToRichtung(msg[2]);
-				}
-				
-				spectator->AktRichtung = s_Drehen->ZielRichtung;
-				//Serial.print("Neue Richtung gesetzt: ");
-				//Serial.println(spectator->AktRichtung);
-			}
-		}
+		spectator->AktRichtung = s_Drehen->ZielRichtung;
+		//Serial.print("Neue Richtung gesetzt: ");
+		//Serial.println(spectator->AktRichtung);
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[5] == C_TELEOPSTOP)
+	{
+		changeState(s_TeleOp);
+			
+		s_TeleOp->MotorSpeedL = convertCharToVorzeichen(msg[1]) * (byte)msg[2];
+		s_TeleOp->MotorSpeedR = convertCharToVorzeichen(msg[3]) * (byte)msg[4];
+
+		/*Serial.print("Neue Motordaten erhalten: l=");
+		Serial.print(l);
+		Serial.print(" r=");
+		Serial.println(r);*/		
 	}
 }
 
@@ -420,16 +413,9 @@ void StateMachineClass::DoAction()
 	}
 	else if (currentState == s_Calibrate)
 	{
-		/*if (s_Calibrate->GetStatus() == Finished)
-		{
-			changeState(s_TeleOp); // todo: Should be s_Idle.
-		}
-		else*/
-		{
-			s_Calibrate->Sense();
-			s_Calibrate->Think();
-			s_Calibrate->Act();
-		}
+		s_Calibrate->Sense();
+		s_Calibrate->Think();
+		s_Calibrate->Act();
 	}
 	else if (currentState == s_GeradeAus)
 	{
