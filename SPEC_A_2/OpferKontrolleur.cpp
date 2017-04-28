@@ -42,19 +42,23 @@ OpferKontrolleurClass::OpferKontrolleurClass()
 ///Funktionen
 void OpferKontrolleurClass::Reset()
 {
-	letztesFeldOpferErkannt = false;
+	if (letztesFeldOpferErkannt > 0)
+	{
+		letztesFeldOpferErkannt--;
+	}
 
 	if (OpferLinks() == true)
 	{
-		letztesFeldOpferErkannt = true;   // Falls auf dem letzten Feld ein Opfer erkannt wurde dies hier speichern.
+		letztesFeldOpferErkannt = C_Opfer_ResetCounter;   // Falls auf dem letzten Feld ein Opfer erkannt wurde dies hier speichern.
 	}
 	if (OpferVorne() == true)
 	{
-		letztesFeldOpferErkannt = true;
+		letztesFeldOpferErkannt = C_Opfer_ResetCounter;
 	}
 	if (OpferRechts() == true)
 	{
-		letztesFeldOpferErkannt = true;
+		letztesFeldOpferErkannt = C_Opfer_ResetCounter;
+		Serial.println(F("OpferKontrolleur.Reset(): Habe auf dem letzten Feld ein Opfer erkannt."));
 	}
 
 	opferLinks = 0;
@@ -94,7 +98,7 @@ void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRe
 
 bool OpferKontrolleurClass::OpferLinks()
 {
-	if (opferLinks > 5 && letztesFeldOpferErkannt == false)
+	if (opferLinks > 5 && letztesFeldOpferErkannt <= 0)
 	{
 		return true;
 	}
@@ -103,7 +107,7 @@ bool OpferKontrolleurClass::OpferLinks()
 
 bool OpferKontrolleurClass::OpferVorne()
 {
-	if (opferVorne > 5 && letztesFeldOpferErkannt == false)
+	if (opferVorne > 5 && letztesFeldOpferErkannt <= 0)
 	{
 		return true;
 	}
@@ -112,7 +116,7 @@ bool OpferKontrolleurClass::OpferVorne()
 
 bool OpferKontrolleurClass::OpferRechts()
 {
-	if (opferRechts > 5 && letztesFeldOpferErkannt == false)
+	if (opferRechts > 5 && letztesFeldOpferErkannt <= 0)
 	{
 		return true;
 	}

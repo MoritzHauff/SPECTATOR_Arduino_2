@@ -36,6 +36,7 @@
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
 static const float C_Opfer_TempUnterschied = 1.0;
+static const int C_Opfer_ResetCounter = 5;
 
 ///////////////////////////////////////////////////////////////////////////
 ///OpferKontrolleur-Klasse
@@ -43,7 +44,7 @@ static const float C_Opfer_TempUnterschied = 1.0;
 class OpferKontrolleurClass
 {
 protected:
-	bool letztesFeldOpferErkannt;
+	int letztesFeldOpferErkannt;
 	int opferLinks;
 	int opferRechts;
 	int opferVorne;
