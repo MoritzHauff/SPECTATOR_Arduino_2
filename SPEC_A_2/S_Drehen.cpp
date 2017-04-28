@@ -10,15 +10,16 @@
 ///Konstruktoren
 void S_DrehenClass::Init()
 {
-	status = Running;
+	status = Running;  // todo move this to Parent
 	
-	startTime = millis();   // todo: stop when the timer is over
+	startTime = millis();
 	counter = 0;
 	
 	MotorSpeedL = 0;
 	MotorSpeedR = 0;
 
 	finishedCounter = 0;
+	stuckCounter = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -83,6 +84,19 @@ void S_DrehenClass::running()
 	{
 		float winkelAbstand = spectator->mpuFahrer.GetWinkelAbstand(ZielRichtung, spectator->mpu.GetYaw());
 		
+		if (stuckCounter > 0)
+		{
+			stuckCounter--;
+		}
+		if (abs(letzterWinkelAbstand - winkelAbstand) < 0.01)  // todo adapt this value
+		{
+			stuckCounter += 2;   // erhöhen obwol er oben verringert wurde.
+		}
+		else
+		{
+			stuckCounter = 0;  // StuckCounter gänzlich zurücksetzen.
+		}
+
 		if (abs(winkelAbstand) <= 0.01)  // stopp-toleranz   // 0.1 = 5,7°
 		{
 			finishedCounter++;
@@ -98,6 +112,14 @@ void S_DrehenClass::running()
 		else
 		{
 			int	motorspeed = (int)(winkelAbstand * S_Drehen_MotorSteigung);  // kein y-Offset da er sonst anfängt zu "schwingen"   // todo: insert a convenient function
+			if (motorspeed > 0)
+			{
+				motorspeed += stuckCounter * S_Drehen_StuckSteigung;
+			}
+			else
+			{
+				motorspeed -= stuckCounter *S_Drehen_StuckSteigung;
+			}
 
 			// Motordrehrichtungen zuweisen.
 			MotorSpeedL = motorspeed;
@@ -117,6 +139,8 @@ void S_DrehenClass::running()
 			MotorSpeedL = spectator->Motoren.CapSpeed(MotorSpeedL, S_Drehen_MaxSpeed, S_Drehen_MinSpeed);
 			MotorSpeedR = spectator->Motoren.CapSpeed(MotorSpeedR, S_Drehen_MaxSpeed, S_Drehen_MinSpeed);
 		}
+
+		letzterWinkelAbstand = winkelAbstand;
 	}
 	else
 	{

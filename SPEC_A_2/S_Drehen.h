@@ -44,6 +44,8 @@ const int S_Drehen_MaxSpeed = 180;  // Die höchste Motorgeschwindigkeit beim Dre
 
 const int S_Drehen_MotorSteigung = 320;  // Mit welcher Steigung die Motorgeschwindigkeit mit größerem MotorAbstand zunimmt.
 
+const int S_Drehen_StuckSteigung = 15;
+
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
 /*Beschreibt den Drehe-nach-Himmelsrichtung-Modus.*/
@@ -56,6 +58,9 @@ class S_DrehenClass : public StateClass
 
 	 int MotorSpeedL;
 	 int MotorSpeedR;
+
+	 float letzterWinkelAbstand;
+	 int stuckCounter;
 
 	 /*Führt alle Aktionen während dem normalen Drehen durch.*/
 	 void running();
