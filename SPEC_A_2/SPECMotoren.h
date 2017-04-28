@@ -70,6 +70,9 @@ class SPECMotorenClass
 	 bool SetMotorL(int Speed);
 	 bool SetMotorR(int Speed);
 
+	 /*Speichert den momentanen Status der Unterflurbeleuchtung.*/
+	 bool ledState;
+
  public:
 	SPECMotorenClass(uint8_t MotorPortLinks, uint8_t MotorPortRechts, uint8_t RescueMotorPort, uint8_t UnterflurPort, 
 		uint8_t StepperLPin1, uint8_t StepperLPin2, uint8_t StepperLPin3, uint8_t StepperLPin4,
@@ -93,6 +96,8 @@ class SPECMotorenClass
 	void TurnLEDOn();
 	/*Deaktivieert die Unterflurbeleuchtung.*/
 	void TurnLEDOff();
+	/*Gibt den aktuellen Status der Unterflulfbeleuchtung zurück.*/
+	bool GetLEDState();
 
 	/*Wirft links ein Kit ab. Diese Funktion blockt.*/
 	void AbwurfLinks();

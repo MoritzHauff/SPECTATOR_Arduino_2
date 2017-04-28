@@ -389,7 +389,7 @@ void StateMachineClass::checkStates()
 	}
 	else if (currentState == s_ScriptedMovement && currentState->GetStatus() != Running)
 	{
-		changeState(s_Sense);  // auch nach einem Fahrfehler soll das Feld ausgemessen werden.
+		changeState(s_Drehen);  // auch nach einem Fahrfehler soll das Feld ausgemessen werden. (aber zuerst gedreht werden!)
 		spectator->GeradeSonstWieNichtVorangekommen = true;
 	}
 	else if (currentState->GetStatus() == Finished &&( currentState == s_GeradeAus || currentState == s_Rampe || currentState == s_SchwarzesFeld))

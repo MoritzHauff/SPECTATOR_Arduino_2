@@ -196,12 +196,19 @@ void SPECMotorenClass::TurnLEDOn()
 		UnterflurBeleuchtung->run(BACKWARD);
 		UnterflurBeleuchtung->setSpeed(240);
 	}
+	ledState = HIGH;
 }
 
 void SPECMotorenClass::TurnLEDOff()
 {
 	UnterflurBeleuchtung->run(RELEASE);
 	UnterflurBeleuchtung->setSpeed(0);
+	ledState = LOW;
+}
+
+bool SPECMotorenClass::GetLEDState()
+{
+	return ledState;
 }
 
 void SPECMotorenClass::AbwurfLinks()

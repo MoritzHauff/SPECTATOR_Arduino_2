@@ -64,6 +64,11 @@ void OverwatcherClass::Control()
 	{
 		actions++;
 		rampenCounter = 0;
+
+		if (SA.Motoren.GetLEDState() == LOW)
+		{
+			SA.Motoren.TurnLEDOn();   // Dafür sorgen, dass nach jeder CoffeeBreak oder sonstiger Möglichkeit die Unterflufbeleuchtung wieder eingeschaltet wird.
+		}
 	}
 
 	if (stateMachine->GetCurrentState() != "CoffeeBreak" && stateMachine->GetCurrentState() != "TeleOp")

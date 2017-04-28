@@ -10,6 +10,10 @@
 *** Moritz Hauff, 01.03.2017
 **/
 
+// todo warum werden nachwievor zwei opfer angezeigt und versorgt?
+// todo drehfunktion anpassen, damit diese nicht mehr stuckt -> erhöhe geschw im laufe der vergangenen Zeit
+// todo states wieder mit error beenden, wenn diese Fehlgeschlagen sind und vom Overwathcer korrigeiren lassen. (z.B. auch GeradeSonstWieNichtVorangekommen senden)
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
 #include "SPECTATORClass.h"
