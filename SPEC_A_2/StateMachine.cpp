@@ -265,7 +265,7 @@ void StateMachineClass::changeState(StateClass *NextState)
 	if (currentState == s_CoffeeBreak)
 	{
 		Serial.println(F("StateMachine.changeState(): ERROR Aktueller Status ist s_CoffeeBreak, kann keinen neuen Status annehmen. Bitte erste \"CONTINUE\" ausfuehren."));
-		return;
+		//return;
 	}
 	
 	Serial.print("Started Next State: "); // to inform the Rapi 
