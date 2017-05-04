@@ -26,6 +26,7 @@ StateMachineClass::StateMachineClass(SPECTATORClass *Spectator)
 	s_SchwarzesFeld = new S_SchwarzesFeldClass(spectator, "SchwarzesFeld");
 	s_Rampe = new S_RampeClass(spectator, "Rampe");
 	s_ScriptedMovement = new S_ScriptedMovementClass(spectator, "ScriptedMovement");
+	s_OpferAbwurf = new S_OpferAbwurfClass(spectator, "OpferAbwurf");
 	
 	currentState = 0;
 
@@ -53,6 +54,7 @@ StateMachineClass::~StateMachineClass()
 	delete s_SchwarzesFeld;
 	delete s_Rampe;
 	delete s_ScriptedMovement;
+	delete s_OpferAbwurf;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -174,15 +176,19 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'O' && msg[2] == 'L' && msg[3] == C_TELEOPSTOP)
 	{
-		spectator->Motoren.AbwurfLinks();
+		s_OpferAbwurf->RechtsLinks = 'l';
+		changeState(s_OpferAbwurf);
+		/*spectator->Motoren.AbwurfLinks();
 		spectator->mpu.ResetFIFO();
-		changeState(s_Sense);   // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
+		changeState(s_Sense); */  // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
 	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'O' && msg[2] == 'R' && msg[3] == C_TELEOPSTOP)
 	{
-		spectator->Motoren.AbwurfRechts();
+		s_OpferAbwurf->RechtsLinks = 'r';
+		changeState(s_OpferAbwurf);
+		/*spectator->Motoren.AbwurfRechts();
 		spectator->mpu.ResetFIFO();
-		changeState(s_Sense);   // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
+		changeState(s_Sense); */  // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
 	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{
@@ -296,6 +302,10 @@ void StateMachineClass::changeState(StateClass *NextState)
 	{
 		s_ScriptedMovement->Init();
 	}
+	else if (currentState == s_OpferAbwurf)
+	{
+		s_OpferAbwurf->Init();
+	}
 }
 
 void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerShiftAmount)
@@ -340,6 +350,10 @@ void StateMachineClass::resumeState(StateClass *NextState, unsigned long TimerSh
 		{
 			s_ScriptedMovement->ShiftTimers(TimerShiftAmount);
 		}
+		else if (currentState == s_OpferAbwurf)
+		{
+			s_OpferAbwurf->ShiftTimers(TimerShiftAmount);
+		}
 
 		spectator->Motoren.TurnLEDOn(); // Nach der KaffeePause könnte die LED ausgeschaltet sein, da diese blinkt.
 
@@ -361,9 +375,9 @@ void StateMachineClass::checkStates()
 		OverwatcherMsg("DrehFehler");
 	}
 
-	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle))
+	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle || currentState == s_OpferAbwurf))
 	{
-		changeState(s_Sense);  // Nach jedem Drehen oder längere Pause automatisch Feld erfassen
+		changeState(s_Sense);  // Nach jedem Drehen oder längere Pause automatisch Feld erfassen, oder nach Opferabwurf.
 	}
 	else if (currentState == s_ScriptedMovement && currentState->GetStatus() != Running)
 	{
@@ -451,6 +465,12 @@ void StateMachineClass::DoAction()
 		s_ScriptedMovement->Sense();
 		s_ScriptedMovement->Think();
 		s_ScriptedMovement->Act();
+	}
+	else if (currentState == s_OpferAbwurf)
+	{
+		s_OpferAbwurf->Sense();
+		s_OpferAbwurf->Think();
+		s_OpferAbwurf->Act();
 	}
 }
 

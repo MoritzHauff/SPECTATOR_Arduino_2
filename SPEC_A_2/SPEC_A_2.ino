@@ -16,6 +16,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
+#include "S_OpferAbwurf.h"
 #include "SPECTATORClass.h"
 #include "Overwatcher.h"
 

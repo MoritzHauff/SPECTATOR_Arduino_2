@@ -24,6 +24,7 @@
 #include "S_SchwarzesFeld.h"
 #include "S_Rampe.h"
 #include "S_ScriptedMovement.h"
+#include "S_OpferAbwurf.h"
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
@@ -50,6 +51,7 @@ class StateMachineClass
 	 S_SchwarzesFeldClass *s_SchwarzesFeld;
 	 S_RampeClass *s_Rampe;
 	 S_ScriptedMovementClass *s_ScriptedMovement;
+	 S_OpferAbwurfClass *s_OpferAbwurf;
 
 	 StateClass *currentState;
 
