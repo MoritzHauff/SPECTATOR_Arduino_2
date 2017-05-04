@@ -97,6 +97,11 @@ void S_RampeClass::Think()
 		Serial.print("S_GeradeAus.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallVorne.GetDistance());
 	}
+	// Neigung kontrollieren
+	if (abs(spectator->mpu.GetPitch()) < C_Overwatcher_RampenWinkel)
+	{
+		stoppWahrscheinlichkeit += 20;
+	}
 
 	if (stoppWahrscheinlichkeit > 100)
 	{
