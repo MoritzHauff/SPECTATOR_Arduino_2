@@ -34,7 +34,7 @@
 #endif
 
 const int bumperLinksRows = 94;  // you need to adapt this!
-const int bumperLinks[][2] PROGMEM = {  // save SRAM and save the data in the program memmory
+const int bumperLinks[][2] = {  // save SRAM and save the data in the program memmory
 	{ -120, -120 },
 	{ -120, -120 },
 	{ -120, -120 },
