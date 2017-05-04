@@ -39,12 +39,12 @@ void MovementArrayClass::GoToStart()
 	aktPos = 0;
 }
 
-MotorDaten* MovementArrayClass::GetNextMovement(const int Movements[][2], const int Rows)
+MotorDaten* MovementArrayClass::GetNextMovement(const int MovementsLinks[], const int MovementsRechts[], const int Rows)
 {
 	if (aktPos < Rows-1 && aktPos >= -1)
 	{
 		aktPos++;
-		return new MotorDaten(Movements[aktPos][0], Movements[aktPos][1]);
+		return new MotorDaten(MovementsLinks[aktPos], MovementsRechts[aktPos]);
 	}
 
 	return NULL;

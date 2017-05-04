@@ -39,6 +39,8 @@ void S_ScriptedMovementClass::Init()
 {
 	movementArrayHandler.GoToStart();
 	startTime = millis();
+
+	status = Running;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -77,7 +79,7 @@ void S_ScriptedMovementClass::Act()
 	
 	if (AusweichBewegung == BumperLinks)
 	{
-		md = movementArrayHandler.GetNextMovement(bumperLinks, bumperLinksRows);
+		md = movementArrayHandler.GetNextMovement(L_bumperLinks, R_bumperLinks, bumperLinksRows);
 	}
 	else if (AusweichBewegung == BumperRechts)
 	{
@@ -93,9 +95,17 @@ void S_ScriptedMovementClass::Act()
 	if (md != NULL)
 	{
 		spectator->Motoren.SetMotoren(md->MotorSpeedL, md->MotorSpeedR);
+
+		Serial.print("Weiche aus: L: ");
+		Serial.print(md->MotorSpeedL);
+		Serial.print(" R: ");
+		Serial.println(md->MotorSpeedR);
+
+		delay(50); // add a small delay.
 	}
 	else
 	{
+		spectator->mpu.ResetFIFO();
 		status = Finished;
 		spectator->Motoren.SetMotoren(0, 0);
 	}

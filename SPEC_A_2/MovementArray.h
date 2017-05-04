@@ -67,7 +67,7 @@ class MovementArrayClass
 	 /// aktuellen Array-Postion eine Stelle weiter. Gibt null zurück, wenn keine weitere
 	 /// Bewegung mehr geplant ist.
 	 /// </summary>
-	 MotorDaten* GetNextMovement(const int Movements[][2], const int Rows);
+	 MotorDaten* GetNextMovement(const int MovementsLinks[], const int MovementsRechts[], const int Rows);
 };
 
 #endif

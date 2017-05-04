@@ -94,7 +94,12 @@ void OverwatcherClass::Control()
 		}
 
 		// todo add bumperKontroller
-		//stateMachine->SendDirectCommand("bSLe");
+
+		if (SA.switchLinks.GetLastState() == true && stateMachine->GetCurrentState() != "ScriptedMovement")
+		{
+			stateMachine->SendDirectCommand("bSLe");
+			Serial.println("Ausweichmanoever gestartet.");
+		}
 
 		// todo
 	}
