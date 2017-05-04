@@ -105,6 +105,7 @@
     <ClInclude Include="S_Drehen.h" />
     <ClInclude Include="S_GeradeAus.h" />
     <ClInclude Include="S_Idle.h" />
+    <ClInclude Include="S_OpferAbwurf.h" />
     <ClInclude Include="S_Rampe.h" />
     <ClInclude Include="S_SchwarzesFeld.h" />
     <ClInclude Include="S_ScriptedMovement.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="S_Drehen.cpp" />
     <ClCompile Include="S_GeradeAus.cpp" />
     <ClCompile Include="S_Idle.cpp" />
+    <ClCompile Include="S_OpferAbwurf.cpp" />
     <ClCompile Include="S_Rampe.cpp" />
     <ClCompile Include="S_SchwarzesFeld.cpp" />
     <ClCompile Include="S_ScriptedMovement.cpp" />

@@ -128,6 +128,9 @@
     <ClInclude Include="S_ScriptedMovement.h">
       <Filter>Header Files - States</Filter>
     </ClInclude>
+    <ClInclude Include="S_OpferAbwurf.h">
+      <Filter>Header Files - States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MedianFilter.cpp">
@@ -221,6 +224,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="S_ScriptedMovement.cpp">
+      <Filter>Source Files - States</Filter>
+    </ClCompile>
+    <ClCompile Include="S_OpferAbwurf.cpp">
       <Filter>Source Files - States</Filter>
     </ClCompile>
   </ItemGroup>
