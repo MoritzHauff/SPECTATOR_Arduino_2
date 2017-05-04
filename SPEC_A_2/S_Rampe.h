@@ -43,7 +43,7 @@ class S_RampeClass : public StateClass
 ///////////////////////////////////////////////////////////////////////////
  protected: ///Konstanten
 	 const static int S_Rampe_USVorne = 7;
-	 const static int S_Rampe_NormalSpeed = 110;
+	 const static int S_Rampe_NormalSpeed = 140;
  
  protected:
 	 int stoppWahrscheinlichkeit;   // todo move to StateClass

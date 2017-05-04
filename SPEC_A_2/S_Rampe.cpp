@@ -85,11 +85,11 @@ void S_RampeClass::Think()
 	if (winkelKorrektur > 0.01)
 	{
 		speedL = S_Rampe_NormalSpeed + 10;
-		speedR = S_Rampe_NormalSpeed - 60;
+		speedR = S_Rampe_NormalSpeed - 45;
 	}
 	else if (winkelKorrektur < -0.01)
 	{
-		speedL = S_Rampe_NormalSpeed - 60;
+		speedL = S_Rampe_NormalSpeed - 45;
 		speedR = S_Rampe_NormalSpeed + 10;
 	}
 	else
@@ -116,13 +116,15 @@ void S_RampeClass::Think()
 	{
 		stoppWahrscheinlichkeit += 60;
 
-		Serial.print("S_GeradeAus.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
+		Serial.print("S_Rampe.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallVorne.GetDistance());
 	}
 	// Neigung kontrollieren
-	if (abs(spectator->mpu.GetPitch()) < C_Overwatcher_RampenWinkel)
+	if (abs(spectator->mpu.GetPitch()) < 0.2)
 	{
-		stoppWahrscheinlichkeit += 20;
+		stoppWahrscheinlichkeit += 13;  // 17 ist zu hoch
+
+		Serial.println("S_Rampe.Think(): MPU verkeundet Ende der Rampe.");
 	}
 
 	if (stoppWahrscheinlichkeit > 100)
