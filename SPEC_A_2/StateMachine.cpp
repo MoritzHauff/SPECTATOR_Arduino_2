@@ -212,6 +212,14 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		spectator->mpu.ResetFIFO();
 		changeState(s_Sense); */  // Feld neu vermessen und den Algo nach dem nächsten Schritt fragen.
 	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'L' && msg[2] == 'L' && msg[3] == C_TELEOPSTOP)
+	{
+		spectator->Motoren.StepL(-1);
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'L' && msg[2] == 'R' && msg[3] == C_TELEOPSTOP)
+	{
+		spectator->Motoren.StepR(-1);
+	}
 	else if (msg[0] == C_TELEOPSTART && msg[1] == 'g' && msg[3] == C_TELEOPSTOP)
 	{
 		s_GeradeAus->Direction = convertCharToVorzeichen(msg[2]);
