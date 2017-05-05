@@ -357,8 +357,8 @@ byte S_GeradeAusClass::ermittleStartWandKategorie()
 		{
 			i++;
 			laserFilter.Update(spectator->laserVorne.GetDistance());
-			Serial.print("neue Laserentfernung: ");
-			Serial.println(spectator->laserVorne.GetDistance());
+			/*Serial.print("neue Laserentfernung: ");
+			Serial.println(spectator->laserVorne.GetDistance());*/
 		}
 	}
 	laserDistance = laserFilter.GetValue();
