@@ -80,30 +80,30 @@ void S_RampeClass::Think()
 	// Bumper kontrollieren.
 	if (spectator->switchLinks.GetLastState() == true)
 	{
-		stoppWahrscheinlichkeit += 80;
-		Serial.println("WARNING S_GeradeAus: linker Bumper hat Kontakt.");
+		stoppWahrscheinlichkeit += 30;
+		Serial.println("WARNING S_Rampe: linker Bumper hat Kontakt.");
 	}
 	if (spectator->switchRechts.GetLastState() == true)
 	{
-		stoppWahrscheinlichkeit += 80;
-		Serial.println("WARNING S_GeradeAus: rechter Bumper hat Kontakt.");
+		stoppWahrscheinlichkeit += 30;
+		Serial.println("WARNING S_Rampe: rechter Bumper hat Kontakt.");
 	}
 
 	// Ultraschall kontrollieren.
 	if (spectator->ultraschallVorne.GetDistance() <= S_Rampe_USVorne)
 	{
-		stoppWahrscheinlichkeit += 40;
+		stoppWahrscheinlichkeit += 60;
 
 		Serial.print("S_Rampe.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallVorne.GetDistance());
 	}
-	// Neigung kontrollieren
+	/*// Neigung kontrollieren
 	if (abs(spectator->mpu.GetPitch()) < 0.2)
 	{
 		stoppWahrscheinlichkeit += 11;  // 17 ist zu hoch
 
 		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
-	}
+	}*/
 
 	if (stoppWahrscheinlichkeit > 100)
 	{
@@ -128,12 +128,12 @@ float S_RampeClass::verwerteSharp(int Vorne, int Hinten)  // todo move this some
 	{
 		//turnCounter = 5;
 		//straightCounter = 5;
-		//Serial.println("S_GeradeAus.Think(): Sharp melden deutliche Naehe zur Wand, korrigiere...");
+		Serial.println("S_Rampe.Think(): Sharp melden deutliche Naehe zur Wand, korrigiere...");
 		return -0.15;
 	}
 	else if (Vorne > 420 || Hinten > 420)   // zu nah aber noch nicht so nah das gerade aus gefahren werden muss.
 	{
-		//Serial.println("S_GeradeAus.Think(): Sharp melden etwas Naehe zur Wand, korrigiere...");
+		Serial.println("S_Rampe.Think(): Sharp melden etwas Naehe zur Wand, korrigiere...");
 		return -0.07;
 	}
 	else
@@ -146,12 +146,12 @@ float S_RampeClass::verwerteSharp(int Vorne, int Hinten)  // todo move this some
 		}
 		else if (differenz > 0)
 		{
-			//Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
+			Serial.println("S_Rampe.Think(): Sharp verlangen richtungskorrektur zur Wand hin.");
 			return 0.05;
 		}
 		else if (differenz < 0)
 		{
-			//Serial.println("S_GeradeAus.Think(): Sharp verlangen richtungskorrektur.");
+			Serial.println("S_Rampe.Think(): Sharp verlangen richtungskorrektur von Wand weg.");
 			return -0.05;
 		}
 
