@@ -288,7 +288,7 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 			Serial.print(" Ziel entfernung :");
 			Serial.println(S_GeradeAus_WandEntfernungenVor[zielWandKategorie]);
 		}
-		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 35 && spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 120)  // noch deutlich zu weit weg von der wand.
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 15 && spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 145)  // noch deutlich zu weit weg von der wand.
 		{
 			if (stoppWahrscheinlichkeit >= 25)
 			{

@@ -36,7 +36,7 @@ const int S_Drehen_SharpMin = 150;  // Sobald die Wänder weiter weg sind, also u
 class S_GeradeAusClass : public StateClass
 {
  protected:
-	 const int S_GeradeAus_WandEntfernungen[8] = { 90, 405, 705, 1005, 1305, 1605, 1905, 2205 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
+	 const int S_GeradeAus_WandEntfernungen[8] = { 80, 395, 695, 995, 1295, 1595, 1895, 2195 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
 	 const int S_GeradeAus_WandEntfernungenVor[8] = { 130, 460, 760, 1060, 1360, 1660, 1960, 2260 };  // Die Wandkategorien für die Vorwärtsfahrt.
 	 const int S_GeradeAus_WandEntfernungenRueck[8] = { 30, 340, 640, 940, 1240, 1540, 1840, 2160 };  // Die Wandkategorien für die Rückwärtsfahrt.
 
