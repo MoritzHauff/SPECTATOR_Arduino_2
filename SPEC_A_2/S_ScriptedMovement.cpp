@@ -41,6 +41,8 @@ void S_ScriptedMovementClass::Init()
 	startTime = millis();
 
 	status = Running;
+
+	counter = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -70,6 +72,8 @@ void S_ScriptedMovementClass::Think()
 		Serial.println("FAILURE: Ausweichmanoever konnte nicht beendet werden. MaxTimer erreicht!");
 	}
 
+	counter++;
+
 	// todo zusammenstoßverhinderungen hinzufügen.
 }
 
@@ -79,11 +83,35 @@ void S_ScriptedMovementClass::Act()
 	
 	if (AusweichBewegung == BumperLinks)
 	{
-		md = movementArrayHandler.GetNextMovement(L_bumperLinks, R_bumperLinks, bumperLinksRows);
+		//md = movementArrayHandler.GetNextMovement(L_bumperLinks, R_bumperLinks, bumperLinksRows);
+
+		if (counter < 6)
+		{
+			md = new MotorDaten(-150, -100);
+		}
+		else if (counter < 10)
+		{
+			md = new MotorDaten(-130, -130);
+		}
+		else
+		{
+			md = NULL;  // Finished
+		}
 	}
 	else if (AusweichBewegung == BumperRechts)
 	{
-		// todo add
+		if (counter < 6)
+		{
+			md = new MotorDaten(-100, -150);
+		}
+		else if (counter < 10)
+		{
+			md = new MotorDaten(-130, -130);
+		}
+		else
+		{
+			md = NULL;  // Finished
+		}
 	}
 	else
 	{
