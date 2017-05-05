@@ -22,7 +22,7 @@ class S_RampeClass : public StateClass
 {
 ///////////////////////////////////////////////////////////////////////////
  protected: ///Konstanten
-	 const static int S_Rampe_USVorne = 4;	 
+	 const static int S_Rampe_USVorne = 6;	 
  
  protected:
 	 int stoppWahrscheinlichkeit;   // todo move to StateClass
