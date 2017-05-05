@@ -29,6 +29,8 @@ void S_RampeClass::Init()
 ///Funktionen
 void S_RampeClass::Sense()
 {
+	spectator->UpdateSharp();
+
 	spectator->UpdateMPU();
 
 	spectator->UpdateSwitches();

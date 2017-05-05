@@ -27,7 +27,7 @@ class OverwatcherClass
 {
 ///////////////////////////////////////////////////////////////////////////
  protected:   /// Konstanten
-	 const static int C_SchwarzesFeld = 820;
+	 const static int C_SchwarzesFeld = 870;
 
  //protected:
  public: 
