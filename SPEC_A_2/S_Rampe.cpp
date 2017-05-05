@@ -93,20 +93,21 @@ void S_RampeClass::Think()
 		Serial.println("WARNING S_Rampe: rechter Bumper hat Kontakt.");
 	}
 
+	
+	// Neigung kontrollieren
+	if (abs(spectator->mpu.GetPitch()) < 0.2)
+	{
+		stoppWahrscheinlichkeit += 11;  // 17 ist zu hoch
+
+		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
+	}
 	// Ultraschall kontrollieren.
-	if (spectator->ultraschallVorne.GetDistance() <= S_Rampe_USVorne)
+	else if (spectator->ultraschallVorne.GetDistance() <= S_Rampe_USVorne)
 	{
 		stoppWahrscheinlichkeit += 60;
 
 		Serial.print("S_Rampe.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallVorne.GetDistance());
-	}
-	// Neigung kontrollieren
-	if (abs(spectator->mpu.GetPitch()) < 0.2)
-	{
-		stoppWahrscheinlichkeit += 12;  // 17 ist zu hoch
-
-		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
 	}
 
 	if (stoppWahrscheinlichkeit > 100)
