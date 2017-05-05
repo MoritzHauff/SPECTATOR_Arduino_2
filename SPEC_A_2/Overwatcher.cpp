@@ -71,11 +71,14 @@ void OverwatcherClass::Control()
 		}
 		if (rampenCounter > 20 && stateMachine->GetCurrentState() != "Rampe")
 		{
-			Serial.println("Overwatcher: Befahre gerade die Rampe. Aendere Status.");
-			stateMachine->SendDirectCommand("bRAMe");
-			if (SA.mpu.GetPitch() < 0)  // beim runterfahrne bitte schneller fahren.
+			Serial.println(F("Overwatcher: Befahre gerade die Rampe. Aendere Status."));
+			if (SA.mpu.GetPitch() < 0)  
 			{
-				stateMachine->s_Rampe->NormalSpeed = 170;  // todo make this pretty !! change the states in the statemachine pack to protected!
+				stateMachine->SendDirectCommand("bRADe");  // beim runterfahrnee erst schneller fahren und dann abbremsen.
+			}
+			else
+			{
+				stateMachine->SendDirectCommand("bRAUe");
 			}
 		}
 
@@ -84,13 +87,13 @@ void OverwatcherClass::Control()
 		if (SA.switchLinks.GetLastState() == true && stateMachine->GetCurrentState() == "GeradeAus")
 		{
 			stateMachine->SendDirectCommand("bSLe");
-			Serial.println("Ausweichmanoever für linken Trigger gestartet.");
+			Serial.println(F("Ausweichmanoever für linken Trigger gestartet."));
 			SA.GeradeSonstWieNichtVorangekommen = true;
 		}
 		if (SA.switchRechts.GetLastState() == true && stateMachine->GetCurrentState() == "GeradeAus")
 		{
 			stateMachine->SendDirectCommand("bSRe");
-			Serial.println("Ausweichmanoever für rechten Trigger gestartet.");
+			Serial.println(F("Ausweichmanoever für rechten Trigger gestartet."));
 			SA.GeradeSonstWieNichtVorangekommen = true;
 		}
 
@@ -102,7 +105,7 @@ void OverwatcherClass::ErrorHandler(String Msg)
 {
 	if (Msg == "DrehFehler")
 	{
-		Serial.println("Overwatcher.ErrorHandler(): Behebe Drehfehler.");
+		Serial.println(F("Overwatcher.ErrorHandler(): Behebe Drehfehler."));
 		
 		OW.stateMachine->SendDirectCommand("Dreh dich richtig zu Schmock");  // todo add the right command!
 	}

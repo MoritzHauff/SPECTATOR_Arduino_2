@@ -15,8 +15,20 @@ void S_RampeClass::Init()
 {
 	status = Running;   // todo move this to StateClass
 
-	speedL = S_Rampe_NormalSpeed;
-	speedR = S_Rampe_NormalSpeed;
+	if (Richtung == 'd')
+	{
+		speedL = S_Rampe_NormalSpeedDownBegin;
+		speedR = S_Rampe_NormalSpeedDownBegin;
+
+		NormalSpeed = S_Rampe_NormalSpeedDownBegin;
+	}
+	else
+	{
+		speedL = S_Rampe_NormalSpeedUp;
+		speedR = S_Rampe_NormalSpeedUp;
+
+		NormalSpeed = S_Rampe_NormalSpeedUp;
+	}
 
 	// Himmelsrichtung ermitteln.
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
@@ -24,7 +36,6 @@ void S_RampeClass::Init()
 	
 	stoppWahrscheinlichkeit = 0;
 
-	NormalSpeed = S_Rampe_NormalSpeed;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -55,7 +66,13 @@ void S_RampeClass::Think()
 	}
 	else if (stoppWahrscheinlichkeit < 0)
 	{
-		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stopnnen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
+		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stoppen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
+	}
+
+	// Geschwindigkeit anpassen.
+	if (Richtung == 'd' && NormalSpeed > S_Rampe_NormalSpeedDownEnd)
+	{
+		NormalSpeed-=3;  // Bremse beim Runterfahren langsam ab.
 	}
 
 	// Winkelkorrektur ermitteln

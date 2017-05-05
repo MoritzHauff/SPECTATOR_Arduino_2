@@ -169,8 +169,21 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		s_SchwarzesFeld->ExpectedNumberOfEncoderTicks = s_GeradeAus->GetEncoderL(); // todo maybe use both sides
 		spectator->GeradeSchwarzesFeldBefahren = true;
 	}
-	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'M' && msg[4] == C_TELEOPSTOP)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'D' && msg[4] == C_TELEOPSTOP)
 	{
+		s_Rampe->Richtung = 'd';
+		changeState(s_Rampe);
+		spectator->GeradeRampeBefahren = true;
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'U' && msg[4] == C_TELEOPSTOP)
+	{
+		s_Rampe->Richtung = 'u';
+		changeState(s_Rampe);
+		spectator->GeradeRampeBefahren = true;
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'M' && msg[4] == C_TELEOPSTOP)   // der normale Rmapenbefehl soll erhalten bleiben.
+	{
+		s_Rampe->Richtung = 'u';
 		changeState(s_Rampe);
 		spectator->GeradeRampeBefahren = true;
 	}

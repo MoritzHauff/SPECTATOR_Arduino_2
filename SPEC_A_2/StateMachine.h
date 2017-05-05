@@ -38,8 +38,7 @@
 /// </summary>
 class StateMachineClass
 {
- //protected:
-public: 
+ protected:
 	 SPECTATORClass *spectator;
 
 	 S_IdleClass *s_Idle /* = S_IdleClass(spectator, "Idle")*/;
