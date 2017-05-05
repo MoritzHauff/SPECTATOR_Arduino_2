@@ -87,7 +87,7 @@ void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRe
 
 bool OpferKontrolleurClass::OpferLinks()
 {
-	if (opferLinks > 2 && letztesFeldOpferErkannt <= 0)  // 5 ist vlt zu viel (fährt zu schnell)
+	if (opferLinks >= 2 && letztesFeldOpferErkannt <= 0)  // 5 ist vlt zu viel (fährt zu schnell)
 	{
 		return true;
 	}
@@ -96,7 +96,7 @@ bool OpferKontrolleurClass::OpferLinks()
 
 bool OpferKontrolleurClass::OpferVorne()
 {
-	if (opferVorne > 2 && letztesFeldOpferErkannt <= 0)
+	if (opferVorne >= 2 && letztesFeldOpferErkannt <= 0)
 	{
 		return true;
 	}

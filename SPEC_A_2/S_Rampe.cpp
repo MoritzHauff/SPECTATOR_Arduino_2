@@ -95,12 +95,15 @@ void S_RampeClass::Think()
 
 	
 	// Neigung kontrollieren
-	/*if (abs(spectator->mpu.GetPitch()) < 0.2)
+	if (abs(spectator->mpu.GetPitch()) < 0.2)
 	{
 		stoppWahrscheinlichkeit += 11;  // 17 ist zu hoch
 
+		speedL += 20;   // Etwas schneller werden, damit nicht vorm ende angehalten wird.
+		speedR += 20;
+
 		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
-	}*/
+	}
 	// Ultraschall kontrollieren.
 	if (spectator->ultraschallVorne.GetDistance() <= S_Rampe_USVorne)
 	{
