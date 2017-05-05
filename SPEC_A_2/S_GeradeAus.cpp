@@ -53,7 +53,7 @@ void S_GeradeAusClass::Init()
 	Serial.print(" Zielentfernung: ");
 	Serial.println(S_GeradeAus_WandEntfernungen[zielWandKategorie]);
 
-	spectator->OpferKontroller.Reset();
+	//spectator->OpferKontroller.Reset();
 	 
 	// Timer starten.
 	startTime = millis();

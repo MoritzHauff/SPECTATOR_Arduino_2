@@ -37,7 +37,9 @@ void S_IdleClass::Init()
 	spectator->GeradeRampeBefahren = false;
 	spectator->GeradeSchwarzesFeldBefahren = false;
 	spectator->GeradeSonstWieNichtVorangekommen = false;
-	//spectator->OpferKontroller.Reset();  // only reset when your really move to another field.
+	
+	
+	spectator->OpferKontroller.Reset();  // only reset when your really move to another field.
 }
 
 ///////////////////////////////////////////////////////////////////////////

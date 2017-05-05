@@ -17,7 +17,7 @@ OpferKontrolleurClass::OpferKontrolleurClass()
 	opferRechts = 0;
 	opferVorne = 0;
 	Reset();
-	letztesFeldOpferErkannt = 0;
+	letztesFeldOpferErkannt = -3;
 }
 
 ///////////////////////////////////////////////////////////////////////////
