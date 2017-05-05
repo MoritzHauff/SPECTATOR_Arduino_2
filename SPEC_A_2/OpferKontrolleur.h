@@ -13,8 +13,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
-static const float C_Opfer_TempUnterschied = 1.0;  // 1.0 führt manchmal zu fehlerkennungen.
-static const int C_Opfer_ResetCounter = 5;
+static const float C_Opfer_TempUnterschied = 2.0;  // 1.0 führt manchmal zu fehlerkennungen.
+static const int C_Opfer_ResetCounter = 4;
 
 ///////////////////////////////////////////////////////////////////////////
 ///OpferKontrolleur-Klasse
