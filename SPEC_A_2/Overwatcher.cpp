@@ -73,6 +73,10 @@ void OverwatcherClass::Control()
 		{
 			Serial.println("Overwatcher: Befahre gerade die Rampe. Aendere Status.");
 			stateMachine->SendDirectCommand("bRAMe");
+			if (SA.mpu.GetPitch() < 0)  // beim runterfahrne bitte schneller fahren.
+			{
+				stateMachine->s_Rampe->NormalSpeed = 170;  // todo make this pretty !! change the states in the statemachine pack to protected!
+			}
 		}
 
 		// todo add bumperKontroller

@@ -23,6 +23,8 @@ void S_RampeClass::Init()
 	winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
 	
 	stoppWahrscheinlichkeit = 0;
+
+	NormalSpeed = S_Rampe_NormalSpeed;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -64,18 +66,18 @@ void S_RampeClass::Think()
 
 	if (winkelKorrektur > 0.01)
 	{
-		speedL = S_Rampe_NormalSpeed + 10;
-		speedR = S_Rampe_NormalSpeed - 45;
+		speedL = NormalSpeed + 10;
+		speedR = NormalSpeed - 45;
 	}
 	else if (winkelKorrektur < -0.01)
 	{
-		speedL = S_Rampe_NormalSpeed - 45;
-		speedR = S_Rampe_NormalSpeed + 10;
+		speedL = NormalSpeed - 45;
+		speedR = NormalSpeed + 10;
 	}
 	else
 	{
-		speedL = S_Rampe_NormalSpeed;
-		speedR = S_Rampe_NormalSpeed;
+		speedL = NormalSpeed;
+		speedR = NormalSpeed;
 	}
 
 
