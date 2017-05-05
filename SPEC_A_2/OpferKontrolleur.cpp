@@ -5,6 +5,13 @@
 *** Moritz Hauff, 23.04.2017
 **/
 
+// todo bumper rückwärts fahren 
+// todo felder hierachiiesieren (bumperfelder am bestern vermeiden)
+// todo checkpoints erkennen und beim zurücksetzen merken
+// todo beim zurücksetzen fahrmodus wechslen (geradeaus / rechte hand)
+// todo beim zurücksetzen kein totalreset der alten anfangsfelder damit er dann in eine neue richtung fährt. ( muss in anfangsrichtung ausgerichtet werden.)
+
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
 #include "OpferKontrolleur.h"

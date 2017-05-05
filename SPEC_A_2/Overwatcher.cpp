@@ -25,6 +25,11 @@ void OverwatcherClass::Init(StateMachineClass *StateMachine)
 	Serial.println("Initialisiere Overwatcher ...");
 	
 	actions = 0;
+
+	drehFehlerCounter = 0;
+	drehFehlerResetCounter = 0;
+	rampenCounter = 0;
+
 	
 	stateMachine = StateMachine;
 	stateMachine->OverwatcherMsg = &this->ErrorHandler;
@@ -42,6 +47,16 @@ void OverwatcherClass::Control()
 	{
 		actions++;
 		rampenCounter = 0;
+
+		if (drehFehlerCounter > 0)
+		{
+			drehFehlerResetCounter++;
+		}
+		if (drehFehlerResetCounter >= 3)
+		{
+			drehFehlerCounter = 0;  // beide Werte zurücksetzen.
+			drehFehlerResetCounter = 0;
+		}
 
 		if (SA.Motoren.GetLEDState() == LOW)
 		{
@@ -105,8 +120,15 @@ void OverwatcherClass::ErrorHandler(String Msg)
 {
 	if (Msg == "DrehFehler")
 	{
-		Serial.println(F("Overwatcher.ErrorHandler(): Behebe Drehfehler."));
+		OW.drehFehlerCounter++;
+
+		if (OW.drehFehlerCounter >= 2)
+		{
+			OW.drehFehlerCounter = 0;
+			Serial.println(F("Overwatcher.ErrorHandler(): Behebe Drehfehler."));
+
+			OW.stateMachine->SendDirectCommand("bg-e");  // fahre einmal rückwärts vlt hilfts ja.
+		}
 		
-		OW.stateMachine->SendDirectCommand("Dreh dich richtig zu Schmock");  // todo add the right command!
 	}
 }
