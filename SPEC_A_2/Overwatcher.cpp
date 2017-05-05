@@ -77,10 +77,16 @@ void OverwatcherClass::Control()
 
 		// todo add bumperKontroller
 
-		if (SA.switchLinks.GetLastState() == true && stateMachine->GetCurrentState() != "ScriptedMovement")
+		if (SA.switchLinks.GetLastState() == true && stateMachine->GetCurrentState() == "GeradeAus")
 		{
 			stateMachine->SendDirectCommand("bSLe");
-			Serial.println("Ausweichmanoever gestartet.");
+			Serial.println("Ausweichmanoever für linken Trigger gestartet.");
+			SA.GeradeSonstWieNichtVorangekommen = true;
+		}
+		if (SA.switchRechts.GetLastState() == true && stateMachine->GetCurrentState() == "GeradeAus")
+		{
+			stateMachine->SendDirectCommand("bSRe");
+			Serial.println("Ausweichmanoever für rechten Trigger gestartet.");
 			SA.GeradeSonstWieNichtVorangekommen = true;
 		}
 

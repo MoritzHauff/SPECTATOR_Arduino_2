@@ -240,7 +240,8 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		}
 		else if (msg[2] == 'R')
 		{
-			// todo add
+			changeState(s_ScriptedMovement);
+			s_ScriptedMovement->AusweichBewegung = BumperRechts;
 		}
 	}
 }
