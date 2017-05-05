@@ -114,7 +114,7 @@ void S_RampeClass::Think()
 	// Ultraschall kontrollieren.
 	if (spectator->ultraschallVorne.GetDistance() <= S_Rampe_USVorne)
 	{
-		stoppWahrscheinlichkeit += 60;
+		stoppWahrscheinlichkeit += 40;
 
 		Serial.print("S_Rampe.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallVorne.GetDistance());
@@ -122,9 +122,9 @@ void S_RampeClass::Think()
 	// Neigung kontrollieren
 	if (abs(spectator->mpu.GetPitch()) < 0.2)
 	{
-		stoppWahrscheinlichkeit += 13;  // 17 ist zu hoch
+		stoppWahrscheinlichkeit += 11;  // 17 ist zu hoch
 
-		Serial.println("S_Rampe.Think(): MPU verkeundet Ende der Rampe.");
+		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
 	}
 
 	if (stoppWahrscheinlichkeit > 100)

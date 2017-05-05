@@ -35,7 +35,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
-static const float C_Opfer_TempUnterschied = 1.0;
+static const float C_Opfer_TempUnterschied = 1.5;  // 1.0 führt manchmal zu fehlerkennungen.
 static const int C_Opfer_ResetCounter = 5;
 
 ///////////////////////////////////////////////////////////////////////////
