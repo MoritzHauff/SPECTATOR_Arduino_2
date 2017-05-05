@@ -60,12 +60,16 @@ void OverwatcherClass::Control()
 			stateMachine->SendDirectCommand("bSFRe");  // Sende das Kommando "SchwarzesFeldRecover".
 		}
 
-		// Kontrolliere ob Rape gerade Befahren wird.
-		if (SA.mpu.GetPitch() < -C_Overwatcher_RampenWinkel || SA.mpu.GetPitch() > C_Overwatcher_RampenWinkel)
+		// Kontrolliere ob Rape gerade Befahren wird.  pos Pitch Wert bei Rampe hoch.
+		if(SA.mpu.GetPitch() > C_Overwatcher_RampenWinkel)
 		{
 			rampenCounter++;
 		}
-		if (rampenCounter > 10 && stateMachine->GetCurrentState() != "Rampe")
+		if (SA.mpu.GetPitch() < -0.15)
+		{
+			rampenCounter += 3;
+		}
+		if (rampenCounter > 20 && stateMachine->GetCurrentState() != "Rampe")
 		{
 			Serial.println("Overwatcher: Befahre gerade die Rampe. Aendere Status.");
 			stateMachine->SendDirectCommand("bRAMe");
