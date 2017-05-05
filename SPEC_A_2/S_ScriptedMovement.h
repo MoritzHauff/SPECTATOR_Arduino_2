@@ -41,6 +41,8 @@ class S_ScriptedMovementClass : public StateClass
 
 	 unsigned long startTime;
 
+	 int counter;
+
  public:
 	 S_ScriptedMovementClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
 	 { }
