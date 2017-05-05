@@ -13,7 +13,11 @@
 ///Konstruktoren
 OpferKontrolleurClass::OpferKontrolleurClass()
 {
+	opferLinks = 0;
+	opferRechts = 0;
+	opferVorne = 0;
 	Reset();
+	letztesFeldOpferErkannt = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -28,10 +32,12 @@ void OpferKontrolleurClass::Reset()
 	if (OpferLinks() == true)
 	{
 		letztesFeldOpferErkannt = C_Opfer_ResetCounter;   // Falls auf dem letzten Feld ein Opfer erkannt wurde dies hier speichern.
+		Serial.println(F("OpferKontrolleur.Reset(): Habe auf dem letzten Feld ein Opfer erkannt."));
 	}
 	if (OpferVorne() == true)
 	{
 		letztesFeldOpferErkannt = C_Opfer_ResetCounter;
+		Serial.println(F("OpferKontrolleur.Reset(): Habe auf dem letzten Feld ein Opfer erkannt."));
 	}
 	if (OpferRechts() == true)
 	{
@@ -65,12 +71,14 @@ void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRe
 	if (TempVorne > mittelwert + C_Opfer_TempUnterschied)
 	{
 		opferVorne++;
+		Serial.println("Opfer Vorne erkannt.");
 	}
 
 	mittelwert = 0.5 * (TempLinks + TempVorne);
 	if (TempRechts > mittelwert + C_Opfer_TempUnterschied)
 	{
 		opferRechts++;
+		Serial.println("OpferRechts erkannt.");
 	}
 }
 
