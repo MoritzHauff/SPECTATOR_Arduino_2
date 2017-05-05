@@ -65,7 +65,7 @@ void setup()
 
 	printFreeRam();
 
-	//OW.Init(stateMachine);
+	OW.Init(stateMachine);
 
 	printFreeRam();
 }
@@ -88,7 +88,7 @@ void loop()
 	eins = micros();
 	
 	// todo: Zeitmessung des Overwatchers
-	//OW.Control();
+	OW.Control();
 
 	/*Serial.print("Bisher durchgefuehrte Aktionen: ");
 	Serial.println(OW.GetActions());*/
