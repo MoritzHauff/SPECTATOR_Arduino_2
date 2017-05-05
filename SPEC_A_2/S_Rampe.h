@@ -43,7 +43,7 @@ class S_RampeClass : public StateClass
 ///////////////////////////////////////////////////////////////////////////
  protected: ///Konstanten
 	 const static int S_Rampe_USVorne = 7;
-	 const static int S_Rampe_NormalSpeed = 120; // 140 kippt bei hindernissen  // 120 sehr langsam kippt aber nicht immer.
+	 const static int S_Rampe_NormalSpeed = 140; // 140 kippt bei hindernissen  // 120 sehr langsam kippt aber nicht immer.
  
  protected:
 	 int stoppWahrscheinlichkeit;   // todo move to StateClass

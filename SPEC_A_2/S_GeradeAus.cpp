@@ -310,6 +310,15 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 			Serial.print(" Ziel entfernung :");
 			Serial.println(S_GeradeAus_WandEntfernungenVor[zielWandKategorie]);
 		}
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 35 && spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 120)  // noch deutlich zu weit weg von der wand.
+		{
+			if (stoppWahrscheinlichkeit >= 25)
+			{
+				stoppWahrscheinlichkeit -= 25;
+
+				Serial.println("S_GeradeAus.Think(): Laser sehen bald das Feldende, muss noch ein bisschen weiterfahren.");
+			}
+		}
 		if (spectator->ultraschallVorne.GetDistance() <= S_GeradeAus_MinUltraschallEntfernung)
 		{
 			stoppWahrscheinlichkeit += 60;

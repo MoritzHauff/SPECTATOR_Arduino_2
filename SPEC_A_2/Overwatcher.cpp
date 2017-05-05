@@ -87,7 +87,7 @@ void OverwatcherClass::Control()
 		{
 			rampenCounter++;
 		}
-		if (rampenCounter > 10 && stateMachine->GetCurrentState() != "Rampe")
+		if (rampenCounter > 20 && stateMachine->GetCurrentState() != "Rampe")
 		{
 			Serial.println("Overwatcher: Befahre gerade die Rampe. Aendere Status.");
 			stateMachine->SendDirectCommand("bRAMe");
@@ -99,6 +99,7 @@ void OverwatcherClass::Control()
 		{
 			stateMachine->SendDirectCommand("bSLe");
 			Serial.println("Ausweichmanoever gestartet.");
+			SA.GeradeSonstWieNichtVorangekommen = true;
 		}
 
 		// todo
