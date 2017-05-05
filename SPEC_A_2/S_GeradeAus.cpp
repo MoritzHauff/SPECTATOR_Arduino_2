@@ -65,11 +65,11 @@ void S_GeradeAusClass::Sense()
 {
 	spectator->UpdateSharp();
 
-	if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
+	/*if (toggleState)   // nur jeden zweiten loopDurchgang sollen die MLX ausgelesen werden.
 	{
 		spectator->UpdateMLX();
 		spectator->OpferKontroller.Check(spectator->MLXLinks.GetObjTemp(), spectator->MLXVorne.GetObjTemp(), spectator->MLXRechts.GetObjTemp());
-	}
+	}*/
 
 	spectator->UpdateLaser();
 
