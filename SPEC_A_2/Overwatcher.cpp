@@ -47,6 +47,7 @@ void OverwatcherClass::Control()
 	{
 		actions++;
 		rampenCounter = 0;
+		checkpointCounter = 0;
 
 		if (drehFehlerCounter > 0)
 		{
@@ -113,6 +114,25 @@ void OverwatcherClass::Control()
 		}
 
 		// todo
+	}
+
+	if (stateMachine->GetCurrentState() == "Sense")
+	{
+		Serial.println(F("Overwatcher.Control(): Kontrolliere auf Checkpoints."));
+		if (SA.ldr.GetValue() < 955 && SA.ldr.GetValue() > 934)
+		{
+			checkpointCounter++;
+			Serial.print(F("Checkpoint entdeckt. Checkpoint Counter: "));
+			Serial.println(checkpointCounter);
+		}
+
+		if (checkpointCounter >= 4)
+		{
+			Serial.println(F("Overwatcher.Control(): Melde Algo, dass ich auf Checkpoint stehe."));
+			SA.Motoren.AbwurfLinks();
+			SA.Motoren.AbwurfRechts();
+			
+		}
 	}
 }
 

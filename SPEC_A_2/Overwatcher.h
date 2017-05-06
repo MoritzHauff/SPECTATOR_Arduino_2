@@ -41,6 +41,8 @@ class OverwatcherClass
 	 int drehFehlerCounter;
 	 int drehFehlerResetCounter;
 
+	 int checkpointCounter;
+
  public:
 	 void Init(StateMachineClass *StateMachine);
 
