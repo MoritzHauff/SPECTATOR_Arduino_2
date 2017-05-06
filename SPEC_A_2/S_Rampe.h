@@ -14,7 +14,7 @@
 #include "State.h"
 
 const static int S_Rampe_NormalSpeedUp = 125; // 140 kippt bei hindernissen  // 120 sehr langsam kippt aber nicht immer.
-const static int S_Rampe_NormalSpeedDownBegin = 180;
+const static int S_Rampe_NormalSpeedDownBegin = 210;
 const static int S_Rampe_NormalSpeedDownEnd = 125;
 const static int S_Rampe_USVorne = 4;
 

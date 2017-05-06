@@ -16,9 +16,9 @@
 
 ///////////////////////////////////////////////////////////////////////////
 ///Konstanten
-const byte S_GeradeAus_NormalSpeed = 240;	// Die normale Bewegungsgeschwindigkeit.
-const int S_GeradeAus_FeldTraversTimer = 1100;	//1000	// Wie lange ein Feld normalerweise benötigt zu befahren.
-const int S_GeradeAus_MaxTimer = 1500;	//1300	// Wie lange maximal geradeaus gefahren werden kann, bevor der Modus erneut gewechselt werden muss.
+const byte S_GeradeAus_NormalSpeed = 220;	// Die normale Bewegungsgeschwindigkeit.  // 240 zu schnell für rampen
+const int S_GeradeAus_FeldTraversTimer = 1200;	//1000	// Wie lange ein Feld normalerweise benötigt zu befahren.
+const int S_GeradeAus_MaxTimer = 1600;	//1300	// Wie lange maximal geradeaus gefahren werden kann, bevor der Modus erneut gewechselt werden muss.
 const int S_GeradeAus_MaxStoppWahrscheinlichkeit = 100;
 const int S_GeradeAus_WinkelRatio = 300;		// Wie stark die Winkelabweichung in die Fahrgeschwindigkeit wirkt.  //75
 
