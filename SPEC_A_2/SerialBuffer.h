@@ -29,10 +29,10 @@ protected:
 	uint8_t c[MAX_SERIALBUFFER_LENGTH];
 	int currentPos;
 
-	void AddMsg(uint8_t Code, String Msg);
-
 public:
 	SerialBuffer();
+
+	void AddMsg(uint8_t Code, String Msg); // Achtung es dürfen nur richtig formatierte Stirngs übergeben werden.
 
 	void AddMsg(uint8_t Code, bool State);
 	void AddMsg(uint8_t Code, int Value);

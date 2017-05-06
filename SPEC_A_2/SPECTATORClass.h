@@ -107,6 +107,7 @@ class SPECTATORClass
 	bool GeradeSchwarzesFeldBefahren;
 	bool GeradeRampeBefahren;
 	bool GeradeSonstWieNichtVorangekommen;
+	bool SteheGeradeAufCheckpoint;
 
 };
 

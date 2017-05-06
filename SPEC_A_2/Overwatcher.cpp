@@ -129,9 +129,7 @@ void OverwatcherClass::Control()
 		if (checkpointCounter >= 4)
 		{
 			Serial.println(F("Overwatcher.Control(): Melde Algo, dass ich auf Checkpoint stehe."));
-			SA.Motoren.AbwurfLinks();
-			SA.Motoren.AbwurfRechts();
-			
+			SA.SteheGeradeAufCheckpoint = true;
 		}
 	}
 }

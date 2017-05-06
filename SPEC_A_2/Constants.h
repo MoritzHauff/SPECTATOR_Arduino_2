@@ -59,4 +59,6 @@
 #define C_GeradeRampeBefahren 0x59
 #define C_GeradeSonstWieNichtVorangekommen 0x60 // todo add this in the deserializer!
 
+#define C_WeitereEreignisse 0x61
+
 #endif
