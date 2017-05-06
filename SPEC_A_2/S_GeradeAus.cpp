@@ -20,6 +20,7 @@ void S_GeradeAusClass::Init()
 	encoderR = 0;
 	straightCounter = 0;
 	turnCounter = 0;
+	mitLaser = true;
 
 	speedL = S_GeradeAus_NormalSpeed * Direction;
 	speedR = S_GeradeAus_NormalSpeed * Direction;
@@ -277,7 +278,7 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 	Serial.println(spectator->ultraschallVorne.GetDistance());*/
 	if (Direction == 1)
 	{
-		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie])
+		if (spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie] && mitLaser)
 		{
 			stoppWahrscheinlichkeit += 50;
 
@@ -288,7 +289,9 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 			Serial.print(" Ziel entfernung :");
 			Serial.println(S_GeradeAus_WandEntfernungenVor[zielWandKategorie]);
 		}
-		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 15 && spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 145)  // noch deutlich zu weit weg von der wand.
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 15 && 
+			spectator->laserVorne.GetDistance() < S_GeradeAus_WandEntfernungenVor[zielWandKategorie] + 145
+			&& mitLaser)  // noch deutlich zu weit weg von der wand.
 		{
 			if (stoppWahrscheinlichkeit >= 25)
 			{
@@ -307,7 +310,8 @@ void S_GeradeAusClass::kontrolliereFortschritt()
 	}
 	if (Direction == -1)
 	{
-		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenRueck[zielWandKategorie])
+		if (spectator->laserVorne.GetDistance() > S_GeradeAus_WandEntfernungenRueck[zielWandKategorie]
+			&& mitLaser)
 		{
 			stoppWahrscheinlichkeit += 50;
 
@@ -392,9 +396,9 @@ byte S_GeradeAusClass::errechneZielWandKategorie(byte StartWandKategorie, int Di
 	{
 		zielWandKategorie = 0;
 	}
-	if (zielWandKategorie >= sizeof(S_GeradeAus_WandEntfernungen))
+	if (zielWandKategorie >= 6)   // todo hier automatisch letztes element nehemen.
 	{
-		zielWandKategorie = sizeof(S_GeradeAus_WandEntfernungen) - 1;  // todo wenn er beim vorherigen schritt zu kurz gefahrne ist sollte die richtige kategorie verwendet werden.
+		zielWandKategorie = 6 - 1;  // todo wenn er beim vorherigen schritt zu kurz gefahrne ist sollte die richtige kategorie verwendet werden.
 	}
 
 	return zielWandKategorie;
@@ -404,15 +408,25 @@ byte S_GeradeAusClass::errechneZielWandKategorie(byte StartWandKategorie, int Di
 byte S_GeradeAusClass::entfernungZuWandKategorie(int Distance, int Direction)
 {
 	byte b = 0;
-	int minAbstand = abs(Distance - S_GeradeAus_WandEntfernungen[b]);
-	
-	for (byte i = 1; i < sizeof(S_GeradeAus_WandEntfernungen); i++)
+
+	if (Distance > S_GeradeAus_WandEntfernungen[5] + 200)   // todo automatische letzets Element nehemen.
 	{
-		int h = abs(Distance - S_GeradeAus_WandEntfernungen[i]);
-		if (h < minAbstand)
+		Serial.println(F("S_Gerade.entfernungZuWandKategorie: Fahre ohne Laser!"));
+		mitLaser = false;
+		b = 5;
+	}
+	else
+	{
+		int minAbstand = abs(Distance - S_GeradeAus_WandEntfernungen[b]);
+
+		for (byte i = 1; i < 6; i++)   // todo automatisch letztes Element verwenden.
 		{
-			minAbstand = h;
-			b = i;
+			int h = abs(Distance - S_GeradeAus_WandEntfernungen[i]);
+			if (h < minAbstand)
+			{
+				minAbstand = h;
+				b = i;
+			}
 		}
 	}
 

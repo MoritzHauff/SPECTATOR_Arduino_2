@@ -36,9 +36,9 @@ const int S_Drehen_SharpMin = 150;  // Sobald die Wänder weiter weg sind, also u
 class S_GeradeAusClass : public StateClass
 {
  protected:
-	 const int S_GeradeAus_WandEntfernungen[8] = { 80, 395, 695, 995, 1295, 1595, 1895, 2195 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
-	 const int S_GeradeAus_WandEntfernungenVor[8] = { 130, 460, 760, 1060, 1360, 1660, 1960, 2260 };  // Die Wandkategorien für die Vorwärtsfahrt.
-	 const int S_GeradeAus_WandEntfernungenRueck[8] = { 30, 340, 640, 940, 1240, 1540, 1840, 2160 };  // Die Wandkategorien für die Rückwärtsfahrt.
+	 const int S_GeradeAus_WandEntfernungen[6] = { 80, 395, 695, 995, 1295, 1595 };  // Die "echten" Wandentfenrungn zur ermittlung der richtigen Kategorie im Stand.
+	 const int S_GeradeAus_WandEntfernungenVor[6] = { 130, 460, 760, 1060, 1360, 1660 };  // Die Wandkategorien für die Vorwärtsfahrt.
+	 const int S_GeradeAus_WandEntfernungenRueck[6] = { 30, 340, 640, 940, 1240, 1540 };  // Die Wandkategorien für die Rückwärtsfahrt.
 
 	 unsigned long startTime;
 
@@ -68,6 +68,7 @@ class S_GeradeAusClass : public StateClass
 	 float verwerteSharp(int Vorne, int Hinten);
 
 	 int aktZielEntfernung;
+	 bool mitLaser;
 
 	 MedianFilterClass laserFilter;
 
