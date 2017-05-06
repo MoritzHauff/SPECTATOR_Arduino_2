@@ -72,8 +72,8 @@ void S_DrehenClass::running()
 {
 	if (startTime + S_Drehen_Timer < millis() && status == Running)
 	{
-		//status = Error;
-		status = Finished;  // There is no errorhandler so continue without. //todo change this.
+		status = Error;
+		//status = Finished;  // There is no errorhandler so continue without. //todo change this.
 		MotorSpeedL = 0;
 		MotorSpeedR = 0;
 

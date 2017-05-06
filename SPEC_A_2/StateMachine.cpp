@@ -394,7 +394,11 @@ void StateMachineClass::checkStates()
 
 	if (currentState->GetStatus() == Error && currentState == s_Drehen)
 	{
-		OverwatcherMsg("DrehFehler");
+		//Serial.println("Drehfehler in der StateMachine erkannt.");
+		changeState(s_Sense);   // erstmal soll normal weitergemacht werden, vielleicht war es einfach nur schwierig zu drehehn und es kann weitergefahren werden.
+
+		OverwatcherMsg("DrehFehler");  // Mekrt der Ovewatcher einen STuck fehle rkann er das hier beheben.
+		
 	}
 
 	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle || currentState == s_OpferAbwurf))

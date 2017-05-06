@@ -52,7 +52,7 @@ void OverwatcherClass::Control()
 		{
 			drehFehlerResetCounter++;
 		}
-		if (drehFehlerResetCounter >= 3)
+		if (drehFehlerResetCounter >= 10)
 		{
 			drehFehlerCounter = 0;  // beide Werte zurücksetzen.
 			drehFehlerResetCounter = 0;
@@ -120,7 +120,11 @@ void OverwatcherClass::ErrorHandler(String Msg)
 {
 	if (Msg == "DrehFehler")
 	{
+
 		OW.drehFehlerCounter++;
+
+		Serial.print(F("DrehFehler im Overwatcher erkannt. drehFehlerCounter:"));
+		Serial.println(OW.drehFehlerCounter);
 
 		if (OW.drehFehlerCounter >= 2)
 		{
