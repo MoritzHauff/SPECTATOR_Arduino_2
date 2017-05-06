@@ -16,6 +16,13 @@ void S_IdleClass::Init()
 	status = Running;
 	counter = 0;
 
+	// Weitere Ereignisse abfragen
+	weitereEreignisse = "";
+	if (spectator->SteheGeradeAufCheckpoint == true)
+	{
+		weitereEreignisse += "Checkpoint";
+	}
+
 	spectator->serialBuffer.AddMsg(C_WandVorne, spectator->GetWand(R_VORNE));
 	spectator->serialBuffer.AddMsg(C_WandRechts, spectator->GetWand(R_RECHTS));
 	spectator->serialBuffer.AddMsg(C_WandHinten, spectator->GetWand(R_HINTEN));
@@ -29,6 +36,7 @@ void S_IdleClass::Init()
 	spectator->serialBuffer.AddMsg(C_GeradeRampeBefahren, spectator->GeradeRampeBefahren);
 	spectator->serialBuffer.AddMsg(C_GeradeSchwarzesFeldBefahren, spectator->GeradeSchwarzesFeldBefahren);
 	spectator->serialBuffer.AddMsg(C_GeradeSonstWieNichtVorangekommen, spectator->GeradeSonstWieNichtVorangekommen);
+	spectator->serialBuffer.AddMsg(C_WeitereEreignisse, weitereEreignisse);
 	spectator->serialBuffer.Flush();
 
 	Serial.println("DemandNextStep");
@@ -37,6 +45,7 @@ void S_IdleClass::Init()
 	spectator->GeradeRampeBefahren = false;
 	spectator->GeradeSchwarzesFeldBefahren = false;
 	spectator->GeradeSonstWieNichtVorangekommen = false;
+	spectator->SteheGeradeAufCheckpoint = false;
 	
 	
 	spectator->OpferKontroller.Reset();  // only reset when your really move to another field.
