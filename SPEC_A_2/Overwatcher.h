@@ -18,6 +18,8 @@
 /// Konstanten
 const static float C_Overwatcher_RampenWinkel = 0.2;
 
+const static int C_MaxActionCounter = 120;
+
 ///////////////////////////////////////////////////////////////////////////
 ///Overwatcher-Class
 /*Diese Klasse überwacht den globalen Zustand und einzelne Aktionen. Dazu 

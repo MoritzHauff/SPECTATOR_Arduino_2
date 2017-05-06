@@ -17,7 +17,7 @@ void S_CalibrateClass::Init()
 
 	MPUCalibration();
 
-	
+	spectator->AktRichtung = R_NORDEN;  // nach dem kalibrierne ist die richtung immer norden (z.B. nach neustarts).
 }
 
 ///////////////////////////////////////////////////////////////////////////
