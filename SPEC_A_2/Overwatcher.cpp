@@ -131,11 +131,11 @@ void OverwatcherClass::Control()
 			Serial.println(F("Overwatcher.Control(): Melde Algo, dass ich auf Checkpoint stehe."));
 			SA.SteheGeradeAufCheckpoint = true;
 
-			if (actions > C_MaxActionCounter)
+			/*if (actions > C_MaxActionCounter)
 			{
 				Serial.println("Overwacther denkt wir stehen wieder auf dem Startfeld.");
 				stateMachine->SendDirectCommand("BREAK");
-			}
+			}*/
 		}
 	}
 }
