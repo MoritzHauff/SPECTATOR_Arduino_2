@@ -63,11 +63,15 @@ void S_ScriptedMovementClass::Act()
 	{
 		//md = movementArrayHandler.GetNextMovement(L_bumperLinks, R_bumperLinks, bumperLinksRows);
 
-		if (counter < 6)
+		if (counter < 4)
 		{
 			md = new MotorDaten(-150, -100);
 		}
-		else if (counter < 10)
+		else if (counter < 12)
+		{
+			md = new MotorDaten(-150, 60);
+		}
+		else if (counter < 19)
 		{
 			md = new MotorDaten(-130, -130);
 		}
@@ -78,11 +82,15 @@ void S_ScriptedMovementClass::Act()
 	}
 	else if (AusweichBewegung == BumperRechts)
 	{
-		if (counter < 6)
+		if (counter < 4)
 		{
 			md = new MotorDaten(-100, -150);
 		}
-		else if (counter < 10)
+		else if (counter < 12)
+		{
+			md = new MotorDaten(60, -150);
+		}
+		else if (counter < 19)
 		{
 			md = new MotorDaten(-130, -130);
 		}
