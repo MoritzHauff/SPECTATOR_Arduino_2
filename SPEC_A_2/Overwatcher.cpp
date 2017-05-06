@@ -118,7 +118,7 @@ void OverwatcherClass::Control()
 
 	if (stateMachine->GetCurrentState() == "Sense")
 	{
-		Serial.println(F("Overwatcher.Control(): Kontrolliere auf Checkpoints."));
+		//Serial.println(F("Overwatcher.Control(): Kontrolliere auf Checkpoints."));
 		if (SA.ldr.GetValue() < 955 && SA.ldr.GetValue() > 934)
 		{
 			checkpointCounter++;
