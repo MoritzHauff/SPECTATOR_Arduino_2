@@ -41,6 +41,11 @@ void S_CoffeeBreakClass::Sense()
 void S_CoffeeBreakClass::Think()
 {
 	// do nothing
+
+	if (GetTimerShiftAmount() > 3000)
+	{
+		status = Finished;
+	}
 }
 
 void S_CoffeeBreakClass::Act()

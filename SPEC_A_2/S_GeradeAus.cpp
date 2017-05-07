@@ -139,13 +139,13 @@ void S_GeradeAusClass::Think()
 
 		if (winkelKorrektur > 0.01)
 		{
-			adaptedSpeedL = 250 * Direction;
-			adaptedSpeedR = 170 * Direction;   // 180
+			adaptedSpeedL = 220 * Direction;  // 250
+			adaptedSpeedR = 150 * Direction;   // 180
 		}
 		else if (winkelKorrektur < -0.01)
 		{
-			adaptedSpeedL = 170 * Direction;   // 180
-			adaptedSpeedR = 250 * Direction;
+			adaptedSpeedL = 150 * Direction;   // 180
+			adaptedSpeedR = 220 * Direction;
 		}
 		else
 		{
