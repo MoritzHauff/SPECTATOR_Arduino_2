@@ -47,6 +47,8 @@ class S_IdleClass : public StateClass
 protected:
 	int counter;
 
+	String weitereEreignisse;
+
 public:
 	S_IdleClass(SPECTATORClass *Spectator, const char Name[]) : StateClass(Spectator, Name)
 	{ }

@@ -46,6 +46,7 @@ void S_SenseClass::Sense()
 	spectator->UpdateSharp();
 
 	spectator->UpdateMLX();
+	spectator->OpferKontroller.Check(spectator->MLXLinks.GetObjTemp(), spectator->MLXVorne.GetObjTemp(), spectator->MLXRechts.GetObjTemp());
 
 	//spectator->serialBuffer.Flush();  // alle Nachrichten auf einmal sind zu lang.
 	spectator->serialBuffer.Clear();
