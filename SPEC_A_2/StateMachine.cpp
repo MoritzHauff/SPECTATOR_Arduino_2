@@ -191,8 +191,21 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		s_SchwarzesFeld->ExpectedNumberOfEncoderTicks = s_GeradeAus->GetEncoderL(); // todo maybe use both sides
 		spectator->GeradeSchwarzesFeldBefahren = true;
 	}
-	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'M' && msg[4] == C_TELEOPSTOP)
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'D' && msg[4] == C_TELEOPSTOP)
 	{
+		s_Rampe->Richtung = 'd';
+		changeState(s_Rampe);
+		spectator->GeradeRampeBefahren = true;
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'U' && msg[4] == C_TELEOPSTOP)
+	{
+		s_Rampe->Richtung = 'u';
+		changeState(s_Rampe);
+		spectator->GeradeRampeBefahren = true;
+	}
+	else if (msg[0] == C_TELEOPSTART && msg[1] == 'R' && msg[2] == 'A' && msg[3] == 'M' && msg[4] == C_TELEOPSTOP)   // der normale Rmapenbefehl soll erhalten bleiben.
+	{
+		s_Rampe->Richtung = 'u';
 		changeState(s_Rampe);
 		spectator->GeradeRampeBefahren = true;
 	}
@@ -262,7 +275,8 @@ void StateMachineClass::handleReceivedMessage(char *msg)
 		}
 		else if (msg[2] == 'R')
 		{
-			// todo add
+			changeState(s_ScriptedMovement);
+			s_ScriptedMovement->AusweichBewegung = BumperRechts;
 		}
 	}
 }
@@ -402,7 +416,11 @@ void StateMachineClass::checkStates()
 
 	if (currentState->GetStatus() == Error && currentState == s_Drehen)
 	{
-		OverwatcherMsg("DrehFehler");
+		//Serial.println("Drehfehler in der StateMachine erkannt.");
+		changeState(s_Sense);   // erstmal soll normal weitergemacht werden, vielleicht war es einfach nur schwierig zu drehehn und es kann weitergefahren werden.
+
+		OverwatcherMsg("DrehFehler");  // Mekrt der Ovewatcher einen STuck fehle rkann er das hier beheben.
+		
 	}
 
 	if (currentState->GetStatus() == Finished &&( currentState == s_Drehen || currentState == s_Idle || currentState == s_OpferAbwurf))

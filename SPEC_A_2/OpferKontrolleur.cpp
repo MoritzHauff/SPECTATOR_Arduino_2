@@ -27,6 +27,13 @@
 /// If you have any questions contact me via mail: admin@vierradroboter.de
 ///////////////////////////////////////////////////////////////////////////
 
+// todo bumper rückwärts fahren 
+// todo felder hierachiiesieren (bumperfelder am bestern vermeiden)
+// todo checkpoints erkennen und beim zurücksetzen merken
+// todo beim zurücksetzen fahrmodus wechslen (geradeaus / rechte hand)
+// todo beim zurücksetzen kein totalreset der alten anfangsfelder damit er dann in eine neue richtung fährt. ( muss in anfangsrichtung ausgerichtet werden.)
+
+
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
 #include "OpferKontrolleur.h"
@@ -39,7 +46,7 @@ OpferKontrolleurClass::OpferKontrolleurClass()
 	opferRechts = 0;
 	opferVorne = 0;
 	Reset();
-	letztesFeldOpferErkannt = 0;
+	letztesFeldOpferErkannt = -3;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -81,23 +88,26 @@ void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRe
 	Serial.print(TempVorne);
 	Serial.print("\tRechts");
 	Serial.println(TempRechts);*/
-	float mittelwert = 0.5 * (TempVorne + TempRechts);
+	//float mittelwert = 0.5 * (TempVorne + TempRechts);
 
-	if (TempLinks > mittelwert + C_Opfer_TempUnterschied)
+	//if (TempLinks > mittelwert + C_Opfer_TempUnterschied)
+	if (TempLinks > C_Opfer_Temp)
 	{
 		opferLinks++;
 		Serial.println("OpferLinks erkannt.");
 	}
 
-	mittelwert = 0.5 * (TempLinks + TempRechts);
-	if (TempVorne > mittelwert + C_Opfer_TempUnterschied)
+	//mittelwert = 0.5 * (TempLinks + TempRechts);
+	//if (TempVorne > mittelwert + C_Opfer_TempUnterschied)
+	if (TempVorne > C_Opfer_Temp)
 	{
 		opferVorne++;
 		Serial.println("Opfer Vorne erkannt.");
 	}
 
-	mittelwert = 0.5 * (TempLinks + TempVorne);
-	if (TempRechts > mittelwert + C_Opfer_TempUnterschied)
+	//mittelwert = 0.5 * (TempLinks + TempVorne);
+	//if (TempRechts > mittelwert + C_Opfer_TempUnterschied)
+	if (TempRechts > C_Opfer_Temp)
 	{
 		opferRechts++;
 		Serial.println("OpferRechts erkannt.");
@@ -106,7 +116,7 @@ void OpferKontrolleurClass::Check(float TempLinks, float TempVorne, float TempRe
 
 bool OpferKontrolleurClass::OpferLinks()
 {
-	if (opferLinks > 3 && letztesFeldOpferErkannt <= 0)  // 5 ist vlt zu viel (fährt zu schnell)
+	if (opferLinks >= 2 && letztesFeldOpferErkannt <= 0)  // 5 ist vlt zu viel (fährt zu schnell)
 	{
 		return true;
 	}
@@ -115,7 +125,7 @@ bool OpferKontrolleurClass::OpferLinks()
 
 bool OpferKontrolleurClass::OpferVorne()
 {
-	if (opferVorne > 3 && letztesFeldOpferErkannt <= 0)
+	if (opferVorne >= 2 && letztesFeldOpferErkannt <= 0)
 	{
 		return true;
 	}
@@ -124,7 +134,7 @@ bool OpferKontrolleurClass::OpferVorne()
 
 bool OpferKontrolleurClass::OpferRechts()
 {
-	if (opferRechts > 3 && letztesFeldOpferErkannt <= 0)
+	if (opferRechts >= 2 && letztesFeldOpferErkannt <= 0)
 	{
 		return true;
 	}

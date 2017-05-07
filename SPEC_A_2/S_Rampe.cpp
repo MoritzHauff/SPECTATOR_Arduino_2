@@ -37,14 +37,27 @@ void S_RampeClass::Init()
 {
 	status = Running;   // todo move this to StateClass
 
-	speedL = S_Rampe_NormalSpeed;
-	speedR = S_Rampe_NormalSpeed;
+	if (Richtung == 'd')
+	{
+		speedL = S_Rampe_NormalSpeedDownBegin;
+		speedR = S_Rampe_NormalSpeedDownBegin;
+
+		NormalSpeed = S_Rampe_NormalSpeedDownBegin;
+	}
+	else
+	{
+		speedL = S_Rampe_NormalSpeedUp;
+		speedR = S_Rampe_NormalSpeedUp;
+
+		NormalSpeed = S_Rampe_NormalSpeedUp;
+	}
 
 	// Himmelsrichtung ermitteln.
 	startRichtung = spectator->mpuFahrer.CalculateRichtung(spectator->mpu.GetYaw());
 	winkelKorrektur = spectator->mpuFahrer.GetWinkelAbstand(startRichtung, spectator->mpu.GetYaw());
 	
 	stoppWahrscheinlichkeit = 0;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -75,7 +88,13 @@ void S_RampeClass::Think()
 	}
 	else if (stoppWahrscheinlichkeit < 0)
 	{
-		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stopnnen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
+		stoppWahrscheinlichkeit = 0;  // War der letzte Tick noch dagegen zu stoppen wird in jeden neuen Tick diese Entscheidung wieder neutral getroffen.
+	}
+
+	// Geschwindigkeit anpassen.
+	if (Richtung == 'd' && NormalSpeed > S_Rampe_NormalSpeedDownEnd)
+	{
+		NormalSpeed-=3;  // Bremse beim Runterfahren langsam ab.
 	}
 
 	// Winkelkorrektur ermitteln
@@ -86,18 +105,18 @@ void S_RampeClass::Think()
 
 	if (winkelKorrektur > 0.01)
 	{
-		speedL = S_Rampe_NormalSpeed + 10;
-		speedR = S_Rampe_NormalSpeed - 45;
+		speedL = NormalSpeed + 10;
+		speedR = NormalSpeed - 45;
 	}
 	else if (winkelKorrektur < -0.01)
 	{
-		speedL = S_Rampe_NormalSpeed - 45;
-		speedR = S_Rampe_NormalSpeed + 10;
+		speedL = NormalSpeed - 45;
+		speedR = NormalSpeed + 10;
 	}
 	else
 	{
-		speedL = S_Rampe_NormalSpeed;
-		speedR = S_Rampe_NormalSpeed;
+		speedL = NormalSpeed;
+		speedR = NormalSpeed;
 	}
 
 
@@ -113,6 +132,17 @@ void S_RampeClass::Think()
 		Serial.println("WARNING S_Rampe: rechter Bumper hat Kontakt.");
 	}
 
+	
+	// Neigung kontrollieren
+	if (abs(spectator->mpu.GetPitch()) < 0.2)
+	{
+		stoppWahrscheinlichkeit += 11;  // 17 ist zu hoch
+
+		speedL += 20;   // Etwas schneller werden, damit nicht vorm ende angehalten wird.
+		speedR += 20;
+
+		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
+	}
 	// Ultraschall kontrollieren.
 	if (spectator->ultraschallVorne.GetDistance() <= S_Rampe_USVorne)
 	{
@@ -121,13 +151,6 @@ void S_RampeClass::Think()
 		Serial.print("S_Rampe.Think(): Ultraschall detektiert vorne ein Hindernis. Entfernung: ");
 		Serial.println(spectator->ultraschallVorne.GetDistance());
 	}
-	/*// Neigung kontrollieren
-	if (abs(spectator->mpu.GetPitch()) < 0.2)
-	{
-		stoppWahrscheinlichkeit += 11;  // 17 ist zu hoch
-
-		Serial.println("S_Rampe.Think(): MPU verkuendet Ende der Rampe.");
-	}*/
 
 	if (stoppWahrscheinlichkeit > 100)
 	{

@@ -60,6 +60,8 @@ class OverwatcherClass
 	 static void ErrorHandler(String Msg);   // you need static for the function pointer
 
 	 int rampenCounter;
+	 int drehFehlerCounter;
+	 int drehFehlerResetCounter;
 
  public:
 	 void Init(StateMachineClass *StateMachine);

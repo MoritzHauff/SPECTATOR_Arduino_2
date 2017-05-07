@@ -35,16 +35,16 @@
 
 #include "State.h"
 
+const static int S_Rampe_NormalSpeedUp = 130; // 140 kippt bei hindernissen  // 120 sehr langsam kippt aber nicht immer.
+const static int S_Rampe_NormalSpeedDownBegin = 210;
+const static int S_Rampe_NormalSpeedDownEnd = 125;
+const static int S_Rampe_USVorne = 4;
+
 ///////////////////////////////////////////////////////////////////////////
 ///State-Class
 /*Dieser State dient dem Befahren der Rampe.*/
 class S_RampeClass : public StateClass
-{
-///////////////////////////////////////////////////////////////////////////
- protected: ///Konstanten
-	 const static int S_Rampe_USVorne = 7;
-	 const static int S_Rampe_NormalSpeed = 135; // 140 kippt bei hindernissen  // 120 sehr langsam kippt aber nicht immer.
- 
+{ 
  protected:
 	 int stoppWahrscheinlichkeit;   // todo move to StateClass
 	 int speedL;  // todo move to StateClass
@@ -64,6 +64,10 @@ class S_RampeClass : public StateClass
 	 void Act();
 
 	 void ShiftTimers(unsigned long ShiftAmount);
+
+	 // 'd' zum runterfahren, 'u' zum hochfahren.
+	 char Richtung;
+	 int NormalSpeed;
 };
 
 #endif
