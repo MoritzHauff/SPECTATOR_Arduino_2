@@ -37,6 +37,8 @@ void S_CalibrateClass::Init()
 {
 	status = Finished;
 
+	spectator->Motoren.TurnLEDOff();
+
 	MPUCalibration();
 
 	
