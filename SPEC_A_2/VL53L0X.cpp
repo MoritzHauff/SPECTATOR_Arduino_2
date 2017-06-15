@@ -1,8 +1,9 @@
-/** VL53K0X.cpp
+/** VL53L0X.cpp
 ***
-*** todo
+*** Diese Klasse liest einzeilne Entfernungen aus dem VL53L0X-
+*** Time-of-Flight-Sensor.
 ***
-*** created by Moritz Hauff, 04.04.2017
+*** Moritz Hauff - 04.04.2017
 **/
 
 ///////////////////////////////////////////////////////////////////////////
