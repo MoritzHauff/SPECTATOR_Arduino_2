@@ -44,50 +44,6 @@ MPUFahrerClass::MPUFahrerClass()
 	zielRichtung = R_NORDEN;
 }
 
-
-	/*/// <summary>
-	///
-	/// </summary>
-	/// <param name="GewuenschteRichtung"></param>
-	/// <param name="AktYaw"></param>
-	/// <param name="ToleranzWinkel">Ab welcher Toleranz die aktuelle Richtung gar nicht mehr korrigiert werden soll.</param>
-	/// <param name="VerlangsamungsWinkel">Ab wann die aktuelle Richtung korrigiert nur noch wenig werden soll.</param>
-	/// <param name="AnpassungsWinkel">Ab wann die aktuelle Richtung korrigiert werden soll.</param>
-	/// <returns></returns>
-	public Korrektur GetKorrektur(Richtung GewuenschteRichtung, int AktYaw, int ToleranzWinkel, int VerlangsamungsWinkel, int AnpassungsWinkel)
-{
-	//mit umweg über algo:
-	int zielWinkel = orientierungswinkel[GewuenschteRichtung.Nummer];
-	//zielWinkel = winkelverkleinern(zielWinkel, millis() / 5000);
-	//ohne -||-
-	//int zielWinkel = orientierungswinkel[_richtung.Nummer];
-
-	if (AktYaw + ToleranzWinkel > zielWinkel && AktYaw - ToleranzWinkel < zielWinkel)
-	{
-		return Korrektur.KeineKorrektur;
-	}
-
-	if (groesser(AktYaw, zielWinkel, VerlangsamungsWinkel))
-	{
-		return Korrektur.WenigNachLinks;
-	}
-	if (groesser(AktYaw, zielWinkel, AnpassungsWinkel))
-	{
-		return Korrektur.WeitNachLinks;
-	}
-
-	if (groesser(zielWinkel, AktYaw, VerlangsamungsWinkel))  // mit dem Umdrehen der verglichenen Winkel entfällt eine mögliche kleiner Funktion.
-	{
-		return Korrektur.WenigNachRechts;
-	}
-	if (groesser(zielWinkel, AktYaw, AnpassungsWinkel))
-	{
-		return Korrektur.WeitNachRechts;
-	}
-
-	return Korrektur.WeitNachRechts;   // Passen gar keine Werte, fahre nach rechts, damit er vielleicht wieder in einen Wertebereich reinrutscht.
-}*/
-
 ///////////////////////////////////////////////////////////////////////////
 ///Funktionen
 float MPUFahrerClass::GetWinkelAbstand(byte ZielRichtung, float aktYaw)

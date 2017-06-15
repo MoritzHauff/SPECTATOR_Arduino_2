@@ -1,6 +1,7 @@
 /** Overwatcher.cpp
 ***
-*** Diese Klasse kontrolliert ständig die Temperatur und gibt gebenfalls an, dass Opfervorhandne sind.
+*** Diese Klasse kontrolliert ständig die Temperatur und gibt gebenfalls an, 
+*** dass Opfer vorhanden sind.
 *** 
 *** Moritz Hauff, 23.04.2017
 **/
@@ -32,7 +33,6 @@
 // todo checkpoints erkennen und beim zurücksetzen merken
 // todo beim zurücksetzen fahrmodus wechslen (geradeaus / rechte hand)
 // todo beim zurücksetzen kein totalreset der alten anfangsfelder damit er dann in eine neue richtung fährt. ( muss in anfangsrichtung ausgerichtet werden.)
-
 
 ///////////////////////////////////////////////////////////////////////////
 ///Includes
